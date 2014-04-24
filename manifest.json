@@ -1,0 +1,25 @@
+{
+	"background": {
+		"scripts": [ "options.js", "background.js" ]
+	},
+	"browser_action": {
+		"default_icon": "icon_dict.gif",
+		"default_popup": "options.html"
+	},
+	"content_scripts": [ {
+		"js": [ "lookup.js" ],
+		"matches": [ "http://*/*", "https://*/*" ]
+	} ],
+	"description": "有道词典第三方出品",
+	"icons": {
+		"128": "icon-128.png",
+		"64": "icon.png"
+	},
+	"manifest_version": 2,
+	"name": "有道词典Chrome划词插件",
+	"options_page": "options.html",
+	"permissions": [ "http://*/*", "https://*/*" ],
+	"update_url": "http://xuediannao.sinaapp.com/chrome/youdao/update.xml",
+	"version": "1.4.0",
+	"web_accessible_resources": [ "ab20.png", "ydd-sprite.png" ]
+}

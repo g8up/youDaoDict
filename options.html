@@ -1,0 +1,99 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Youdao Dict For Chrome</title>
+	<style>
+	body {
+		font-family: Microsoft YaHei;
+		font-size: 13px;
+		color: #000000;
+		min-width:200px;
+		overflow-x:hidden;
+		background:url("youdaoskin.jpg");
+	}
+	img {
+		margin:5px;
+		border:0px solid black;
+		vertical-align:middle;
+		width:82px;
+		height:22px;
+	}
+	input.smallInput {
+		border:1px solid black;
+		FONT-SIZE: 9pt;
+		FONT-STYLE: normal;
+		FONT-VARIANT: normal;
+		FONT-WEIGHT: normal;
+		HEIGHT: 18px;
+		LINE-HEIGHT: normal
+	}
+	/*
+	 *搜索历史
+	 * @author Sigma
+	 */
+	#cache a{
+		cursor:pointer;
+	}
+	</style>
+</head>
+
+<body>
+	<table id="maintable" cellpadding="1" width=230px align="center" style="word-break:keep-all;">
+
+		<tr>
+			<td>
+				<img src="logo.png"></img>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<input type="text" name="word" id="word" style="width:160px;  " class=smallInput>
+				<INPUT TYPE="button" id="querybutton" value="查询">
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id='result' style=' white-space:nowrap;'></div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id='opt_text'>
+					<strong>选项设置:</strong>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id='opt_text'>
+					<input type="checkbox" id="dict_disable">关闭划词翻译</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<div id='opt_text'>
+					<input type="checkbox" id="ctrl_only">指词即译模式（按下Ctrl键指词）</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<div id='opt_text'>
+					<input type="checkbox" id="english_only">仅对英文划译</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<div style="font-size:10px;float:right;"><a href="#" id="feedback">意见反馈 </a> &nbsp;<a href="#" id="about">关于</a>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<script type="text/javascript" src="options.js"></script>
+</body>
+</html>
