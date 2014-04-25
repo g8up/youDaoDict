@@ -83,17 +83,17 @@ function translateXML(xmlnode) {
 		langType = root.getElementsByTagName("lang")[0].childNodes[0].nodeValue;
 	}
 	var strpho = "";
-
-	if ("" + root.getElementsByTagName("phonetic-symbol")[0] != "undefined") {
-		if ("" + root.getElementsByTagName("phonetic-symbol")[0].childNodes[0] != "undefined")
-			var pho = root.getElementsByTagName("phonetic-symbol")[0].childNodes[0].nodeValue;
+	var symbol = root.getElementsByTagName("phonetic-symbol")[0];
+	if ("" + symbol != "undefined") {
+		if ("" + symbol.childNodes[0] != "undefined")
+			var pho = symbol.childNodes[0].nodeValue;
 
 		if (pho != null) {
 			strpho = "&nbsp;[" + pho + "]";
 		}
 	}
-
-	if ("" + root.getElementsByTagName("translation")[0] == "undefined") {
+	var translation = root.getElementsByTagName("translation")[0];
+	if ("" + translation == "undefined") {
 		noBaseTrans = true;
 	}
 	if ("" + root.getElementsByTagName("web-translation")[0] == "undefined") {
@@ -104,7 +104,7 @@ function translateXML(xmlnode) {
 	if (noBaseTrans == false) {
 		translate += retphrase + "<br/><br/><strong>基本释义:</strong><br/>";
 
-		if ("" + root.getElementsByTagName("translation")[0].childNodes[0] != "undefined")
+		if ("" + translation.childNodes[0] != "undefined")
 			var translations = root.getElementsByTagName("translation");
 		else {
 			basetrans += '未找到基本释义';
@@ -120,7 +120,6 @@ function translateXML(xmlnode) {
 					line += childs[j] + "<br/>";
 			}
 			basetrans += line;
-
 		}
 	}
 	if (noWebTrans == false) {
@@ -152,10 +151,13 @@ function mainQuery(word, callback) {
 			}
 		}
 	}
-	_word = word;
+	_word = trim(word);
 	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng'
 	xhr.open('GET', url, true);
 	xhr.send();
+}
+function trim( str ){
+	return str.replace( /^\s+|\s+$/, '' );
 }
 
 function removeDiv(divname) {
@@ -248,17 +250,20 @@ function getCachedWord() {
 // 缓存查询词
 function saveSearchedWord(word) {
 	var w = word || (document.querySelector('#word') ? document.querySelector('#word').value : '');
-	var cache = localStorage.getItem('wordcache');
-	if (cache) {
-		//distinct
-		if (cache.indexOf(w) > -1) {
-			return;
+	if( w ){
+		w = trim( w );
+		var cache = localStorage.getItem('wordcache');
+		if (cache) {
+			//distinct
+			if (cache.indexOf(w) > -1) {
+				return;
+			}
+			cache = [w, cache].join();
+		} else {
+			cache = w;
 		}
-		cache = [w, cache].join();
-	} else {
-		cache = w;
+		localStorage.setItem('wordcache', cache);
 	}
-	localStorage.setItem('wordcache', cache);
 }
 
 function save_options() {
