@@ -10,16 +10,16 @@
 		"js": [ "lookup.js" ],
 		"matches": [ "http://*/*", "https://*/*" ]
 	} ],
-	"description": "有道词典第三方出品",
+	"description": "有道词典划词插件（第三方出品）",
 	"icons": {
 		"128": "icon-128.png",
 		"64": "icon.png"
 	},
 	"manifest_version": 2,
-	"name": "有道词典Chrome划词插件",
+	"name": "有道词典划词插件++",
 	"options_page": "options.html",
 	"permissions": [ "http://*/*", "https://*/*" ],
 	"update_url": "http://xuediannao.sinaapp.com/chrome/youdao/update.xml",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"web_accessible_resources": [ "ab20.png", "ydd-sprite.png" ]
 }
