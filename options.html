@@ -2,10 +2,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Youdao Dict For Chrome</title>
+	<title>有道词典划词扩展++</title>
 	<style>
 	body {
-		font-family: Microsoft YaHei;
+		font-family: "Microsoft YaHei";
 		font-size: 13px;
 		color: #000000;
 		min-width:200px;
@@ -21,12 +21,12 @@
 	}
 	input.smallInput {
 		border:1px solid black;
-		FONT-SIZE: 9pt;
-		FONT-STYLE: normal;
-		FONT-VARIANT: normal;
-		FONT-WEIGHT: normal;
-		HEIGHT: 18px;
-		LINE-HEIGHT: normal
+		font-size: 9pt;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: normal;
+		height: 18px;
+		line-height: normal
 	}
 	/*
 	 *搜索历史
@@ -35,18 +35,27 @@
 	#cache a{
 		cursor:pointer;
 	}
+	#history_count{
+		width: 50px;
+	}
+	footer{
+		text-align: right;
+	}
+	footer a{
+		color: #dddddd;
+		font-size: 11px;
+		text-decoration: none;
+	}
 	</style>
 </head>
 
 <body>
 	<table id="maintable" cellpadding="1" width=230px align="center" style="word-break:keep-all;">
-
 		<tr>
 			<td>
 				<img src="logo.png"></img>
 			</td>
 		</tr>
-
 		<tr>
 			<td>
 				<input type="text" name="word" id="word" style="width:160px;  " class=smallInput>
@@ -59,41 +68,27 @@
 				<div id='result' style=' white-space:nowrap;'></div>
 			</td>
 		</tr>
-		<tr>
-			<td>
-				<div id='opt_text'>
-					<strong>选项设置:</strong>
-				</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div id='opt_text'>
-					<input type="checkbox" id="dict_disable">关闭划词翻译</div>
-			</td>
-		</tr>
-
-		<tr>
-			<td>
-				<div id='opt_text'>
-					<input type="checkbox" id="ctrl_only">指词即译模式（按下Ctrl键指词）</div>
-			</td>
-		</tr>
-
-		<tr>
-			<td>
-				<div id='opt_text'>
-					<input type="checkbox" id="english_only">仅对英文划译</div>
-			</td>
-		</tr>
-
-		<tr>
-			<td>
-				<div style="font-size:10px;float:right;"><a href="#" id="feedback">意见反馈 </a> &nbsp;<a href="#" id="about">关于</a>
-				</div>
-			</td>
-		</tr>
 	</table>
+	<section id="options">
+		<div>
+			<strong>选项设置:</strong>
+		</div>
+		<div>
+			<input type="checkbox" id="dict_disable">关闭划词翻译
+		</div>
+		<div>
+			<input type="checkbox" id="ctrl_only">指词即译模式（按下Ctrl键指词）
+		</div>
+		<div>
+			<input type="checkbox" id="english_only">仅对英文划译
+		</div>
+		<div>
+			历史记录条数：<input type="number" id="history_count">
+		</div>
+	</section>
+	<footer>
+		<a href="https://chrome.google.com/webstore/detail/%E6%9C%89%E9%81%93%E8%AF%8D%E5%85%B8chrome%E5%88%92%E8%AF%8D%E6%8F%92%E4%BB%B6/chgkpfgnhlojjpjchjcbpbgmdnmfmmil/reviews?hl=zh-cn" target="_blank">意见反馈</a>
+	</footer>
 	<script type="text/javascript" src="options.js"></script>
 </body>
 </html>

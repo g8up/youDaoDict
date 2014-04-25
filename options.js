@@ -9,7 +9,8 @@
 var Options = {
 	"dict_disable": ["checked", false],
 	"ctrl_only": ["checked", false],
-	"english_only": ["checked", false]
+	"english_only": ["checked", false],
+	"history_count":5
 };
 
 function close() {
@@ -160,17 +161,8 @@ function trim( str ){
 	return str.replace( /^\s+|\s+$/, '' );
 }
 
-function removeDiv(divname) {
-	var div = document.getElementById(divname);
-	if (div == null) return;
-	div.parentNode.removeChild(div);
-}
-
 function mainFrameQuery() {
-	removeDiv('opt_text');
-	removeDiv('opt_text');
-	removeDiv('opt_text');
-	removeDiv('opt_text');
+	document.querySelector('#options').style.display = "none";//hide option pannel
 	var lan = '';
 	if (isContainKoera(_word)) {
 		lan = "&le=ko";
@@ -219,8 +211,9 @@ function mainFrameQuery() {
 // 取缓存查询次
 function getCachedWord() {
 	var html = [],
-		cache = localStorage.getItem('wordcache');
-	var words = cache.split(',').slice(0, 5);
+		cache = localStorage.getItem('wordcache'),
+		count = Options.history_count || 5;
+	var words = cache.split(',').slice( 0, count );
 	for (var i = 0, len = words.length; i < len; i++) {
 		html.push('<a>' + words[i] + '</a>');
 	}
@@ -269,24 +262,18 @@ function saveSearchedWord(word) {
 function save_options() {
 	changeIcon();
 	for (key in Options) {
+		var elem = document.getElementById(key);
 		if (Options[key][0] == "checked") {
-			Options[key][1] = document.getElementById(key).checked;
+			Options[key][1] = elem.checked;
+		}else{
+			Options[key] = elem.value;
 		}
 	}
 	localStorage["ColorOptions"] = JSON.stringify(Options);
 }
 
-function goFeedback() {
-	window.open("http://feedback.youdao.com/deskapp_report.jsp?prodtype=deskdict&ver=chrome.extension");
-}
-
-function goAbout() {
-	window.open("http://cidian.youdao.com/chromeplus");
-}
-
 function initIcon() {
-	var localOptions = JSON.parse(localStorage["ColorOptions"]);
-	if (localOptions['dict_disable'][1] == true) {
+	if (Options['dict_disable'][1] == true) {
 		chrome.browserAction.setIcon({
 			path: "icon_nodict.gif"
 		})
@@ -318,49 +305,67 @@ function check() {
 	window.open("http://dict.youdao.com/search?q=" + encodeURI(word) + "&ue=utf8&keyfrom=chrome.index");
 }
 
+/**读取配置信息
+ * {"dict_disable":["checked",false],"ctrl_only":["checked",false],"english_only":["checked",true]}
+*/
 function restore_options() {
-	var localOptions = JSON.parse(localStorage["ColorOptions"]);
-	for (key in localOptions) {
-		optionValue = localOptions[key];
-		if (!optionValue) return;
-		var element = document.getElementById(key);
-		if (element) {
-			element.value = localOptions[key][1];
-			switch (localOptions[key][0]) {
-				case "checked":
-					if (localOptions[key][1]) element.checked = true;
-					else element.checked = false;
+	var cachedOpts = localStorage["ColorOptions"];
+	if( cachedOpts ){//有缓存
+		Options = JSON.parse( cachedOpts );
+	}
+	for (key in Options) {
+		var elem = document.getElementById(key);
+		if (elem) {
+			var val = Options[key];
+			if (!val) continue;
+			var elemType = elem.getAttribute('type');
+			switch( elemType ){
+				case 'checkbox':
+					elem.value = val[1];
+					switch (val[0]) {
+						case "checked":
+							if (val[1]) elem.checked = true;
+							else elem.checked = false;
+							break;
+					}
+					break;
+				case 'number':
+					elem.value = val || Options.history_count;
 					break;
 			}
 		}
 	}
-
 }
 
 document.body.onload = function() {
-	restore_options();
 	document.getElementById('word').focus();
+	restore_options();
 	changeIcon();
+	getCachedWord();
 };
-document.getElementById("dict_disable").onclick = function() {
-	save_options();
+
+// 配置项设置
+document.querySelector('#options').onmouseover = function(){
+	document.querySelector('table',this).style.display = "block";
+	this.onmouseover = null;
+
+	document.getElementById("dict_disable").onclick = function() {
+		save_options();
+	};
+	document.getElementById("ctrl_only").onclick = function() {
+		save_options();
+	};
+	document.getElementById("english_only").onclick = function() {
+		save_options();
+	};
+	document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
+		save_options();
+	};
 };
-document.getElementById("ctrl_only").onclick = function() {
-	save_options();
-};
-document.getElementById("english_only").onclick = function() {
-	save_options();
-};
-document.getElementById("feedback").onclick = function() {
-	goFeedback();
-};
-document.getElementById("about").onclick = function() {
-	goAbout();
-};
+
 document.getElementById("word").onkeydown = function() {
 	if (event.keyCode == 13) mainQuery(document.getElementsByName("word")[0].value, translateXML);
 };
 document.getElementById("querybutton").onclick = function() {
 	mainQuery(document.getElementsByName("word")[0].value, translateXML);
 };
-getCachedWord();
