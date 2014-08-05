@@ -283,7 +283,7 @@ function adaptCachedOptions(cachedOpts) {
 function exportHistory(){
 	var cachedWords = localStorage.getItem('wordcache');
 	if( cachedWords ){
-		saveContent2File( cachedWords.replace( ',','\r\n' ), 'youDao-history.txt' );
+		saveContent2File( cachedWords.replace( /\,/g,'\r\n' ), 'youDao-history.txt' );
 	}
 }
 
@@ -406,9 +406,9 @@ function saveContent2File(content, filename) {
 	var extName = extDetail.name;
 	var version = extDetail.version;
 	var banner = [
-		'【'+ extName +'】 Ver'+ version + '查询历史备份文件',
+		'【'+ extName +'】Ver'+ version + '查询历史备份文件',
 		new Date().toString().slice(0,24),
-		'====================='
+		new Array(25).join('='),
 	].join('\r\n');
 	var blob = new Blob([ banner, '\r\n', content ], {type: "text/plain;charset=utf-8"});
 	saveAs( blob, filename );

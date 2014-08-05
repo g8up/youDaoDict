@@ -13,7 +13,8 @@
 	"description": "有道词典划词扩展，支持记录、导出查询历史",
 	"icons": {
 		"128": "icon-128.png",
-		"64": "icon.png"
+		"64": "icon-128.png",
+		"48": "icon-128.png"
 	},
 	"manifest_version": 2,
 	"name": "有道词典划词扩展 V3",
