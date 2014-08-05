@@ -3,7 +3,8 @@
  * @date   2010-2-21
  *
  * @optimizing Simga
- * @date 2014.04.24
+ * @date 2014.04.24 支持缓存查询历史
+ * @date 2014.08.05 支持导出查询历史
  */
 
 // 配置项
@@ -11,7 +12,7 @@ var Options = {
 	"dict_disable": ["checked", false],
 	"ctrl_only": ["checked", false],
 	"english_only": ["checked", false],
-	"history_count":5
+	"history_count": 5
 };
 
 var retphrase = '';
@@ -34,7 +35,7 @@ function translateXML(xmlnode) {
 	var strpho = '';
 	var symbol = root.getElementsByTagName("phonetic-symbol")[0];
 	if ('' + symbol != "undefined") {
-		if ('' + symbol.childNodes[0] != "undefined"){
+		if ('' + symbol.childNodes[0] != "undefined") {
 			var pho = symbol.childNodes[0].nodeValue;
 			if (pho !== null) {
 				strpho = "&nbsp;[" + pho + "]";
@@ -50,9 +51,9 @@ function translateXML(xmlnode) {
 	}
 
 
-	if ( noBaseTrans === false ) {
+	if (noBaseTrans === false) {
 		translate += retphrase + "<br/><br/><strong>基本释义:</strong><br/>";
-		if ('' + translation.childNodes[0] != "undefined"){
+		if ('' + translation.childNodes[0] != "undefined") {
 			var translations = root.getElementsByTagName("translation");
 			for (var i = 0; i < translations.length; i++) {
 				var line = translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "<br/>";
@@ -65,11 +66,11 @@ function translateXML(xmlnode) {
 				}
 				basetrans += line;
 			}
-		}else {
+		} else {
 			basetrans += '未找到基本释义';
 		}
 	}
-	if ( noWebTrans === false ) {
+	if (noWebTrans === false) {
 		//网络释义
 		if ('' + root.getElementsByTagName("web-translation")[0].childNodes[0] != "undefined")
 			var webtranslations = root.getElementsByTagName("web-translation");
@@ -105,7 +106,7 @@ function mainQuery(word, callback) {
 }
 
 function buildSearchResult() {
-	document.querySelector('#options').style.display = "none";//hide option pannel
+	document.querySelector('#options').style.display = "none"; //hide option pannel
 	var lan = '';
 	if (isContainKoera(_word)) {
 		lan = "&le=ko";
@@ -154,9 +155,9 @@ function buildSearchResult() {
 // 取缓存查询次
 function getCachedWord() {
 	var html = [],
-		cache = localStorage.getItem('wordcache'),
-		count = Options.history_count >= 0 ? Options.history_count: 0;
-	var words = cache.split(',').slice( 0, count );
+		cache = localStorage.getItem('wordcache')||'',
+		count = Options.history_count >= 0 ? Options.history_count : 0;
+	var words = cache.split(',').slice(0, count);
 	for (var i = 0, len = words.length; i < len; i++) {
 		html.push('<a>' + words[i] + '</a>');
 	}
@@ -181,8 +182,8 @@ function getCachedWord() {
 // 缓存查询词
 function saveSearchedWord(word) {
 	var w = word || (document.querySelector('#word') ? document.querySelector('#word').value : '');
-	if( w ){
-		w = trim( w );
+	if (w) {
+		w = trim(w);
 		var cache = localStorage.getItem('wordcache');
 		if (cache) {
 			//distinct
@@ -196,7 +197,6 @@ function saveSearchedWord(word) {
 		localStorage.setItem('wordcache', cache);
 	}
 }
-
 
 function initIcon() {
 	if (Options['dict_disable'][1] == true) {
@@ -237,8 +237,8 @@ function check() {
  */
 function restore_options() {
 	var cachedOpts = localStorage["ColorOptions"];
-	if( cachedOpts ){//有缓存
-		adaptCachedOptions( JSON.parse( cachedOpts ) );
+	if (cachedOpts) { //有缓存
+		adaptCachedOptions(JSON.parse(cachedOpts));
 	}
 	for (key in Options) {
 		var elem = document.getElementById(key);
@@ -246,7 +246,7 @@ function restore_options() {
 			var val = Options[key];
 			if (!val) continue;
 			var elemType = elem.getAttribute('type');
-			switch( elemType ){
+			switch (elemType) {
 				case 'checkbox':
 					elem.value = val[1];
 					switch (val[0]) {
@@ -267,13 +267,23 @@ function restore_options() {
 /**
  * 适配缓存的配置，用于配置升级后的兼容
  */
-function adaptCachedOptions( cachedOpts ){
-	for(var item in Options ){
+function adaptCachedOptions(cachedOpts) {
+	for (var item in Options) {
 		var c = cachedOpts[item],
 			o = Options[item];
-		if( typeof c !== 'undefined' && typeof o !== 'undefined' ){
+		if (typeof c !== 'undefined' && typeof o !== 'undefined') {
 			Options[item] = c;
 		}
+	}
+}
+
+/*
+ * 导出单词查询历史
+ */
+function exportHistory(){
+	var cachedWords = localStorage.getItem('wordcache');
+	if( cachedWords ){
+		saveContent2File( cachedWords.replace( ',','\r\n' ), 'youDao-history.txt' );
 	}
 }
 
@@ -283,7 +293,7 @@ function save_options() {
 		var elem = document.getElementById(key);
 		if (Options[key][0] == "checked") {
 			Options[key][1] = elem.checked;
-		}else{
+		} else {
 			Options[key] = elem.value;
 		}
 	}
@@ -300,8 +310,8 @@ document.body.onload = function() {
 /**
  * 配置项设置
  */
-document.querySelector('#options').onmouseover = function(){
-	document.querySelector('table',this).style.display = "block";
+document.querySelector('#options').onmouseover = function() {
+	document.querySelector('table', this).style.display = "block";
 	this.onmouseover = null;
 
 	document.getElementById("dict_disable").onclick = function() {
@@ -326,11 +336,15 @@ document.getElementById("querybutton").onclick = function() {
 	mainQuery(document.getElementsByName("word")[0].value, translateXML);
 };
 
+document.querySelector('#backup').onclick = function(){
+	exportHistory();
+};
+
 /**
  * util
  */
-function trim( str ){
-	return str.replace( /^\s+|\s+$/, '' );
+function trim(str) {
+	return str.replace(/^\s+|\s+$/, '');
 }
 
 function isChinese(temp) {
@@ -346,7 +360,7 @@ function isJapanese(temp) {
 }
 
 function isKoera(str) {
-	for (i = 0; i < str.length; i++) {
+	for (var i = 0, len = str.length; i < len; i++) {
 		if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F) || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
 			return true;
 		}
@@ -356,7 +370,7 @@ function isKoera(str) {
 
 function isContainKoera(temp) {
 	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
+	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isKoera(temp.charAt(i)))
 			cnt++;
 	}
@@ -366,7 +380,7 @@ function isContainKoera(temp) {
 
 function isContainChinese(temp) {
 	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
+	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isChinese(temp.charAt(i)))
 			cnt++;
 	}
@@ -376,10 +390,26 @@ function isContainChinese(temp) {
 
 function isContainJapanese(temp) {
 	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
+	for (var i = 0,len = temp.length; i < len; i++) {
 		if (isJapanese(temp.charAt(i)))
 			cnt++;
 	}
 	if (cnt > 2) return true;
 	return false;
+}
+
+/*
+ * 保存为系统文件
+ */
+function saveContent2File(content, filename) {
+	var extDetail = chrome.app.getDetails();
+	var extName = extDetail.name;
+	var version = extDetail.version;
+	var banner = [
+		'【'+ extName +'】 Ver'+ version + '查询历史备份文件',
+		new Date().toString().slice(0,24),
+		'====================='
+	].join('\r\n');
+	var blob = new Blob([ banner, '\r\n', content ], {type: "text/plain;charset=utf-8"});
+	saveAs( blob, filename );
 }
