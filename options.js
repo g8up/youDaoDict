@@ -301,7 +301,8 @@ function save_options() {
 }
 
 document.body.onload = function() {
-	document.getElementById('word').focus();
+	var word = document.getElementById('word');
+	word && word.focus();
 	restore_options();
 	changeIcon();
 	getCachedWord();
@@ -310,7 +311,9 @@ document.body.onload = function() {
 /**
  * 配置项设置
  */
-document.querySelector('#options').onmouseover = function() {
+ var options = document.querySelector('#options');
+
+options && (options.onmouseover = function() {
 	document.querySelector('table', this).style.display = "block";
 	this.onmouseover = null;
 
@@ -327,7 +330,7 @@ document.querySelector('#options').onmouseover = function() {
 		save_options();
 		getCachedWord();
 	};
-};
+});
 
 document.getElementById("word").onkeydown = function() {
 	if (event.keyCode == 13) mainQuery(document.getElementsByName("word")[0].value, translateXML);
@@ -413,3 +416,13 @@ function saveContent2File(content, filename) {
 	var blob = new Blob([ banner, '\r\n', content ], {type: "text/plain;charset=utf-8"});
 	saveAs( blob, filename );
 }
+/*
+ * Google Analytics
+*/
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-31304107-3', 'auto');
+ga('send', 'pageview');
