@@ -10,17 +10,17 @@
 		"js": [ "lookup.js" ],
 		"matches": [ "http://*/*", "https://*/*" ]
 	} ],
-	"description": "有道词典划词扩展，支持记录、导出查询历史",
+	"description": "可记录、导出查询历史!",
 	"icons": {
 		"128": "icon-128.png",
-		"64": "icon.png"
+		"64": "icon-128.png",
+		"48": "icon-128.png"
 	},
 	"manifest_version": 2,
 	"name": "有道词典划词扩展 V3",
+	"short_name":"有道词典",
 	"options_page": "options.html",
 	"permissions": [ "http://*/*", "https://*/*" ],
-	"update_url": "http://xuediannao.sinaapp.com/chrome/youdao/update.xml",
-	"homepage_url":"https://chrome.google.com/webstore/detail/%E6%9C%89%E9%81%93%E8%AF%8D%E5%85%B8chrome%E5%88%92%E8%AF%8D%E6%8F%92%E4%BB%B6/chgkpfgnhlojjpjchjcbpbgmdnmfmmil",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"web_accessible_resources": [ "ab20.png", "ydd-sprite.png" ]
 }
