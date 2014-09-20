@@ -237,6 +237,10 @@ function saveOptions() {
 		}
 	}
 	localStorage["ColorOptions"] = JSON.stringify(Options);
+	chrome.extension.sendRequest({
+		'action': 'setOptions',
+		'data':Options
+	},function( rep ){});
 }
 
 document.body.onload = function() {

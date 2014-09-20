@@ -134,18 +134,6 @@ sprintfWrapper = {
 
 sprintf = sprintfWrapper.init;
 
-chrome.extension.onRequest.addListener(
-	function(request, sender, sendResponse) {
-		if (request.init == "init" && ColorsChanged == true) {
-			sendResponse({
-				init: "globalPages",
-				ChangeColors: "true",
-				ColorOptions: Options
-			});
-		}
-	}
-);
-
 function genTable(word, strpho, baseTrans, webTrans) {
 	var lan = '';
 	if (isContainKoera(word)) {
@@ -350,8 +338,6 @@ function fetchWordOnline(word, callback) {
 				var dataText = translateXML(xhr.responseXML);
 				if (dataText != null)
 					callback(dataText);
-			} else {
-				//callback(null);
 			}
 		}
 	}
@@ -385,19 +371,6 @@ function handleTimeout() {
 	fetchWordOnline(_word, _callback);
 }
 
-function onRequest(request, sender, callback) {
-	if (request.action == 'dict') {
-		if (navigator.appVersion.indexOf("Win") != -1) {
-			fetchWordOnline(request.word, callback);
-		} else {
-			fetchWordOnline(request.word, callback);
-		}
-	}
-	if (request.action == 'translate') {
-		fetchTranslate(request.word, callback);
-	}
-};
-
 function fetchTranslate(words, callback) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function(data) {
@@ -416,4 +389,33 @@ function fetchTranslate(words, callback) {
 	xhr.send();
 }
 
-chrome.extension.onRequest.addListener(onRequest);
+chrome.extension.onRequest.addListener(
+	function(request, sender, sendResponse) {
+		var _action = request.action;
+		switch( _action ){
+			case 'getOptions':
+				if ( ColorsChanged == true) {
+					sendResponse({
+						init: "globalPages",
+						ChangeColors: "true",
+						ColorOptions: Options
+					});
+				}
+				break;
+			case 'setOptions':
+				Options = request.data;
+				break;
+			case 'dict':
+				if (navigator.appVersion.indexOf("Win") > -1) {
+					fetchWordOnline(request.word, sendResponse);
+				} else {
+					fetchWordOnline(request.word, sendResponse);
+				}
+				break;
+			case 'translate':
+				fetchTranslate(request.word, sendResponse);
+				break;
+			default:break;
+		}
+	}
+);
