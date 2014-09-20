@@ -178,23 +178,15 @@ function saveSearchedWord(word) {
 }
 
 function changeIcon() {
-	if (document.getElementById('dict_disable').checked) {
-		var a = document.getElementById('ctrl_only');
-		a.disabled = true;
-		a = document.getElementById('english_only');
-		a.disabled = true;
-		chrome.browserAction.setIcon({
-			path: "icon_nodict.gif"
-		})
-	} else {
-		var a = document.getElementById('ctrl_only');
-		a.disabled = false;
-		a = document.getElementById('english_only');
-		a.disabled = false;
-		chrome.browserAction.setIcon({
-			path: "icon_dict.gif"
-		})
-	}
+	var ctrlBox = document.getElementById('ctrl_only'),
+		engBox = document.getElementById('english_only'),
+		dictBox = document.getElementById('dict_disable');
+	var flag = !!dictBox.checked;
+	ctrlBox.disabled = flag;
+	engBox.disabled = flag;
+	chrome.browserAction.setIcon({
+		path: flag ? "icon_nodict.gif" : "icon_dict.gif"
+	});
 }
 
 function check() {
@@ -234,7 +226,7 @@ function exportHistory() {
 	}
 }
 
-function save_options() {
+function saveOptions() {
 	changeIcon();
 	for (key in Options) {
 		var elem = document.getElementById(key);
@@ -246,6 +238,7 @@ function save_options() {
 	}
 	localStorage["ColorOptions"] = JSON.stringify(Options);
 }
+
 document.body.onload = function() {
 	var word = document.getElementById('word');
 	word && word.focus();
@@ -256,24 +249,25 @@ document.body.onload = function() {
 /**
  * 配置项设置
  */
-var options = document.querySelector('#options');
-options && (options.onmouseover = function() {
+var optElem = document.querySelector('#options');
+optElem && (optElem.onmouseover = function() {
 	document.querySelector('table', this).style.display = "block";
 	this.onmouseover = null;
 	document.getElementById("dict_disable").onclick = function() {
-		save_options();
+		saveOptions();
 	};
 	document.getElementById("ctrl_only").onclick = function() {
-		save_options();
+		saveOptions();
 	};
 	document.getElementById("english_only").onclick = function() {
-		save_options();
+		saveOptions();
 	};
 	document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
-		save_options();
+		saveOptions();
 		getCachedWord();
 	};
 });
+
 document.getElementById("word").onkeydown = function() {
 	if (event.keyCode == 13) {
 		mainQuery(document.getElementsByName("word")[0].value, translateXML);

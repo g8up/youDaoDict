@@ -298,13 +298,14 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	document.getElementById("test").onmousemove = function(e) {
 		frame.style.cursor = 'default';
 	};
-	document.getElementById("yddTop").onmousedown = dragDown;
-	document.getElementById("yddTop").onmouseup = dragUp;
-	document.getElementById("yddTop").onmousemove = dragMove;
-	document.getElementById("yddTop").onmouseover = function(e) {
+	var _yddTop = document.getElementById("yddTop");
+	_yddTop.onmousedown = dragDown;
+	_yddTop.onmouseup = dragUp;
+	_yddTop.onmousemove = dragMove;
+	_yddTop.onmouseover = function(e) {
 		frame.style.cursor = 'move';
 	};
-	document.getElementById("yddTop").onmouseout = function(e) {
+	_yddTop.onmouseout = function(e) {
 		frame.style.cursor = 'default';
 	};
 
