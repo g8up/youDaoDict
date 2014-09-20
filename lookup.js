@@ -1,6 +1,9 @@
 /**
  * @author Dongxu Huang
  * @date   2010-2-21
+ *
+ * @optimizing Simga
+ * @date 2014.09.20 cut verbose code
  */
 
 var body = document.getElementsByTagName("body")[0];
