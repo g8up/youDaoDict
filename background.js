@@ -1,29 +1,17 @@
-﻿var DefaultOptions = {
-	"dict_disable": ["checked", false],
-	"ctrl_only": ["checked", false],
-	"english_only": ["checked", true]
-};
-
-var DictTranslate = {
-	"return-phrase": "",
-	"lang": "",
-	"translation": [],
-}
-var ColorsChanged = true;
-
-if (localStorage["ColorOptions"] == undefined) {
-	localStorage["ColorOptions"] = JSON.stringify(DefaultOptions);
-}
-
-
-var startupOptions = JSON.parse(localStorage["ColorOptions"]);
+﻿var ColorsChanged = true;
 
 initIcon();
 
+function initIcon() {
+	if (Options['dict_disable'][1] == true) {
+		chrome.browserAction.setIcon({
+			path: "icon_nodict.gif"
+		})
+	}
+}
+
 sprintfWrapper = {
-
 	init: function() {
-
 		if (typeof arguments == "undefined") {
 			return null;
 		}
@@ -36,7 +24,6 @@ sprintfWrapper = {
 		if (typeof RegExp == "undefined") {
 			return null;
 		}
-
 		var string = arguments[0];
 		var exp = new RegExp(/(%([%]|(\-)?(\+|\x20)?(0)?(\d+)?(\.(\d)?)?([bcdfosxX])))/g);
 		var matches = new Array();
@@ -78,13 +65,11 @@ sprintfWrapper = {
 		if ((arguments.length - 1) < convCount) {
 			return null;
 		}
-
 		var code = null;
 		var match = null;
 		var i = null;
 
 		for (i = 0; i < matches.length; i++) {
-
 			if (matches[i].code == '%') {
 				substitution = '%'
 			} else if (matches[i].code == 'b') {
@@ -120,9 +105,7 @@ sprintfWrapper = {
 
 		}
 		newString += strings[i];
-
 		return newString;
-
 	},
 
 	convert: function(match, nosign) {
@@ -151,20 +134,17 @@ sprintfWrapper = {
 
 sprintf = sprintfWrapper.init;
 
-
-
 chrome.extension.onRequest.addListener(
 	function(request, sender, sendResponse) {
 		if (request.init == "init" && ColorsChanged == true) {
 			sendResponse({
 				init: "globalPages",
 				ChangeColors: "true",
-				ColorOptions: localStorage["ColorOptions"]
+				ColorOptions: Options
 			});
 		}
 	}
 );
-
 
 function genTable(word, strpho, baseTrans, webTrans) {
 	var lan = '';
@@ -183,7 +163,6 @@ function genTable(word, strpho, baseTrans, webTrans) {
 	}
 	var fmt = '';
 	if (noBaseTrans && noWebTrans) {
-
 		fmt = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' +
 			'    <div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=' +
 			encodeURIComponent(word) +
@@ -343,7 +322,6 @@ function translateTransXML(xmlnode) {
 		input_str_tmp = input_str_tmp.substring(0, 15) + ' ...';
 	}
 
-
 	if (trans_str_tmp == input_str_tmp) return null;
 
 	var res = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;" >' +
@@ -357,12 +335,10 @@ function translateTransXML(xmlnode) {
 		'	</div>' +
 		'   </div>' +
 		'  </div>';
-
-
 	return res;
 }
 
-function fetchWordWithoutDeskDict(word, callback) {
+function fetchWordOnline(word, callback) {
 	var lang = '';
 	if (isContainKoera(word)) {
 		lang = '&le=ko';
@@ -371,7 +347,6 @@ function fetchWordWithoutDeskDict(word, callback) {
 	xhr.onreadystatechange = function(data) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-
 				var dataText = translateXML(xhr.responseXML);
 				if (dataText != null)
 					callback(dataText);
@@ -380,41 +355,18 @@ function fetchWordWithoutDeskDict(word, callback) {
 			}
 		}
 	}
-	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng'
-
+	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng';
 	xhr.open('GET', url, true);
 	xhr.send();
-};
+}
+
 var _word;
 var _callback;
 var _timer;
 
-function handleTimeout() {
-	fetchWordWithoutDeskDict(_word, _callback);
-}
-
-function isKoera(str) {
-	for (i = 0; i < str.length; i++) {
-		if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F) || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function isContainKoera(temp) {
-	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
-		if (isKoera(temp.charAt(i)))
-			cnt++;
-	}
-	if (cnt > 0) return true;
-	return false;
-}
-
 function fetchWord(word, callback) {
 	if (isContainKoera(word)) {
-		fetchWordWithoutDeskDict(word, callback);
+		fetchWordOnline(word, callback);
 		return;
 	}
 	var xhr = new XMLHttpRequest();
@@ -427,23 +379,24 @@ function fetchWord(word, callback) {
 	xhr.open('GET', url, true);
 	xhr.send();
 	_timer = setTimeout(handleTimeout, 600);
-};
+}
+
+function handleTimeout() {
+	fetchWordOnline(_word, _callback);
+}
 
 function onRequest(request, sender, callback) {
-
 	if (request.action == 'dict') {
 		if (navigator.appVersion.indexOf("Win") != -1) {
-			fetchWordWithoutDeskDict(request.word, callback);
+			fetchWordOnline(request.word, callback);
 		} else {
-			fetchWordWithoutDeskDict(request.word, callback);
+			fetchWordOnline(request.word, callback);
 		}
 	}
 	if (request.action == 'translate') {
 		fetchTranslate(request.word, callback);
 	}
 };
-
-
 
 function fetchTranslate(words, callback) {
 	var xhr = new XMLHttpRequest();
