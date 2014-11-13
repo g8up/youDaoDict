@@ -62,11 +62,11 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 		}
 
 		var word = String(window.getSelection());
-		word = trim(word);
-		if (word == "") {
-			return;
-		} else if (word.length > 2000) {
-			return;
+		if ( word !== undefined ) {
+			word = word.trim();
+			if ( word.length < 1 || word.length > 2000 ) {
+				return;
+			}
 		}
 
 		if (getOptVal("english_only")) {

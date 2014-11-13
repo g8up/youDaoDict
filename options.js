@@ -165,8 +165,7 @@ function getCachedWord() {
 // 缓存查询词
 function saveSearchedWord(word) {
 	var w = word || (document.querySelector('#word') ? document.querySelector('#word').value : '');
-	if (w) {
-		w = trim(w);
+	if ( w && ( w = w.trim() ) ) {
 		var cache = localStorage.getItem('wordcache');
 		if (cache) {
 			//distinct
