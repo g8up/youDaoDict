@@ -1,10 +1,6 @@
 /**
  * util
  */
-function trim(str) {
-	return str.replace(/^\s+|\s+$/, '');
-}
-
 function isEnglish(s) {
 	for (var i = 0; i < s.length; i++) {
 		if (s.charCodeAt(i) > 126) {
