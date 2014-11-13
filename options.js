@@ -136,7 +136,7 @@ function getCachedWord() {
 	var html = [],
 		cache = localStorage.getItem('wordcache') || '',
 		count = Options.history_count >= 0 ? Options.history_count : 0;
-	var words = cache.split(',').slice(0, count);
+	var words = cache.split( ',' , count );
 	for (var i = 0, len = words.length; i < len; i++) {
 		html.push('<a>' + words[i] + '</a>');
 	}
