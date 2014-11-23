@@ -282,10 +282,10 @@ function translateTransXML(xmlnode) {
 	var remain = xmlnode.substring(e + 2, xmlnode.length - 1);
 	s = remain.indexOf("CDATA[");
 	e = remain.indexOf("]]");
-	trans_str = remain.substring(s + 6, e);
+	var trans_str = remain.substring(s + 6, e);
 
-	trans_str_tmp = trans_str.replace(/^\s*/, "").replace(/\s*$/, "");
-	input_str_tmp = input_str.replace(/^\s*/, "").replace(/\s*$/, "");
+	trans_str_tmp = trans_str.trim();
+	input_str_tmp = input_str.trim();
 
 	if ((isContainChinese(input_str_tmp) || isContainJapanese(input_str_tmp) || isContainKoera(input_str_tmp)) && input_str_tmp.length > 15) {
 		input_str_tmp = input_str_tmp.substring(0, 8) + ' ...';
