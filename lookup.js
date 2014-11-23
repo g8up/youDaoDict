@@ -168,7 +168,7 @@ function OnCheckCloseWindow() {
 	isDrag = false;
 	if (in_div) return;
 	if (last_frame != null) {
-		var cur = Math.round(new Date().getTime());
+		var cur = new Date().getTime();
 		if (cur - last_time < 500) {
 			return;
 		}
@@ -184,10 +184,10 @@ function OnCheckCloseWindow() {
 
 function OnCheckCloseWindowForce() {
 	in_div = false;
-	if (last_frame != null) {
-		var cur = Math.round(new Date().getTime());
-		while (list.length != 0) {
-			body.removeChild(list.pop());
+	if ( last_frame != null ) {
+		var cur = new Date().getTime();
+		while ( list.length != 0 ) {
+			body.removeChild( list.pop() );
 		}
 		last_frame = null;
 		last_div = null;
@@ -211,17 +211,17 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 
 	var frame_left = 0;
 	var frame_top = 0;
-	var frame = document.createElement('div');
+	var frame = document.createElement( 'div' );
 
 	frame.id = 'yddWrapper';
 
 	var screen_width = screen.availWidth;
 	var screen_height = screen.availHeight;
 
-	if (screenX + frame_width < screen_width) {
+	if ( screenX + frame_width < screen_width ) {
 		frame_left = x;
 	} else {
-		frame_left = (x - frame_width - 2 * padding);
+		frame_left = ( x - frame_width - 2 * padding );
 	}
 	frame.style.left = frame_left + 'px';
 
@@ -271,8 +271,7 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 			if (speach_flash != null) {
 				try {
 					speach_flash.StopPlay();
-				} catch (err) {;
-				}
+				} catch (err) {}
 			}
 		}
 	}
@@ -290,14 +289,24 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 			return;
 		}
 	}
-	last_time = Math.round(new Date().getTime());
+	last_time = new Date().getTime();
 	last_frame = frame;
 	div_num++;
 }
 
 function insertAudio(a, query, action, type) {
-	return '<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="15px" height="15px" align="absmiddle" id="speach_flash">' + '<param name="allowScriptAccess" value="sameDomain" />' + '<param name="movie" value="http://cidian.youdao.com/chromeplus/voice.swf" />' + '<param name="loop" value="false" />' + '<param name="menu" value="false" />' + '<param name="quality" value="high" />' + '<param name="wmode"  value="transparent">' + '<param name="FlashVars" value="audio=' + a + '">' + '<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=' + a + '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />' + '</object>';
+	return ['<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="15px" height="15px" align="absmiddle" id="speach_flash">' ,
+		'<param name="allowScriptAccess" value="sameDomain" />' ,
+		'<param name="movie" value="http://cidian.youdao.com/chromeplus/voice.swf" />' ,
+		'<param name="loop" value="false" />' ,
+		'<param name="menu" value="false" />' ,
+		'<param name="quality" value="high" />' ,
+		'<param name="wmode"  value="transparent">' ,
+		'<param name="FlashVars" value="audio=' , a , '">' ,
+		'<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=' , a , '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />' ,
+		'</object>'].join('');
 }
+
 var isDrag = false;
 var px = 0;
 var py = 0;

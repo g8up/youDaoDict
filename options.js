@@ -16,7 +16,10 @@ var langType = '';
 function translateXML(xmlnode) {
 	var translate = "<strong>查询:</strong><br/>";
 	var root = xmlnode.getElementsByTagName("yodaodict")[0];
-	if ('' + root.getElementsByTagName("return-phrase")[0].childNodes[0] != "undefined") retphrase = root.getElementsByTagName("return-phrase")[0].childNodes[0].nodeValue;
+	var phrase = root.getElementsByTagName("return-phrase");
+	if ('' + phrase[0].childNodes[0] != "undefined") {
+		retphrase = phrase[0].childNodes[0].nodeValue;
+	}
 	if ('' + root.getElementsByTagName("lang")[0] != "undefined") {
 		langType = root.getElementsByTagName("lang")[0].childNodes[0].nodeValue;
 	}

@@ -151,77 +151,60 @@ function genTable(word, strpho, baseTrans, webTrans) {
 	}
 	var fmt = '';
 	if (noBaseTrans && noWebTrans) {
-		fmt = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' +
-			'    <div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank title="查看完整释义" id="yddKeyTitle">' +
-			title +
-			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' +
-			strpho +
-			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://www.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' +
-			'    <div id="yddMiddle">';
+		fmt = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' ,
+			'<div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word), '&keyfrom=chrome.extension', lan,
+			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word), '&keyfrom=chrome.extension', lan,
+			'" target=_blank title="查看完整释义" id="yddKeyTitle">', title,
+			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">', strpho,
+			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://www.youdao.com/search?q=',
+			encodeURIComponent(word),
+			'&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>',
+			'    <div id="yddMiddle">'].join('');
 	} else {
-		fmt = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' +
-			'    <div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank title="查看完整释义" id="yddKeyTitle">' +
-			title +
-			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' +
-			strpho +
-			'&nbsp;&nbsp;</span><span id="voice" style="padding:2px;height:15px;width:15px">' +
-			speach +
-			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' +
-			'    <div id="yddMiddle">';
+		fmt = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">',
+			'<div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' ,
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" target=_blank title="查看完整释义" id="yddKeyTitle">' , title , '</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' ,
+			strpho , '&nbsp;&nbsp;</span><span id="voice" style="padding:2px;height:15px;width:15px">' ,
+			speach , '</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://dict.youdao.com/search?q=' ,
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' ,
+			'<div id="yddMiddle">'].join('');
 	}
 	if (noBaseTrans == false) {
 		var base =
-			'  <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">' +
-			'        <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>' +
-			'        %s' +
-			'	</div>';
+			['<div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">' ,
+			'      <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>' ,
+			'      %s' ,
+			'</div>'].join('');
 		base = sprintf(base, baseTrans);
 		fmt += base;
 	}
 	if (noWebTrans == false) {
 		var web =
-			'       <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">' +
-			'        <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>' +
-			'        %s' +
-			'      </div>';
+			[' <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">' ,
+			'  <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>' ,
+			'  %s' ,
+			'</div>'].join('');
 		web = sprintf(web, webTrans);
 		fmt += web;
 	}
 	if (noBaseTrans && noWebTrans) {
 		fmt += '&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="http://www.youdao.com/search?q=' + encodeURIComponent(word) + '&ue=utf8&keyfrom=chrome.extension" target=_blank>请尝试网页搜索</a>';
 	}
-	fmt += '   </div>' +
-		'  </div>';
+	fmt += '</div></div>';
 
 	res = fmt;
 	noBaseTrans = false;
 	noWebTrans = false;
 	speach = '';
-	//alert(res);
 	return res;
 }
+
 var noBaseTrans = false;
 var noWebTrans = false;
 var speach = '';
