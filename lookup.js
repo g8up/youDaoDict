@@ -52,6 +52,7 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 		word = word.trim();
 	}
 	if ( word.length < 1 || word.length > 2000 ) {
+		OnCheckCloseWindowForce();
 		return;
 	}
 	/*read options*/
