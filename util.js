@@ -75,7 +75,7 @@ function spaceCount(temp) {
 function ExtractEnglish(word) {
 	var patt = new RegExp(/([a-zA-Z ]+)/);
 	var results = patt.exec(word);
-	if( results.length ){
+	if( results && results.length ){
 		return results[1];
 	}
 	return '';
