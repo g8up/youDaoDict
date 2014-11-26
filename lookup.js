@@ -46,6 +46,14 @@ function getOptVal(strKey) {
 getOptions();
 
 body.addEventListener("mouseup", function OnDictEvent(e) {
+
+	var word = window.getSelection().toString();
+	if( word !== '' ){
+		word = word.trim();
+	}
+	if ( word.length < 1 || word.length > 2000 ) {
+		return;
+	}
 	/*read options*/
 	getOptions(function() {
 		if (in_div) return;
@@ -59,14 +67,6 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 		}
 		if (getOptVal("ctrl_only") && !e.ctrlKey) {
 			return;
-		}
-
-		var word = String(window.getSelection());
-		if ( word !== undefined ) {
-			word = word.trim();
-			if ( word.length < 1 || word.length > 2000 ) {
-				return;
-			}
 		}
 
 		if (getOptVal("english_only")) {
