@@ -5,15 +5,15 @@
  * @optimizing Simga
  * @date 2014.09.20 cut verbose code
  */
-var body = document.getElementsByTagName("body")[0];
-var Options = null;
-var last_frame = null;
-var last_div = null;
-var div_num = 0;
-var xx, yy, sx, sy;
-var list = new Array();
-var last_time = 0;
-var last_request_time = 0;
+var body = document.querySelector('body');
+
+var Options,
+	last_frame,
+	last_div,
+	div_num = 0;
+var list = [];
+var last_time = 0,
+	last_request_time = 0;
 
 var youdaoStyle = document.createElement("style"),
 	styleContent = document.createTextNode("#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(" + chrome.extension.getURL("ab20.png") + ");}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(" + chrome.extension.getURL("ydd-sprite.png") + ")}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}");
@@ -23,7 +23,7 @@ if (youdaoStyle.styleSheet) {
 	youdaoStyle.styleSheet.cssText = styleContent.nodeValue;
 } else {
 	youdaoStyle.appendChild(styleContent);
-	document.getElementsByTagName("head")[0].appendChild(youdaoStyle)
+	document.querySelector("head").appendChild(youdaoStyle)
 }
 
 function getOptions(next) {
@@ -78,15 +78,19 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 		} else if ((!isContainChinese(word) && spaceCount(word) >= 3) ||
 			(isContainChinese(word) && word.length > 4) ||
 			isContainJapanese(word) && word.length > 4) {
-			xx = e.pageX, yy = e.pageY, sx = e.screenX, sy = e.screenY;
-			getYoudaoTrans(word, e.pageX, e.pageY, e.screenX, e.screenY);
+			var xx = e.pageX, yy = e.pageY, sx = e.screenX, sy = e.screenY;
+			getYoudaoTrans(word, e.pageX, e.pageY, e.screenX, e.screenY,function( data ){
+				createPopUpEx(data, xx, yy, sx, sy);
+			});
 			return;
 		}
 		// TODO: add isEnglish function
 		if (word != '') {
 			OnCheckCloseWindowForce();
-			xx = e.pageX, yy = e.pageY, sx = e.screenX, sy = e.screenY;
-			getYoudaoDict(word, e.pageX, e.pageY, e.screenX, e.screenY);
+			var xx = e.pageX, yy = e.pageY, sx = e.screenX, sy = e.screenY;
+			getYoudaoDict(word, e.pageX, e.pageY, e.screenX, e.screenY,function( data ){
+				createPopUpEx(data, xx, yy, sx, sy);
+			});
 			return;
 		}
 	});
@@ -94,43 +98,44 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 
 var prevC, prevO, prevWord, c;
 
-document.addEventListener('mousemove', function onScrTrans(event) {
+document.addEventListener('mousemove', function onScrTrans(e) {
 	clearTimeout(window._ydTimer);
 	window._ydTimer = setTimeout(function() {
 		if (!getOptVal("ctrl_only")) {
 			return;
-		} else if (!event.ctrlKey) {
+		} else if (!e.ctrlKey) {
 			return true;
 		}
 
-		var r = document.caretRangeFromPoint(event.clientX, event.clientY);
-		if (!r) return true;
+		var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
+		if (!caretRange) return true;
 
-		pX = event.pageX;
-		pY = event.pageY;
-		var so = r.startOffset,
-			eo = r.endOffset;
-		if (prevC === r.startContainer && prevO === so) return true
+		pX = e.pageX;
+		pY = e.pageY;
+		var so = caretRange.startOffset,
+			eo = caretRange.endOffset;
+		if (prevC === caretRange.startContainer && prevO === so) return true;
 
-		prevC = r.startContainer;
+		prevC = caretRange.startContainer;
 		prevO = so;
-		var tr = r.cloneRange(),
+		var tr = caretRange.cloneRange(),
 			text = '';
-		if (r.startContainer.data)
+		if (caretRange.startContainer.data){
 			while (so >= 1) {
-				tr.setStart(r.startContainer, --so);
+				tr.setStart( caretRange.startContainer, --so );
 				text = tr.toString();
 				if (!isAlpha(text.charAt(0))) {
-					tr.setStart(r.startContainer, so + 1);
+					tr.setStart( caretRange.startContainer, so + 1);
 					break;
 				}
 			}
-		if (r.endContainer.data) {
-			while (eo < r.endContainer.data.length) {
-				tr.setEnd(r.endContainer, ++eo);
+		}
+		if (caretRange.endContainer.data) {
+			while (eo < caretRange.endContainer.data.length) {
+				tr.setEnd(caretRange.endContainer, ++eo);
 				text = tr.toString();
 				if (!isAlpha(text.charAt(text.length - 1))) {
-					tr.setEnd(r.endContainer, eo - 1);
+					tr.setEnd(caretRange.endContainer, eo - 1);
 					break;
 				}
 			}
@@ -143,11 +148,13 @@ document.addEventListener('mousemove', function onScrTrans(event) {
 
 		if (word.length >= 1) {
 			setTimeout(function() {
-				var s = window.getSelection();
-				s.removeAllRanges();
-				s.addRange(tr);
-				xx = event.pageX, yy = event.pageY, sx = event.screenX, sy = event.screenY;
-				getYoudaoDict(word, event.pageX, event.pageY, event.screenX, event.screenY);
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(tr);
+				var xx = pX, yy = pY, sx = e.screenX, sy = e.screenY;
+				getYoudaoDict(word, pX, pY, e.screenX, e.screenY, function( data ){
+					createPopUpEx(data, xx, yy, sx, sy);
+				});
 			}, 50);
 		}
 	}, 200);
@@ -264,16 +271,20 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 		frame.style.cursor = 'default';
 	};
 
-	if (document.getElementById("voice") != null) {
-		var speach_swf = document.getElementById("voice");
-		if (speach_swf.innerHTML != '') {
-			speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML, "test", "CLICK", "dictcn_speech");
-			var speach_flash = document.getElementById("speach_flash");
-			if (speach_flash != null) {
-				try {
-					speach_flash.StopPlay();
-				} catch (err) {}
+	var speach_swf = document.getElementById("voice");
+	if ( speach_swf ) {
+		if( window.location.protocol == 'http:' ){
+			if (speach_swf.innerHTML != '') {
+				speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML, "test", "CLICK", "dictcn_speech");
+				var speach_flash = document.getElementById("speach_flash");
+				if (speach_flash != null) {
+					try {
+						speach_flash.StopPlay();
+					} catch (err) {}
+				}
 			}
+		}else{
+			speach_swf.innerHTML = '';
 		}
 	}
 	list.push(frame);
@@ -332,28 +343,28 @@ function dragUp(e) {
 	isDrag = false;
 }
 
-function onText(data) {
-	createPopUpEx(data, xx, yy, sx, sy);
-}
-
-function getYoudaoDict(word, x, y, screenx, screeny) {
+function getYoudaoDict(word, x, y, screenX, screenY, next ) {
 	chrome.extension.sendRequest({
 		'action': 'dict',
 		'word': word,
 		'x': x,
 		'y': y,
-		'screenX': screenx,
-		'screenY': screeny
-	}, onText);
+		'screenX': screenX,
+		'screenY': screenY
+	}, function( data ){
+		next && next( data );
+	});
 }
 
-function getYoudaoTrans(word, x, y, screenx, screeny) {
+function getYoudaoTrans(word, x, y, screenX, screenY, next ) {
 	chrome.extension.sendRequest({
 		'action': 'translate',
 		'word': word,
 		'x': x,
 		'y': y,
-		'screenX': screenx,
-		'screenY': screeny
-	}, onText);
+		'screenX': screenX,
+		'screenY': screenY
+	}, function( data ){
+		next && next( data );
+	});
 }
