@@ -1,29 +1,17 @@
-﻿var DefaultOptions = {
-	"dict_disable": ["checked", false],
-	"ctrl_only": ["checked", false],
-	"english_only": ["checked", true]
-};
-
-var DictTranslate = {
-	"return-phrase": "",
-	"lang": "",
-	"translation": [],
-}
-var ColorsChanged = true;
-
-if (localStorage["ColorOptions"] == undefined) {
-	localStorage["ColorOptions"] = JSON.stringify(DefaultOptions);
-}
-
-
-var startupOptions = JSON.parse(localStorage["ColorOptions"]);
+﻿var ColorsChanged = true;
 
 initIcon();
 
+function initIcon() {
+	if (Options['dict_disable'][1] == true) {
+		chrome.browserAction.setIcon({
+			path: "icon_nodict.gif"
+		})
+	}
+}
+
 sprintfWrapper = {
-
 	init: function() {
-
 		if (typeof arguments == "undefined") {
 			return null;
 		}
@@ -36,7 +24,6 @@ sprintfWrapper = {
 		if (typeof RegExp == "undefined") {
 			return null;
 		}
-
 		var string = arguments[0];
 		var exp = new RegExp(/(%([%]|(\-)?(\+|\x20)?(0)?(\d+)?(\.(\d)?)?([bcdfosxX])))/g);
 		var matches = new Array();
@@ -78,13 +65,11 @@ sprintfWrapper = {
 		if ((arguments.length - 1) < convCount) {
 			return null;
 		}
-
 		var code = null;
 		var match = null;
 		var i = null;
 
 		for (i = 0; i < matches.length; i++) {
-
 			if (matches[i].code == '%') {
 				substitution = '%'
 			} else if (matches[i].code == 'b') {
@@ -120,9 +105,7 @@ sprintfWrapper = {
 
 		}
 		newString += strings[i];
-
 		return newString;
-
 	},
 
 	convert: function(match, nosign) {
@@ -151,21 +134,6 @@ sprintfWrapper = {
 
 sprintf = sprintfWrapper.init;
 
-
-
-chrome.extension.onRequest.addListener(
-	function(request, sender, sendResponse) {
-		if (request.init == "init" && ColorsChanged == true) {
-			sendResponse({
-				init: "globalPages",
-				ChangeColors: "true",
-				ColorOptions: localStorage["ColorOptions"]
-			});
-		}
-	}
-);
-
-
 function genTable(word, strpho, baseTrans, webTrans) {
 	var lan = '';
 	if (isContainKoera(word)) {
@@ -183,78 +151,60 @@ function genTable(word, strpho, baseTrans, webTrans) {
 	}
 	var fmt = '';
 	if (noBaseTrans && noWebTrans) {
-
-		fmt = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' +
-			'    <div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank title="查看完整释义" id="yddKeyTitle">' +
-			title +
-			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' +
-			strpho +
-			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://www.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' +
-			'    <div id="yddMiddle">';
+		fmt = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' ,
+			'<div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word), '&keyfrom=chrome.extension', lan,
+			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word), '&keyfrom=chrome.extension', lan,
+			'" target=_blank title="查看完整释义" id="yddKeyTitle">', title,
+			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">', strpho,
+			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://www.youdao.com/search?q=',
+			encodeURIComponent(word),
+			'&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>',
+			'    <div id="yddMiddle">'].join('');
 	} else {
-		fmt = '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">' +
-			'    <div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank title="查看完整释义" id="yddKeyTitle">' +
-			title +
-			'</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' +
-			strpho +
-			'&nbsp;&nbsp;</span><span id="voice" style="padding:2px;height:15px;width:15px">' +
-			speach +
-			'</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://dict.youdao.com/search?q=' +
-			encodeURIComponent(word) +
-			'&keyfrom=chrome.extension' +
-			lan +
-			'" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' +
-			'    <div id="yddMiddle">';
+		fmt = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">',
+			'<div id="yddTop" class="ydd-sp"><div id="yddTopBorderlr"><a href="http://dict.youdao.com/search?q=',
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" title="查看完整释义" class="ydd-sp ydd-icon" style="padding:0px 0px 0px 0px;padding-top:17px;" target=_blank></a> <a href="http://dict.youdao.com/search?q=' ,
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" target=_blank title="查看完整释义" id="yddKeyTitle">' , title , '</a>&nbsp;<span style="font-weight:normal;font-size:10px;">' ,
+			strpho , '&nbsp;&nbsp;</span><span id="voice" style="padding:2px;height:15px;width:15px">' ,
+			speach , '</span><span style="float:right;font-weight:normal;font-size:10px"><a href="http://dict.youdao.com/search?q=' ,
+			encodeURIComponent(word) , '&keyfrom=chrome.extension' , lan ,
+			'" target=_blank>详细</a></span><a id="test"><span class="ydd-sp ydd-close">X</span></a></div></div>' ,
+			'<div id="yddMiddle">'].join('');
 	}
 	if (noBaseTrans == false) {
 		var base =
-			'  <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">' +
-			'        <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>' +
-			'        %s' +
-			'	</div>';
+			['<div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">' ,
+			'      <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>' ,
+			'      %s' ,
+			'</div>'].join('');
 		base = sprintf(base, baseTrans);
 		fmt += base;
 	}
 	if (noWebTrans == false) {
 		var web =
-			'       <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">' +
-			'        <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>' +
-			'        %s' +
-			'      </div>';
+			[' <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">' ,
+			'  <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>' ,
+			'  %s' ,
+			'</div>'].join('');
 		web = sprintf(web, webTrans);
 		fmt += web;
 	}
 	if (noBaseTrans && noWebTrans) {
 		fmt += '&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="http://www.youdao.com/search?q=' + encodeURIComponent(word) + '&ue=utf8&keyfrom=chrome.extension" target=_blank>请尝试网页搜索</a>';
 	}
-	fmt += '   </div>' +
-		'  </div>';
+	fmt += '</div></div>';
 
 	res = fmt;
 	noBaseTrans = false;
 	noWebTrans = false;
 	speach = '';
-	//alert(res);
 	return res;
 }
+
 var noBaseTrans = false;
 var noWebTrans = false;
 var speach = '';
@@ -332,17 +282,16 @@ function translateTransXML(xmlnode) {
 	var remain = xmlnode.substring(e + 2, xmlnode.length - 1);
 	s = remain.indexOf("CDATA[");
 	e = remain.indexOf("]]");
-	trans_str = remain.substring(s + 6, e);
+	var trans_str = remain.substring(s + 6, e);
 
-	trans_str_tmp = trans_str.replace(/^\s*/, "").replace(/\s*$/, "");
-	input_str_tmp = input_str.replace(/^\s*/, "").replace(/\s*$/, "");
+	trans_str_tmp = trans_str.trim();
+	input_str_tmp = input_str.trim();
 
 	if ((isContainChinese(input_str_tmp) || isContainJapanese(input_str_tmp) || isContainKoera(input_str_tmp)) && input_str_tmp.length > 15) {
 		input_str_tmp = input_str_tmp.substring(0, 8) + ' ...';
 	} else if (input_str_tmp.length > 25) {
 		input_str_tmp = input_str_tmp.substring(0, 15) + ' ...';
 	}
-
 
 	if (trans_str_tmp == input_str_tmp) return null;
 
@@ -357,12 +306,10 @@ function translateTransXML(xmlnode) {
 		'	</div>' +
 		'   </div>' +
 		'  </div>';
-
-
 	return res;
 }
 
-function fetchWordWithoutDeskDict(word, callback) {
+function fetchWordOnline(word, callback) {
 	var lang = '';
 	if (isContainKoera(word)) {
 		lang = '&le=ko';
@@ -371,50 +318,24 @@ function fetchWordWithoutDeskDict(word, callback) {
 	xhr.onreadystatechange = function(data) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-
 				var dataText = translateXML(xhr.responseXML);
 				if (dataText != null)
 					callback(dataText);
-			} else {
-				//callback(null);
 			}
 		}
 	}
-	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng'
-
+	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng';
 	xhr.open('GET', url, true);
 	xhr.send();
-};
+}
+
 var _word;
 var _callback;
 var _timer;
 
-function handleTimeout() {
-	fetchWordWithoutDeskDict(_word, _callback);
-}
-
-function isKoera(str) {
-	for (i = 0; i < str.length; i++) {
-		if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F) || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
-			return true;
-		}
-	}
-	return false;
-}
-
-function isContainKoera(temp) {
-	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
-		if (isKoera(temp.charAt(i)))
-			cnt++;
-	}
-	if (cnt > 0) return true;
-	return false;
-}
-
 function fetchWord(word, callback) {
 	if (isContainKoera(word)) {
-		fetchWordWithoutDeskDict(word, callback);
+		fetchWordOnline(word, callback);
 		return;
 	}
 	var xhr = new XMLHttpRequest();
@@ -427,23 +348,11 @@ function fetchWord(word, callback) {
 	xhr.open('GET', url, true);
 	xhr.send();
 	_timer = setTimeout(handleTimeout, 600);
-};
+}
 
-function onRequest(request, sender, callback) {
-
-	if (request.action == 'dict') {
-		if (navigator.appVersion.indexOf("Win") != -1) {
-			fetchWordWithoutDeskDict(request.word, callback);
-		} else {
-			fetchWordWithoutDeskDict(request.word, callback);
-		}
-	}
-	if (request.action == 'translate') {
-		fetchTranslate(request.word, callback);
-	}
-};
-
-
+function handleTimeout() {
+	fetchWordOnline(_word, _callback);
+}
 
 function fetchTranslate(words, callback) {
 	var xhr = new XMLHttpRequest();
@@ -463,4 +372,33 @@ function fetchTranslate(words, callback) {
 	xhr.send();
 }
 
-chrome.extension.onRequest.addListener(onRequest);
+chrome.extension.onRequest.addListener(
+	function(request, sender, sendResponse) {
+		var _action = request.action;
+		switch( _action ){
+			case 'getOptions':
+				if ( ColorsChanged == true) {
+					sendResponse({
+						init: "globalPages",
+						ChangeColors: "true",
+						ColorOptions: Options
+					});
+				}
+				break;
+			case 'setOptions':
+				Options = request.data;
+				break;
+			case 'dict':
+				if (navigator.appVersion.indexOf("Win") > -1) {
+					fetchWordOnline(request.word, sendResponse);
+				} else {
+					fetchWordOnline(request.word, sendResponse);
+				}
+				break;
+			case 'translate':
+				fetchTranslate(request.word, sendResponse);
+				break;
+			default:break;
+		}
+	}
+);

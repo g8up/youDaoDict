@@ -1,15 +1,22 @@
 {
 	"background": {
-		"scripts": [ "options.js", "background.js" ]
+		"scripts": ["common.js", "util.js", "background.js"]
 	},
 	"browser_action": {
 		"default_icon": "icon_dict.gif",
 		"default_popup": "options.html"
 	},
-	"content_scripts": [ {
-		"js": [ "lookup.js" ],
-		"matches": [ "http://*/*", "https://*/*" ]
-	} ],
+	"commands": {
+		"_execute_browser_action": {
+			"suggested_key": {
+				"default": "Alt+Shift+Y"
+			}
+		}
+	},
+	"content_scripts": [{
+		"js": ["util.js", "lookup.js"],
+		"matches": ["http://*/*", "https://*/*"]
+	}],
 	"description": "可记录、导出查询历史!",
 	"icons": {
 		"128": "icon-128.png",
@@ -17,11 +24,11 @@
 		"48": "icon-128.png"
 	},
 	"manifest_version": 2,
-	"version": "3.0.1",
+	"version": "3.0.4",
 	"name": "有道词典划词扩展 V3",
-	"short_name":"有道词典",
+	"short_name": "有道词典",
 	"options_page": "options.html",
-	"permissions": [ "*://*/*" ],
+	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": [ "ab20.png", "ydd-sprite.png" ]
+	"web_accessible_resources": ["ab20.png", "ydd-sprite.png"]
 }
