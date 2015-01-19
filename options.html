@@ -28,6 +28,19 @@
 			height: 18px;
 			line-height: normal
 		}
+		#maintable,
+		#options{
+			width:230px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#maintable{
+			word-break:keep-all;
+		}
+		#result,
+		#cache{
+			white-space:nowrap;
+		}
 		/* *搜索历史
 			* @author Sigma */
 		#cache a {
@@ -54,7 +67,7 @@
 </head>
 
 <body>
-	<table id="maintable" cellpadding="1" width="230px" align="center" style="word-break:keep-all;">
+	<table id="maintable" cellpadding="1">
 		<tr>
 			<td>
 				<img src="logo.png">
@@ -68,12 +81,12 @@
 		</tr>
 		<tr>
 			<td>
-				<div id='result' style=' white-space:nowrap;'></div>
+				<div id='result'></div>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<div id='cache' style=' white-space:nowrap;'></div>
+				<div id='cache'></div>
 			</td>
 		</tr>
 	</table>
