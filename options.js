@@ -141,28 +141,30 @@ function buildSearchResult() {
 // 取缓存查询次
 function getCachedWord() {
 	var html = [],
-		cache = localStorage.getItem('wordcache') || '',
-		count = Options.history_count >= 0 ? Options.history_count : 0;
-	var words = cache.split( ',' , count );
-	for (var i = 0, len = words.length; i < len; i++) {
-		html.push('<a>' + words[i] + '</a>');
-	}
-	if (html.length) {
-		var cache = document.querySelector('#cache');
-		html.unshift('<strong>查询历史：</strong>');
-		cache.innerHTML = html.join('<br/>');
-		cache.onclick = function(event) { //查询
-			var e = event || window.event;
-			var a = e.target;
-			if (a.tagName.toLowerCase() == 'a') {
-				var w = a.innerText;
-				if (w) {
-					document.querySelector('#word').value = w;
-					mainQuery(w, translateXML);
+		cache = localStorage.getItem('wordcache');
+	if( cache && ( cache = cache.trim() ) ){
+		var count = Options.history_count >= 0 ? Options.history_count : 0;
+		var words = cache.split( ',' , count );
+		for (var i = 0, len = words.length; i < len; i++) {
+			html.push('<a>' + words[i] + '</a>');
+		}
+		if (html.length) {
+			var cache = document.querySelector('#cache');
+			html.unshift('<strong>查询历史：</strong>');
+			cache.innerHTML = html.join('<br/>');
+			cache.onclick = function(event) { //查询
+				var e = event || window.event;
+				var a = e.target;
+				if (a.tagName.toLowerCase() == 'a') {
+					var w = a.innerText;
+					if (w) {
+						document.querySelector('#word').value = w;
+						mainQuery(w, translateXML);
+					}
 				}
-			}
-		};
-		cache = null;
+			};
+			cache = null;
+		}
 	}
 }
 // 缓存查询词
