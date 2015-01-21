@@ -34,11 +34,19 @@
 			margin-left:auto;
 			margin-right:auto;
 		}
+		#options{
+			margin-top: 5px;
+			color: #666;
+		}
+		#options input[type=checkbox]{
+			vertical-align: middle;
+		}
+		.conf-item{
+			height: 25px;
+			line-height: 25px;
+		}
 		#maintable{
 			word-break:keep-all;
-		}
-		#options{
-			color: #666;
 		}
 		#result,
 		#cache{
@@ -48,6 +56,8 @@
 			* @author Sigma */
 		#cache a {
 			cursor: pointer;
+			padding-left: 2px;
+			line-height: 20px;
 		}
 		#history_count {
 			width: 40px;
@@ -97,16 +107,16 @@
 		<div>
 			<strong>选项设置:</strong>
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="dict_disable" type="checkbox">关闭划词翻译
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="ctrl_only" type="checkbox">指词即译模式（按下Ctrl键指词）
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="english_only" type="checkbox">仅对英文划译
 		</div>
-		<div>
+		<div class="conf-item">
 			历史记录条数：
 			<input type="number" id="history_count">
 			<em id="backup" title="导出所有查询记录">导出</em>
