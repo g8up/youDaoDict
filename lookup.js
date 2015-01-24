@@ -9,8 +9,7 @@ var body = document.querySelector('body');
 
 var Options,
 	last_frame,
-	last_div,
-	div_num = 0;
+	last_div;
 var list = [];
 var last_time = 0,
 	last_request_time = 0;
@@ -174,7 +173,6 @@ document.onkeydown = function(e) {
 }
 
 function OnCheckCloseWindow() {
-	isDrag = false;
 	if (inDictPannel) return;
 	if (last_frame != null) {
 		var cur = new Date().getTime();
@@ -205,16 +203,15 @@ function OnCheckCloseWindowForce() {
 	return false;
 }
 
-function createPopUpEx(word, x, y, screenx, screeny) {
+function createPopUpEx( html , x, y, screenx, screeny) {
 	OnCheckCloseWindowForce();
-	createPopUp(word, window.getSelection().getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+	createPopUp( html , window.getSelection().getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
 }
 
 // 鼠标是否在弹出框上
 var inDictPannel = false;
 
-function createPopUp(word, senctence, x, y, screenX, screenY) {
-	last_word = word;
+function createPopUp( html , senctence, x, y, screenX, screenY) {
 	var frame_height = 150;
 	var frame_width = 300;
 	var padding = 10;
@@ -224,6 +221,7 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	var frame = document.createElement( 'div' );
 
 	frame.id = 'yddWrapper';
+	frame.setAttribute('draggable', true );
 
 	var screen_width = screen.availWidth;
 	var screen_height = screen.availHeight;
@@ -247,26 +245,44 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	if (frame.style.left + frame_width > screen_width) {
 		frame.style.left -= frame.style.left + frame_width - screen_width;
 	}
-	frame.innerHTML += word;
+	frame.innerHTML += html;
+
 	frame.onmouseover = function(e) {
 		inDictPannel = true;
 	};
 	frame.onmouseout = function(e) {
 		inDictPannel = false;
 	};
+
 	body.style.position = "static";
 	body.appendChild(frame);
+	list.push(frame);
+
+	// 拖放
+	var distanceX,distanceY;
+	frame.ondragstart = function(e){
+		distanceX = e.x - parseInt( frame.style.left );
+		distanceY = e.y - parseInt( frame.style.top );
+	};
+	frame.ondragend = function(e){
+		frame.style.left = e.x - distanceX + 'px';
+		frame.style.top = e.y - distanceY + 'px';
+		distanceX = 0;
+		distanceY = 0;
+	};
+
+	document.querySelector('#yddMiddle').setAttribute('draggable', true );
+	document.querySelector('#yddMiddle').ondragstart = function(e){
+		e.preventDefault();
+	};
+
 	// 关闭按钮
 	var closeBtn = document.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
 		OnCheckCloseWindowForce();
 	};
 	closeBtn = null;
-	// 标题栏
-	var _yddTop = document.getElementById("yddTop");
-	_yddTop.onmousedown = dragDown;
-	_yddTop.onmouseup = dragUp;
-	_yddTop.onmousemove = dragMove;
+
 	// 语音播放
 	var speach_swf = document.getElementById("ydd-voice");
 	if ( speach_swf ) {
@@ -284,7 +300,8 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 			speach_swf.innerHTML = '';
 		}
 	}
-	list.push(frame);
+
+	// 确定位置
 	var leftbottom = frame_top + 10 + document.getElementById("yddWrapper").clientHeight;
 
 	if (leftbottom < y) {
@@ -300,7 +317,6 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	}
 	last_time = new Date().getTime();
 	last_frame = frame;
-	div_num++;
 }
 
 function insertAudio( link ) {
@@ -314,30 +330,6 @@ function insertAudio( link ) {
 		'<param name="FlashVars" value="audio=' , link , '">' ,
 		'<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=' , link , '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />' ,
 		'</object>'].join('');
-}
-
-var isDrag = false;
-var px = 0;
-var py = 0;
-
-function dragMove(e) {
-	if (isDrag) {
-		var myDragDiv = last_frame;
-		myDragDiv.style.left = px + e.x;
-		myDragDiv.style.top = py + e.y;
-	}
-}
-
-function dragDown(e) {
-	var oDiv = last_frame;
-	px = parseInt( oDiv.style.left ) - e.x;
-	py = parseInt( oDiv.style.top ) - e.y;
-	isDrag = true;
-}
-
-function dragUp(e) {
-	var oDiv = last_frame;
-	isDrag = false;
 }
 
 function getYoudaoDict(word, x, y, screenX, screenY, next ) {
