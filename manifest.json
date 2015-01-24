@@ -3,7 +3,7 @@
 		"scripts": ["common.js", "util.js", "background.js"]
 	},
 	"browser_action": {
-		"default_icon": "icon_dict.gif",
+		"default_icon": "icon-yd-dict.png",
 		"default_popup": "options.html"
 	},
 	"commands": {
@@ -30,5 +30,5 @@
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["ab20.png", "ydd-sprite.png"]
+	"web_accessible_resources": ["icon-yd-dict.png"]
 }

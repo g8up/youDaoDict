@@ -16,7 +16,8 @@ var last_time = 0,
 	last_request_time = 0;
 
 var youdaoStyle = document.createElement("style"),
-	styleContent = document.createTextNode("#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(" + chrome.extension.getURL("ab20.png") + ");}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(" + chrome.extension.getURL("ydd-sprite.png") + ")}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}");
+	styleContent = document.createTextNode("#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;font-size:12px;border:1px solid #4b7598;background:#fff;}#yddTop{display:block;height:22px;cursor:move;border-bottom: 1px solid #d7e3eb; background: #e1f1fb;}#yddTopBorderlr{display:block;position:static;height:22px;line-height:22px;padding:0 28px;font-size:12px;color:#5079bb;font-weight:bold;}#yddWrapper .ydd-icon{display: inline-block; position: absolute; left: 5px; top: 2px; width: 17px; height: 17px;background:url(" + chrome.extension.getURL("icon-yd-dict.png") + ") no-repeat;}.ydd-close{display: inline-block; width: 20px; height: 22px; line-height: 22px; font-size: 16px; position: absolute; right: 0; padding-left: 4px; text-decoration: none!important; cursor: pointer;}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{-webkit-user-drag:element;color:#252525;z-index:10001;box-shadow: 2px 2px 4px gray;}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}#ydd-voice{margin-left:2px;height:15px;width:15px}#ydd-voice object{vertical-align: top;}");
+
 youdaoStyle.type = "text/css";
 youdaoStyle.info = "youdaoDict";
 if (youdaoStyle.styleSheet) {
@@ -57,7 +58,7 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 	}
 	/*read options*/
 	getOptions(function() {
-		if (in_div) return;
+		if (inDictPannel) return;
 		OnCheckCloseWindow();
 
 		if (getOptVal("dict_disable")) {
@@ -174,7 +175,7 @@ document.onkeydown = function(e) {
 
 function OnCheckCloseWindow() {
 	isDrag = false;
-	if (in_div) return;
+	if (inDictPannel) return;
 	if (last_frame != null) {
 		var cur = new Date().getTime();
 		if (cur - last_time < 500) {
@@ -191,7 +192,7 @@ function OnCheckCloseWindow() {
 }
 
 function OnCheckCloseWindowForce() {
-	in_div = false;
+	inDictPannel = false;
 	if ( last_frame != null ) {
 		var cur = new Date().getTime();
 		while ( list.length != 0 ) {
@@ -209,7 +210,8 @@ function createPopUpEx(word, x, y, screenx, screeny) {
 	createPopUp(word, window.getSelection().getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
 }
 
-var in_div = false;
+// 鼠标是否在弹出框上
+var inDictPannel = false;
 
 function createPopUp(word, senctence, x, y, screenX, screenY) {
 	last_word = word;
@@ -247,35 +249,33 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	}
 	frame.innerHTML += word;
 	frame.onmouseover = function(e) {
-		in_div = true;
+		inDictPannel = true;
 	};
 	frame.onmouseout = function(e) {
-		in_div = false;
+		inDictPannel = false;
 	};
 	body.style.position = "static";
 	body.appendChild(frame);
-	document.getElementById("test").onclick = function(e) {
+	// 关闭按钮
+	var closeBtn = document.querySelector('.ydd-close');
+	closeBtn.onclick = function(e) {
 		OnCheckCloseWindowForce();
 	};
-	document.getElementById("test").onmousemove = function(e) {
+	closeBtn.onmousemove = function(e) {
 		frame.style.cursor = 'default';
 	};
+	closeBtn = null;
+	// 标题栏
 	var _yddTop = document.getElementById("yddTop");
 	_yddTop.onmousedown = dragDown;
 	_yddTop.onmouseup = dragUp;
 	_yddTop.onmousemove = dragMove;
-	_yddTop.onmouseover = function(e) {
-		frame.style.cursor = 'move';
-	};
-	_yddTop.onmouseout = function(e) {
-		frame.style.cursor = 'default';
-	};
-
-	var speach_swf = document.getElementById("voice");
+	// 语音播放
+	var speach_swf = document.getElementById("ydd-voice");
 	if ( speach_swf ) {
 		if( window.location.protocol == 'http:' ){
 			if (speach_swf.innerHTML != '') {
-				speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML, "test", "CLICK", "dictcn_speech");
+				speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML );
 				var speach_flash = document.getElementById("speach_flash");
 				if (speach_flash != null) {
 					try {
@@ -306,7 +306,7 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	div_num++;
 }
 
-function insertAudio(a, query, action, type) {
+function insertAudio( link ) {
 	return ['<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="15px" height="15px" align="absmiddle" id="speach_flash">' ,
 		'<param name="allowScriptAccess" value="sameDomain" />' ,
 		'<param name="movie" value="http://cidian.youdao.com/chromeplus/voice.swf" />' ,
@@ -314,8 +314,8 @@ function insertAudio(a, query, action, type) {
 		'<param name="menu" value="false" />' ,
 		'<param name="quality" value="high" />' ,
 		'<param name="wmode"  value="transparent">' ,
-		'<param name="FlashVars" value="audio=' , a , '">' ,
-		'<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=' , a , '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />' ,
+		'<param name="FlashVars" value="audio=' , link , '">' ,
+		'<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=' , link , '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />' ,
 		'</object>'].join('');
 }
 
@@ -326,15 +326,15 @@ var py = 0;
 function dragMove(e) {
 	if (isDrag) {
 		var myDragDiv = last_frame;
-		myDragDiv.style.pixelLeft = px + e.x;
-		myDragDiv.style.pixelTop = py + e.y;
+		myDragDiv.style.left = px + e.x;
+		myDragDiv.style.top = py + e.y;
 	}
 }
 
 function dragDown(e) {
 	var oDiv = last_frame;
-	px = oDiv.style.pixelLeft - e.x;
-	py = oDiv.style.pixelTop - e.y;
+	px = parseInt( oDiv.style.left ) - e.x;
+	py = parseInt( oDiv.style.top ) - e.y;
 	isDrag = true;
 }
 
