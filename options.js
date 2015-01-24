@@ -193,7 +193,7 @@ function changeIcon() {
 	ctrlBox.disabled = flag;
 	engBox.disabled = flag;
 	chrome.browserAction.setIcon({
-		path: flag ? "icon_nodict.gif" : "icon_dict.gif"
+		path: flag ? "icon_nodict.gif" : "icon-yd-dict.png"
 	});
 }
 
