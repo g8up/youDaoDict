@@ -28,16 +28,42 @@
 			height: 18px;
 			line-height: normal
 		}
+		#maintable,	#options{
+			width:230px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		#options{
+			color: #666;
+			margin-top: 5px;
+			padding-left: 3px;
+		}
+		#options input[type=checkbox]{
+			vertical-align: middle;
+		}
+		.conf-item{
+			height: 25px;
+			line-height: 25px;
+		}
+		#maintable{
+			word-break:keep-all;
+		}
+		#result,
+		#cache{
+			white-space:nowrap;
+		}
 		/* *搜索历史
 			* @author Sigma */
 		#cache a {
 			cursor: pointer;
+			padding-left: 2px;
+			line-height: 20px;
 		}
 		#history_count {
 			width: 40px;
+			color: inherit;
 		}
 		#backup {
-			color: gray;
 			font-size: 10px;
 			margin-left: 2px;
 			cursor: pointer;
@@ -54,7 +80,7 @@
 </head>
 
 <body>
-	<table id="maintable" cellpadding="1" width="230px" align="center" style="word-break:keep-all;">
+	<table id="maintable" cellpadding="1">
 		<tr>
 			<td>
 				<img src="logo.png">
@@ -62,18 +88,18 @@
 		</tr>
 		<tr>
 			<td>
-				<input type="text" name="word" id="word" style="width:160px;  " class=smallInput>
-				<input TYPE="button" id="querybutton" value="查询">
+				<input id="word" type="text" name="word" style="width:160px;" class=smallInput>
+				<input id="querybutton" type="button" value="查询">
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<div id='result' style=' white-space:nowrap;'></div>
+				<div id='result'></div>
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<div id='cache' style=' white-space:nowrap;'></div>
+				<div id='cache'></div>
 			</td>
 		</tr>
 	</table>
@@ -81,16 +107,16 @@
 		<div>
 			<strong>选项设置:</strong>
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="dict_disable" type="checkbox">关闭划词翻译
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="ctrl_only" type="checkbox">指词即译模式（按下Ctrl键指词）
 		</div>
-		<div>
+		<div class="conf-item">
 			<input id="english_only" type="checkbox">仅对英文划译
 		</div>
-		<div>
+		<div class="conf-item">
 			历史记录条数：
 			<input type="number" id="history_count">
 			<em id="backup" title="导出所有查询记录">导出</em>
