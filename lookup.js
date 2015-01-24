@@ -261,9 +261,6 @@ function createPopUp(word, senctence, x, y, screenX, screenY) {
 	closeBtn.onclick = function(e) {
 		OnCheckCloseWindowForce();
 	};
-	closeBtn.onmousemove = function(e) {
-		frame.style.cursor = 'default';
-	};
 	closeBtn = null;
 	// 标题栏
 	var _yddTop = document.getElementById("yddTop");
