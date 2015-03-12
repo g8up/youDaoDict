@@ -37,6 +37,7 @@
 			color: #666;
 			margin-top: 5px;
 			padding-left: 3px;
+			-webkit-user-select: none;
 		}
 		#options input[type=checkbox]{
 			vertical-align: middle;
@@ -108,13 +109,13 @@
 			<strong>选项设置:</strong>
 		</div>
 		<div class="conf-item">
-			<input id="dict_disable" type="checkbox">关闭划词翻译
+			<input id="dict_disable" type="checkbox"><label for="dict_disable">关闭划词翻译</label>
 		</div>
 		<div class="conf-item">
-			<input id="ctrl_only" type="checkbox">指词即译模式（按下Ctrl键指词）
+			<input id="ctrl_only" type="checkbox"><label for="ctrl_only">指词即译模式（按下Ctrl键指词）</label>
 		</div>
 		<div class="conf-item">
-			<input id="english_only" type="checkbox">仅对英文划译
+			<input id="english_only" type="checkbox"><label for="english_only">仅对英文划译</label>
 		</div>
 		<div class="conf-item">
 			历史记录条数：
