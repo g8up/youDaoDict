@@ -3,9 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<title>有道词典划词扩展++</title>
+	<meta name="description" content="有道词典划词扩展">
+	<meta name="author" content="duxing.org">
 	<style>
 		body {
-			font-family: "Microsoft YaHei";
+			font-family: "微软雅黑", 'Microsoft YaHei', Arial, sans-serif;
 			font-size: 13px;
 			color: #000000;
 			min-width: 200px;
@@ -19,14 +21,65 @@
 			width: 82px;
 			height: 22px;
 		}
-		input.smallInput {
-			border: 1px solid black;
-			font-size: 9pt;
+		.input-group{
+			position: relative;
+			display: table;
+			border-collapse: separate;
+		}
+		.form-control {
+			display: table-cell;
+			box-sizing: border-box;
+			border: 1px solid #ccc;
 			font-style: normal;
 			font-variant: normal;
 			font-weight: normal;
-			height: 18px;
-			line-height: normal
+			line-height: normal;
+			font-size: 14px;
+			transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+
+		}
+		.form-control:focus{
+			border-color: #46c3c1;
+			box-shadow: inset 0 1px 1px rgba(102, 175, 233, 0.1), 0 0 5px rgba(102, 175, 233, 0.3);
+			outline: 0;
+		}
+		.btn{
+			border: 1px solid transparent;
+			box-shadow: none;
+			-webkit-user-select: none;
+			-webkit-appearance: button;
+		}
+		.btn:active{
+			background-color: #2b9d9b;
+			color: #fff;
+			border: #2b9d9b solid 1px;
+			-webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+			box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+		}
+		.btn:active,.btn:focus{
+			outline: none;
+		}
+		.form-control,.btn{
+			height: 30px;
+			padding: 4px 8px;
+			vertical-align: middle;
+			border-radius: 4px;
+			line-height: 1.428571429;
+			font-size: 14px;
+		}
+		.keyword{
+			width: 75%;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+		.search{
+			width: 25%;
+			border-bottom-left-radius: 0;
+			border-top-left-radius: 0;
+			margin-left: -1px;
+			border-color:#46C3C1;
+			background-color: #46C3C1;
+			color: white;
 		}
 		#maintable,	#options{
 			width:230px;
@@ -89,8 +142,10 @@
 		</tr>
 		<tr>
 			<td>
-				<input id="word" type="text" name="word" style="width:160px;" class=smallInput>
-				<input id="querybutton" type="button" value="查询">
+				<div class="input-group">
+					<input id="word" type="text" name="word" class="keyword form-control">
+					<button id="querybutton" class="search btn">查询</button>
+				</div>
 			</td>
 		</tr>
 		<tr>
