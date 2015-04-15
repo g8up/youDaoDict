@@ -100,9 +100,12 @@ var prevC, prevO, prevWord, c;
 
 document.addEventListener('mousemove', function onScrTrans(e) {
 	clearTimeout(window._ydTimer);
+	if( !e.ctrlKey ){
+		return;
+	}
 	window._ydTimer = setTimeout(function() {
 		getOptions(function() {
-			if (!( getOptVal("ctrl_only") && e.ctrlKey ) ) {
+			if ( !getOptVal("ctrl_only") ) {
 				return;
 			}
 
