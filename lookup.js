@@ -63,12 +63,12 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
 		if (getOptVal("dict_disable")) {
 			return;
 		}
-		if (!getOptVal("ctrl_only") && e.ctrlKey) {
-			return;
-		}
-		if (getOptVal("ctrl_only") && !e.ctrlKey) {
-			return;
-		}
+		// if (!getOptVal("ctrl_only") && e.ctrlKey) {
+		// 	return;
+		// }
+		// if (getOptVal("ctrl_only") && !e.ctrlKey) {
+		// 	return;
+		// }
 
 		if (getOptVal("english_only")) {
 			if (isContainJapanese(word) || isContainKoera(word) || isContainChinese(word)) {
@@ -101,62 +101,62 @@ var prevC, prevO, prevWord, c;
 document.addEventListener('mousemove', function onScrTrans(e) {
 	clearTimeout(window._ydTimer);
 	window._ydTimer = setTimeout(function() {
-		if (!getOptVal("ctrl_only")) {
-			return;
-		} else if (!e.ctrlKey) {
-			return true;
-		}
+		getOptions(function() {
+			if (!( getOptVal("ctrl_only") && e.ctrlKey ) ) {
+				return;
+			}
 
-		var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
-		if (!caretRange) return true;
+			var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
+			if (!caretRange) return true;
 
-		pX = e.pageX;
-		pY = e.pageY;
-		var so = caretRange.startOffset,
-			eo = caretRange.endOffset;
-		if (prevC === caretRange.startContainer && prevO === so) return true;
+			pX = e.pageX;
+			pY = e.pageY;
+			var so = caretRange.startOffset,
+				eo = caretRange.endOffset;
+			if (prevC === caretRange.startContainer && prevO === so) return true;
 
-		prevC = caretRange.startContainer;
-		prevO = so;
-		var tr = caretRange.cloneRange(),
-			text = '';
-		if (caretRange.startContainer.data){
-			while (so >= 1) {
-				tr.setStart( caretRange.startContainer, --so );
-				text = tr.toString();
-				if (!isAlpha(text.charAt(0))) {
-					tr.setStart( caretRange.startContainer, so + 1);
-					break;
+			prevC = caretRange.startContainer;
+			prevO = so;
+			var tr = caretRange.cloneRange(),
+				text = '';
+			if (caretRange.startContainer.data){
+				while (so >= 1) {
+					tr.setStart( caretRange.startContainer, --so );
+					text = tr.toString();
+					if (!isAlpha(text.charAt(0))) {
+						tr.setStart( caretRange.startContainer, so + 1);
+						break;
+					}
 				}
 			}
-		}
-		if (caretRange.endContainer.data) {
-			while (eo < caretRange.endContainer.data.length) {
-				tr.setEnd(caretRange.endContainer, ++eo);
-				text = tr.toString();
-				if (!isAlpha(text.charAt(text.length - 1))) {
-					tr.setEnd(caretRange.endContainer, eo - 1);
-					break;
+			if (caretRange.endContainer.data) {
+				while (eo < caretRange.endContainer.data.length) {
+					tr.setEnd(caretRange.endContainer, ++eo);
+					text = tr.toString();
+					if (!isAlpha(text.charAt(text.length - 1))) {
+						tr.setEnd(caretRange.endContainer, eo - 1);
+						break;
+					}
 				}
 			}
-		}
-		var word = tr.toString();
+			var word = tr.toString();
 
-		if (prevWord == word) return true;
+			if (prevWord == word) return true;
 
-		prevWord = word;
+			prevWord = word;
 
-		if (word.length >= 1) {
-			setTimeout(function() {
-				var selection = window.getSelection();
-				selection.removeAllRanges();
-				selection.addRange(tr);
-				var xx = pX, yy = pY, sx = e.screenX, sy = e.screenY;
-				getYoudaoDict(word, pX, pY, e.screenX, e.screenY, function( data ){
-					createPopUpEx(data, xx, yy, sx, sy);
-				});
-			}, 50);
-		}
+			if (word.length >= 1) {
+				setTimeout(function() {
+					var selection = window.getSelection();
+					selection.removeAllRanges();
+					selection.addRange(tr);
+					var xx = pX, yy = pY, sx = e.screenX, sy = e.screenY;
+					getYoudaoDict(word, pX, pY, e.screenX, e.screenY, function( data ){
+						createPopUpEx(data, xx, yy, sx, sy);
+					});
+				}, 50);
+			}
+		});
 	}, 200);
 }, true);
 

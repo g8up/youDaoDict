@@ -190,7 +190,7 @@ function changeIcon() {
 		engBox = document.getElementById('english_only'),
 		dictBox = document.getElementById('dict_disable');
 	var flag = !!dictBox.checked;
-	ctrlBox.disabled = flag;
+	// ctrlBox.disabled = flag;
 	engBox.disabled = flag;
 	chrome.browserAction.setIcon({
 		path: flag ? "icon_nodict.gif" : "icon-yd-dict.png"
@@ -235,7 +235,6 @@ function exportHistory() {
 }
 
 function saveOptions() {
-	changeIcon();
 	for (key in Options) {
 		var elem = document.getElementById(key);
 		if (Options[key][0] == "checked") {
@@ -267,6 +266,7 @@ optElem && (optElem.onmouseover = function() {
 	this.onmouseover = null;
 	document.getElementById("dict_disable").onclick = function() {
 		saveOptions();
+		changeIcon();
 	};
 	document.getElementById("ctrl_only").onclick = function() {
 		saveOptions();
