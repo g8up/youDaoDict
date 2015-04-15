@@ -7,4 +7,4 @@
 [https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil](https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil "Chrome Web Store")
 
 鸣谢：
-感谢网友 john_shao 对本版（ V3.0.8 ）提供的更新意见。
+感谢网友 john_shao 对 Ver 3.0.8 提供的更新意见。

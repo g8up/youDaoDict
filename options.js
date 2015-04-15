@@ -186,14 +186,12 @@ function saveSearchedWord(word) {
 }
 
 function changeIcon() {
-	var ctrlBox = document.getElementById('ctrl_only'),
-		engBox = document.getElementById('english_only'),
+	var engBox = document.getElementById('english_only'),
 		dictBox = document.getElementById('dict_disable');
-	var flag = !!dictBox.checked;
-	// ctrlBox.disabled = flag;
-	engBox.disabled = flag;
+	var isDisabled = !dictBox.checked;
+	engBox.disabled = isDisabled;
 	chrome.browserAction.setIcon({
-		path: flag ? "icon_nodict.gif" : "icon-yd-dict.png"
+		path: isDisabled ? "icon_nodict.gif" : "icon-yd-dict.png"
 	});
 }
 
