@@ -38,7 +38,7 @@ function getOptions(next) {
 }
 
 function getOptVal(strKey) {
-	if (Options !== null) {
+	if ( Options ) {
 		return Options[strKey][1];
 	}
 }
