@@ -136,7 +136,6 @@ function buildSearchResult() {
 	langType = '';
 	noBaseTrans = false;
 	noWebTrans = false;
-	document.getElementsByName('word')[0].focus();
 }
 // 取缓存查询次
 function getCachedWord() {
