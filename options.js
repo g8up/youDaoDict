@@ -227,8 +227,25 @@ function restore_options() {
 function exportHistory() {
 	var cachedWords = localStorage.getItem('wordcache');
 	if (cachedWords) {
-		saveContent2File(cachedWords.replace(/\,/g, '\r\n'), 'youDao-history.txt');
+		var extDetail = chrome.app.getDetails();
+		var extName = extDetail.name;
+		var version = extDetail.version;
+		var banner = ['【' + extName + '】Ver' + version + ' 查询历史备份文件',
+			new Date().toString().slice(0, 24),
+			new Array(25).join('='),
+		].join('\r\n');
+		var content = banner + '\r\n' + cachedWords.replace(/\,/g, '\r\n');
+		saveContent2File( content, 'youDaoCrx-history-' + +new Date() + '.txt' );
 	}
+}
+/*
+ * 保存为系统文件
+ */
+function saveContent2File(content, filename) {
+	var blob = new Blob( [content], {
+		type: "text/plain;charset=utf-8"
+	});
+	saveAs(blob, filename);
 }
 
 function saveOptions() {
@@ -288,19 +305,3 @@ document.getElementById("querybutton").onclick = function() {
 document.querySelector('#backup').onclick = function() {
 	exportHistory();
 };
-/*
- * 保存为系统文件
- */
-function saveContent2File(content, filename) {
-	var extDetail = chrome.app.getDetails();
-	var extName = extDetail.name;
-	var version = extDetail.version;
-	var banner = ['【' + extName + '】Ver' + version + '查询历史备份文件',
-		new Date().toString().slice(0, 24),
-		new Array(25).join('='),
-	].join('\r\n');
-	var blob = new Blob([banner, '\r\n', content], {
-		type: "text/plain;charset=utf-8"
-	});
-	saveAs(blob, filename);
-}
