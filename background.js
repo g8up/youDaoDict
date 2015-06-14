@@ -343,7 +343,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     }
 });
 /**
- * 将配置更新通知已经打开的
+ * 将配置更新通知已经打开的 Tab
  */
 function publishOptionChangeToTabs() {
     chrome.tabs.query({}, function(tabs) {
