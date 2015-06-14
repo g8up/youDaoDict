@@ -97,11 +97,11 @@ var prevC, prevO, prevWord, c;
 
 // 指词即译
 document.addEventListener('mousemove', function onScrTrans(e) {
-    clearTimeout(window._ydTimerSelect);
+    clearTimeout(window._ydTimer);
     if (!e.ctrlKey) {
         return;
     }
-    window._ydTimerSelect = setTimeout(function() {
+    window._ydTimer = setTimeout(function() {
         if (!getOptVal("ctrl_only")) {
             return;
         }
