@@ -186,11 +186,11 @@ function saveSearchedWord(word) {
 
 function changeIcon() {
 	var engBox = document.getElementById('english_only'),
-		dictBox = document.getElementById('dict_disable');
-	var isDisabled = !dictBox.checked;
-	engBox.disabled = isDisabled;
+		dictBox = document.getElementById('dict_enable');
+	var isEnabled = dictBox.checked;
+	engBox.disabled = !isEnabled;
 	chrome.browserAction.setIcon({
-		path: isDisabled ? "icon_nodict.gif" : "icon-yd-dict.png"
+		path: isEnabled ? "icon_nodict.gif" : "icon-yd-dict.png"
 	});
 }
 
@@ -201,7 +201,7 @@ function check() {
 /**
  * 读取配置信息
  */
-function restore_options() {
+function restoreOptions() {
 	for (key in Options) {
 		var elem = document.getElementById(key);
 		if (elem) {
@@ -267,7 +267,7 @@ function saveOptions() {
 document.body.onload = function() {
 	var word = document.getElementById('word');
 	word && word.focus();
-	restore_options();
+	restoreOptions();
 	changeIcon();
 	getCachedWord();
 };
@@ -278,7 +278,7 @@ var optElem = document.querySelector('#options');
 optElem && (optElem.onmouseover = function() {
 	document.querySelector('table', this).style.display = "block";
 	this.onmouseover = null;
-	document.getElementById("dict_disable").onclick = function() {
+	document.getElementById("dict_enable").onclick = function() {
 		saveOptions();
 		changeIcon();
 	};

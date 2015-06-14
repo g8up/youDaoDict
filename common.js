@@ -2,7 +2,7 @@
 	var _isDev = !1;
 	var _DefaultOptions = {
 		"ctrl_only": ["checked", false],
-		"dict_disable": ["checked", false],
+		"dict_enable": ["checked", false],
 		"english_only": ["checked", true],
 		"history_count": 5
 	};
