@@ -322,7 +322,7 @@ function getYoudaoTrans(word, x, y, screenX, screenY, next) {
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log( request.optionChanged);
+    // console.log( request.optionChanged);
     if( request.optionChanged ){
     	Options = request.optionChanged;
     }
