@@ -346,7 +346,9 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
  * 将配置更新通知已经打开的 Tab
  */
 function publishOptionChangeToTabs() {
-    chrome.tabs.query({}, function(tabs) {
+    chrome.tabs.query({
+        status:"complete"
+    }, function(tabs) {
         if (tabs.length) {
             tabs.forEach(function(tab) {
                 chrome.tabs.sendMessage(tab.id, {
