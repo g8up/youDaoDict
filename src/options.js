@@ -202,7 +202,7 @@ function check() {
  * 读取配置信息
  */
 function restoreOptions() {
-	for (key in Options) {
+	for (var key in Options) {
 		var elem = document.getElementById(key);
 		if (elem) {
 			var val = Options[key];
@@ -249,7 +249,7 @@ function saveContent2File(content, filename) {
 }
 
 function saveOptions() {
-	for (key in Options) {
+	for (var key in Options) {
 		var elem = document.getElementById(key);
 		if (Options[key][0] == "checked") {
 			Options[key][1] = elem.checked;
@@ -286,6 +286,9 @@ optElem && (optElem.onmouseover = function() {
 		saveOptions();
 	};
 	document.getElementById("english_only").onclick = function() {
+		saveOptions();
+	};
+	document.getElementById("auto_speech").onclick = function() {
 		saveOptions();
 	};
 	document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {

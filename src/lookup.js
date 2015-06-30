@@ -6,7 +6,7 @@
  * @date 2014.09.20 cut verbose code
  */
 var body = document.querySelector('body');
-var Options,
+var Options = {},
     last_frame,
     last_div;
 var list = [];
@@ -93,7 +93,7 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
     }, TriggerDelay);
 }, false);
 
-var prevC, prevO, prevWord, c;
+var prevC, prevO, c;
 
 // 指词即译
 document.addEventListener('mousemove', function onScrTrans(e) {
@@ -137,8 +137,6 @@ document.addEventListener('mousemove', function onScrTrans(e) {
             }
         }
         var word = tr.toString();
-        if (prevWord == word) return true;
-        prevWord = word;
         if (word.length >= 1) {
             setTimeout(function() {
                 var selection = window.getSelection();
@@ -258,20 +256,22 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
     };
     closeBtn = null;
     // 语音播放
-    var speach_swf = document.getElementById("ydd-voice");
-    if (speach_swf) {
-        if (window.location.protocol == 'http:') {
-            if (speach_swf.innerHTML != '') {
-                speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML);
-                var speach_flash = document.getElementById("speach_flash");
-                if (speach_flash != null) {
-                    try {
-                        speach_flash.StopPlay();
-                    } catch (err) {}
+    if( getOptVal('auto_speech') ){
+        var speach_swf = document.getElementById("ydd-voice");
+        if (speach_swf) {
+            if (window.location.protocol == 'http:') {
+                if (speach_swf.innerHTML != '') {
+                    speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML);
+                    var speach_flash = document.getElementById("speach_flash");
+                    if (speach_flash != null) {
+                        try {
+                            speach_flash.StopPlay();
+                        } catch (err) {}
+                    }
                 }
+            } else {
+                speach_swf.innerHTML = '';
             }
-        } else {
-            speach_swf.innerHTML = '';
         }
     }
     // 确定位置

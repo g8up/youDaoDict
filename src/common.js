@@ -4,6 +4,7 @@
 		"dict_enable": ["checked", true],
 		"ctrl_only": ["checked", false],
 		"english_only": ["checked", true],
+		"auto_speech": ["checked", true],
 		"history_count": 5
 	};
 	win.log = function() {
