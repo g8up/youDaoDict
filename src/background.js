@@ -2,7 +2,7 @@
 initIcon();
 
 function initIcon() {
-    if (Options['dict_enable'][1] == true) {
+    if (Options['dict_enable'][1] !== true) {
         chrome.browserAction.setIcon({
             path: "icon_nodict.gif"
         });
