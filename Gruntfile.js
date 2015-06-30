@@ -24,6 +24,9 @@
  		},
  		// 代码压缩
  		uglify: {
+ 			options:{
+ 				compress:true
+ 			},
  			dist: {
  				expand: true,
  				cwd: 'src',
