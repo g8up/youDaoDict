@@ -15,23 +15,19 @@
 	/**
 	 * 适配缓存的配置，用于配置升级后的兼容
 	 */
-	var _initOpt = function(cachedOpts, opt) {
-		for (var item in opt) {
-			var c = cachedOpts[item],
-				o = opt[item];
-			if (typeof c !== 'undefined' && typeof o !== 'undefined') {
-				opt[item] = c;
+	var mergeOption = function(defaultOption, setting) {
+		for (var item in defaultOption) {
+			var s = setting[item];
+			if( typeof s !== 'undefined'){
+				defaultOption[item] = s;
 			}
 		}
 	};
-	var _opt = _DefaultOptions,
-		_cachedOtp = localStorage["ColorOptions"];
+	var _cachedOtp = localStorage["ColorOptions"];
 	if (_cachedOtp) {
-		_initOpt(JSON.parse(_cachedOtp), _opt);
-		log('init Options', _opt);
+		mergeOption(_DefaultOptions, JSON.parse(_cachedOtp));
 	} else {
 		localStorage["ColorOptions"] = JSON.stringify(_DefaultOptions);
-		log('first plant ColorOptions');
 	}
-	win.Options = _opt;
+	win.Options = _DefaultOptions;
 })(window);
