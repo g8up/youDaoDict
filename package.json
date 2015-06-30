@@ -1,6 +1,6 @@
 {
   "name": "youdaocrx",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "repository": {
     "type": "git",
