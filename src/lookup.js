@@ -256,9 +256,9 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
     };
     closeBtn = null;
     // 语音播放
-    if( getOptVal('auto_speech') ){
-        var speach_swf = document.getElementById("ydd-voice");
-        if (speach_swf) {
+    var speach_swf = document.getElementById("ydd-voice");
+    if (speach_swf) {
+        if( getOptVal('auto_speech') ){
             if (window.location.protocol == 'http:') {
                 if (speach_swf.innerHTML != '') {
                     speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML);
@@ -272,6 +272,8 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
             } else {
                 speach_swf.innerHTML = '';
             }
+        } else {
+            speach_swf.innerHTML = '';
         }
     }
     // 确定位置
