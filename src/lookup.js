@@ -33,6 +33,8 @@ function getOptions(next) {
     }, function(response) {
         if (response.ColorOptions) {
             Options = response.ColorOptions;
+            dealSelectEvent();
+            dealPointEvent();
         }
         next && next();
     });
@@ -47,7 +49,7 @@ function getOptVal(strKey) {
 getOptions();
 
 // 划词翻译
-body.addEventListener("mouseup", function OnDictEvent(e) {
+function _onDictEvent(e) {
     clearTimeout(window._ydTimerSelect);
     window._ydTimerSelect = setTimeout(function() {
         var word = window.getSelection().toString();
@@ -60,9 +62,6 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
         }
         if (inDictPannel) return;
         OnCheckCloseWindow();
-        if (!getOptVal("dict_enable")) {
-            return;
-        }
         if (getOptVal("english_only")) {
             if (isContainJapanese(word) || isContainKoera(word) || isContainChinese(word)) {
                 return;
@@ -91,20 +90,25 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
             return;
         }
     }, TriggerDelay);
-}, false);
+}
+
+function dealSelectEvent(){
+    if ( getOptVal("dict_enable") ) {
+        body.addEventListener("mouseup", _onDictEvent);
+    }else{
+        body.removeEventListener("mouseup", _onDictEvent);
+    }
+}
 
 var prevC, prevO, c;
 
 // 指词即译
-document.addEventListener('mousemove', function onScrTrans(e) {
+function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
     if (!e.ctrlKey) {
         return;
     }
     window._ydTimer = setTimeout(function() {
-        if (!getOptVal("ctrl_only")) {
-            return;
-        }
         var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (!caretRange) return true;
         pX = e.pageX;
@@ -152,7 +156,17 @@ document.addEventListener('mousemove', function onScrTrans(e) {
             }, 50);
         }
     }, TriggerDelay);
-}, true);
+}
+
+function dealPointEvent(){
+    if ( getOptVal("ctrl_only") ) {
+        document.addEventListener('mousemove', _onScrTrans);
+    }else{
+        document.removeEventListener('mousemove', _onScrTrans);
+    }
+}
+
+
 
 document.onmousedown = function(e) {
     OnCheckCloseWindow();
@@ -327,5 +341,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // console.log( request.optionChanged);
     if( request.optionChanged ){
     	Options = request.optionChanged;
+        dealSelectEvent();
+        dealPointEvent();
     }
 });
