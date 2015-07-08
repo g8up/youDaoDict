@@ -1,6 +1,6 @@
 {
   "name": "youdaocrx",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
     "grunt-contrib-clean": "~0.6.0",
     "grunt-contrib-compress": "~0.13.0",
     "grunt-contrib-copy": "^0.8.0",
+    "grunt-contrib-cssmin": "^0.12.3",
     "grunt-contrib-uglify": "~0.9.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-shell": "~1.1.2"
