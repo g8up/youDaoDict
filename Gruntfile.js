@@ -56,24 +56,12 @@
  				}]
  			}
  		}
- 		// shell: {
- 		// 	options: {
- 		// 		stderr: false
- 		// 	},
- 		// 	target: {
- 		// 		command: 'git archive --format zip --output release/cws-yd<%= pkg.version %>.zip newArch dist'
- 		// 	},
- 		// 	winzip: {
- 		// 		command: 'makecab dist release/cws-yd<%= pkg.version %>.zip'
- 		// 	}
- 		// }
  	});
  	grunt.loadNpmTasks('grunt-contrib-clean');
  	grunt.loadNpmTasks('grunt-contrib-copy');
  	grunt.loadNpmTasks('grunt-contrib-uglify');
- 	grunt.loadNpmTasks('grunt-css');
+ 	grunt.loadNpmTasks('grunt-contrib-cssmin');
  	grunt.loadNpmTasks('grunt-contrib-compress');
- 	// grunt.loadNpmTasks('grunt-shell');
 
  	grunt.registerTask('dist', ['clean:dist', 'uglify', 'cssmin', 'copy']);
  	grunt.registerTask('release', ['clean:dist', 'uglify', 'compress']); //完整流程
