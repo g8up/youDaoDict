@@ -13,19 +13,6 @@ var list = [];
 var last_time = 0,
     last_request_time = 0;
 var TriggerDelay = 350;
-var youdaoStyle = document.createElement("style"),
-    styleContent = document.createTextNode("#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;font-size:12px;border:1px solid #4b7598;background:#fff;}#yddTop{display:block;height:22px;cursor:move;border-bottom: 1px solid #d7e3eb; background: #e1f1fb;}#yddTopBorderlr{display:block;position:static;height:22px;line-height:22px;padding:0 28px;font-size:12px;color:#5079bb;font-weight:bold;}#yddWrapper .ydd-icon{display: inline-block; position: absolute; left: 5px; top: 2px; width: 17px; height: 17px;background:url(" + chrome.extension.getURL("icon-yd-dict.png") + ") no-repeat;}.ydd-close{display: inline-block; width: 20px; height: 22px; line-height: 22px; font-size: 16px; position: absolute; right: 0; padding-left: 4px; text-decoration: none!important; cursor: pointer;}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{-webkit-user-drag:element;color:#252525;z-index:10001;box-shadow: 2px 2px 4px gray;}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}#ydd-voice{margin-left:2px;height:15px;width:15px}#ydd-voice object{vertical-align: top;}");
-youdaoStyle.type = "text/css";
-
-// 友情提示，以免页面开发者误会
-youdaoStyle.setAttribute('info', '这是有道词典划词扩展插入的样式');
-
-if (youdaoStyle.styleSheet) {
-    youdaoStyle.styleSheet.cssText = styleContent.nodeValue;
-} else {
-    youdaoStyle.appendChild(styleContent);
-    document.querySelector("head").appendChild(youdaoStyle)
-}
 
 function getOptions(next) {
     chrome.extension.sendRequest({
@@ -33,6 +20,8 @@ function getOptions(next) {
     }, function(response) {
         if (response.ColorOptions) {
             Options = response.ColorOptions;
+            dealSelectEvent();
+            dealPointEvent();
         }
         next && next();
     });
@@ -47,7 +36,7 @@ function getOptVal(strKey) {
 getOptions();
 
 // 划词翻译
-body.addEventListener("mouseup", function OnDictEvent(e) {
+function _onDictEvent(e) {
     clearTimeout(window._ydTimerSelect);
     window._ydTimerSelect = setTimeout(function() {
         var word = window.getSelection().toString();
@@ -60,9 +49,6 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
         }
         if (inDictPannel) return;
         OnCheckCloseWindow();
-        if (!getOptVal("dict_enable")) {
-            return;
-        }
         if (getOptVal("english_only")) {
             if (isContainJapanese(word) || isContainKoera(word) || isContainChinese(word)) {
                 return;
@@ -91,20 +77,25 @@ body.addEventListener("mouseup", function OnDictEvent(e) {
             return;
         }
     }, TriggerDelay);
-}, false);
+}
+
+function dealSelectEvent(){
+    if ( getOptVal("dict_enable") ) {
+        body.addEventListener("mouseup", _onDictEvent);
+    }else{
+        body.removeEventListener("mouseup", _onDictEvent);
+    }
+}
 
 var prevC, prevO, c;
 
 // 指词即译
-document.addEventListener('mousemove', function onScrTrans(e) {
+function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
     if (!e.ctrlKey) {
         return;
     }
     window._ydTimer = setTimeout(function() {
-        if (!getOptVal("ctrl_only")) {
-            return;
-        }
         var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (!caretRange) return true;
         pX = e.pageX;
@@ -152,7 +143,17 @@ document.addEventListener('mousemove', function onScrTrans(e) {
             }, 50);
         }
     }, TriggerDelay);
-}, true);
+}
+
+function dealPointEvent(){
+    if ( getOptVal("ctrl_only") ) {
+        document.addEventListener('mousemove', _onScrTrans);
+    }else{
+        document.removeEventListener('mousemove', _onScrTrans);
+    }
+}
+
+
 
 document.onmousedown = function(e) {
     OnCheckCloseWindow();
@@ -327,5 +328,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // console.log( request.optionChanged);
     if( request.optionChanged ){
     	Options = request.optionChanged;
+        dealSelectEvent();
+        dealPointEvent();
     }
 });
