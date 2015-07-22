@@ -92,10 +92,10 @@ var prevC, prevO, c;
 // 指词即译
 function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
-    if (!e.ctrlKey) {
-        return;
-    }
     window._ydTimer = setTimeout(function() {
+        if (!e.ctrlKey) {
+            return;
+        }
         var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (!caretRange) return true;
         pX = e.pageX;
