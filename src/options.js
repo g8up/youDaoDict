@@ -276,7 +276,6 @@ document.body.onload = function() {
  */
 var optElem = document.querySelector('#options');
 optElem && (optElem.onmouseover = function() {
-	document.querySelector('table', this).style.display = "block";
 	this.onmouseover = null;
 	document.getElementById("dict_enable").onclick = function() {
 		saveOptions();
