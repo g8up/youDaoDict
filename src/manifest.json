@@ -15,7 +15,7 @@
 	},
 	"content_scripts": [{
 		"js": ["util.js", "lookup.js"],
-		"matches": ["http://*/*", "https://*/*"],
+		"matches": ["http://*/*", "https://*/*", "file://*"],
 		"css":["youdao-crx.css"]
 	}],
 	"description": "可记录、导出查询历史!",
