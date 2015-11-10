@@ -92,6 +92,9 @@ var prevC, prevO, c;
 // 指词即译
 function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
+    if (!e.ctrlKey) {
+        return;
+    }
     window._ydTimer = setTimeout(function() {
         if (!e.ctrlKey) {
             return;
@@ -153,8 +156,6 @@ function dealPointEvent(){
     }
 }
 
-
-
 document.onmousedown = function(e) {
     OnCheckCloseWindow();
 }
@@ -192,7 +193,10 @@ function OnCheckCloseWindowForce() {
 
 function createPopUpEx(html, x, y, screenx, screeny) {
     OnCheckCloseWindowForce();
-    createPopUp(html, window.getSelection().getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+    var sel = window.getSelection();
+    if( sel && sel.rangeCount ){
+        createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+    }
 }
 // 鼠标是否在弹出框上
 var inDictPannel = false;
