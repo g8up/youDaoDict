@@ -284,11 +284,13 @@ function renderAudio() {
     if (speech) {
         if (window.location.protocol == 'http:') {
             if (speech.innerHTML != '') {
+                speech.classList.add('ydd-void-icon');
                 var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
                 var audio = document.createElement('audio');
                 audio.src = audioSrc;
                 if (getOptVal('auto_speech')) {
-                    audio.play();
+                    // audio.play();
+                    audio.autoplay = true;
                 }
                 speech.addEventListener('click', function(e){
                     audio.play();

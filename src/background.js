@@ -140,7 +140,7 @@ function genTable(word, strpho, baseTrans, webTrans) {
     }
     var fmt = '';
     if (noBaseTrans && noWebTrans) {
-        fmt = [ '<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">',
+        fmt = [ '<div id="yddContainer">',
                     '<div id="yddTop" class="ydd-sp">',
                         '<div id="yddTopBorderlr">',
                             '<a id="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
@@ -152,7 +152,7 @@ function genTable(word, strpho, baseTrans, webTrans) {
                     '<div id="yddMiddle">'
         ].join('');
     } else {
-        fmt = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;">',
+        fmt = ['<div id="yddContainer">',
                     '<div id="yddTop" class="ydd-sp">',
                         '<div id="yddTopBorderlr">',
                             '<a id="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',

@@ -7,6 +7,7 @@
 	font-size: 12px;
 	border: 1px solid #4b7598;
 	background: #fff;
+	text-align: left;
 }
 #yddTop {
 	display: block;
@@ -32,18 +33,22 @@
 	padding-left: 20px; /*给图标预留至少 17px 的宽度*/
 	font-weight: bold;
 	background: url("chrome-extension://__MSG_@@extension_id__/icon-yd-dict.png") no-repeat;
+	vertical-align: top;
 }
 #ydd-phonetic{
 	margin-left: 3px;
+	display: inline-block;
+    vertical-align: top;
 }
-#ydd-voice {
+#ydd-voice.ydd-void-icon {
 	display: inline-block;
 	margin-left: 3px;
-	height: 15px;
-	width: 15px;
+	height: 19px;
+    width: 14px;
 	background-size: 30px 20px;
 	background:url("chrome-extension://__MSG_@@extension_id__/voice-btn.png") no-repeat;
 	cursor: pointer;
+    vertical-align: top;
 }
 #ydd-detail{
 	margin-left: 3px;
