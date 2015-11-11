@@ -261,27 +261,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
     };
     closeBtn = null;
     // 语音播放
-    var speach_swf = document.getElementById("ydd-voice");
-    if (speach_swf) {
-        if( getOptVal('auto_speech') ){
-            if (window.location.protocol == 'http:') {
-                if (speach_swf.innerHTML != '') {
-                    var audioSrc = "http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML;
-                    speach_swf.innerHTML = insertAudio( audioSrc );
-                    var speach_flash = document.getElementById("speach_flash");
-                    if (speach_flash != null) {
-                        try {
-                            speach_flash.StopPlay();
-                        } catch (err) {}
-                    }
-                }
-            } else {
-                speach_swf.innerHTML = '';
-            }
-        } else {
-            speach_swf.innerHTML = '';
-        }
-    }
+    renderAudio();
     // 确定位置
     var leftbottom = frame_top + 10 + document.getElementById("yddWrapper").clientHeight;
     if (leftbottom < y) {
@@ -299,8 +279,24 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
     last_frame = frame;
 }
 
-function insertAudio(link) {
-    return ['<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="15px" height="15px" align="absmiddle" id="speach_flash">', '<param name="allowScriptAccess" value="sameDomain" />', '<param name="movie" value="http://cidian.youdao.com/chromeplus/voice.swf" />', '<param name="loop" value="false" />', '<param name="menu" value="false" />', '<param name="quality" value="high" />', '<param name="wmode"  value="transparent">', '<param name="FlashVars" value="audio=', link, '">', '<embed wmode="transparent" src="http://cidian.youdao.com/chromeplus/voice.swf" loop="false" menu="false" quality="high" bgcolor="#ffffff" width="15" height="15" align="absmiddle" allowScriptAccess="sameDomain" FlashVars="audio=', link, '" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />', '</object>'].join('');
+function renderAudio() {
+    var speech = document.getElementById("ydd-voice");
+    if (speech) {
+        if (window.location.protocol == 'http:') {
+            if (speech.innerHTML != '') {
+                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+                var audio = document.createElement('audio');
+                audio.src = audioSrc;
+                if (getOptVal('auto_speech')) {
+                    audio.play();
+                }
+                speech.addEventListener('click', function(e){
+                    audio.play();
+                });
+            }
+        }
+    }
+    speech.innerHTML = '';
 }
 
 function getYoudaoDict(word, x, y, screenX, screenY, next) {
@@ -332,7 +328,7 @@ function getYoudaoTrans(word, x, y, screenX, screenY, next) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     // console.log( request.optionChanged);
     if( request.optionChanged ){
-    	Options = request.optionChanged;
+        Options = request.optionChanged;
         dealSelectEvent();
         dealPointEvent();
     }
