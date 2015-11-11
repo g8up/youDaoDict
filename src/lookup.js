@@ -266,7 +266,8 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
         if( getOptVal('auto_speech') ){
             if (window.location.protocol == 'http:') {
                 if (speach_swf.innerHTML != '') {
-                    speach_swf.innerHTML = insertAudio("http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML);
+                    var audioSrc = "http://dict.youdao.com/speech?audio=" + speach_swf.innerHTML;
+                    speach_swf.innerHTML = insertAudio( audioSrc );
                     var speach_flash = document.getElementById("speach_flash");
                     if (speach_flash != null) {
                         try {
