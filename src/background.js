@@ -181,13 +181,21 @@ var speach = '';
 function translateXML(xmlnode) {
     var translate = "<strong>查询:</strong><br/>";
     var root = xmlnode.getElementsByTagName("yodaodict")[0];
-    if ("" + root.getElementsByTagName("return-phrase")[0].childNodes[0] != "undefined") var retphrase = root.getElementsByTagName("return-phrase")[0].childNodes[0].nodeValue;
-    if ("" + root.getElementsByTagName("dictcn-speach")[0] != "undefined") speach = root.getElementsByTagName("dictcn-speach")[0].childNodes[0].nodeValue;
+    if ("" + root.getElementsByTagName("return-phrase")[0].childNodes[0] != "undefined") {
+        var retphrase = root.getElementsByTagName("return-phrase")[0].childNodes[0].nodeValue;
+    }
+    if ("" + root.getElementsByTagName("dictcn-speach")[0] != "undefined") {
+        speach = root.getElementsByTagName("dictcn-speach")[0].childNodes[0].nodeValue;
+    }
     var lang = "&le=";
-    if ("" + root.getElementsByTagName("lang")[0] != "undefined") lang += root.getElementsByTagName("lang")[0].childNodes[0].nodeValue;
+    if ("" + root.getElementsByTagName("lang")[0] != "undefined") {
+        lang += root.getElementsByTagName("lang")[0].childNodes[0].nodeValue;
+    }
     var strpho = "";
     if ("" + root.getElementsByTagName("phonetic-symbol")[0] != "undefined") {
-        if ("" + root.getElementsByTagName("phonetic-symbol")[0].childNodes[0] != "undefined") var pho = root.getElementsByTagName("phonetic-symbol")[0].childNodes[0].nodeValue;
+        if ("" + root.getElementsByTagName("phonetic-symbol")[0].childNodes[0] != "undefined") {
+            var pho = root.getElementsByTagName("phonetic-symbol")[0].childNodes[0].nodeValue;
+        }
         if (pho != null) {
             strpho = "&nbsp;[" + pho + "]";
         }
@@ -208,11 +216,10 @@ function translateXML(xmlnode) {
         } else {
             noBaseTrans = true;
         }
-        var i;
-        for (i = 0; i < translations.length - 1; i++) {
+        for (var i = 0; i < translations.length - 1; i++) {
             basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>";
         }
-        basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>";
+        basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>"; // 多余行？
     }
     if (noWebTrans == false) {
         if ("" + root.getElementsByTagName("web-translation")[0].childNodes[0] != "undefined") {
@@ -220,8 +227,7 @@ function translateXML(xmlnode) {
         } else {
             noWebTrans = true;
         }
-        var i;
-        for (i = 0; i < webtranslations.length - 1; i++) {
+        for (var i = 0; i < webtranslations.length - 1; i++) {
             webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
             webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "<br /></div>";
         }
@@ -270,6 +276,7 @@ function fetchWordOnline(word, callback) {
     xhr.open('GET', url, true);
     xhr.send();
 }
+
 var _word;
 var _callback;
 var _timer;
@@ -342,6 +349,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             break;
     }
 });
+
 /**
  * 将配置更新通知已经打开的 Tab
  */
