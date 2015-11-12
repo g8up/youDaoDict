@@ -284,11 +284,11 @@ function renderAudio() {
                 speech.classList.add('ydd-void-icon');
                 var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
                 var audio = document.createElement('audio');
-                audio.src = audioSrc;
                 if (getOptVal('auto_speech')) {
                     // audio.play();
                     audio.autoplay = true;
                 }
+                audio.src = audioSrc;
                 speech.addEventListener('click', function(e){
                     audio.play();
                 });
