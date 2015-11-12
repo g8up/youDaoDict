@@ -7,8 +7,7 @@
  */
 var body = document.querySelector('body');
 var Options = {},
-    last_frame,
-    last_div;
+    last_frame;
 var list = [];
 var last_time = 0,
     last_request_time = 0;
@@ -162,7 +161,7 @@ document.onmousedown = function(e) {
 
 function OnCheckCloseWindow() {
     if (inDictPannel) return;
-    if (last_frame != null) {
+    if (last_frame) {
         var cur = new Date().getTime();
         if (cur - last_time < 500) {
             return;
@@ -171,7 +170,6 @@ function OnCheckCloseWindow() {
             body.removeChild(list.pop());
         }
         last_frame = null;
-        last_div = null;
         return true;
     }
     return false
@@ -179,13 +177,12 @@ function OnCheckCloseWindow() {
 
 function OnCheckCloseWindowForce() {
     inDictPannel = false;
-    if (last_frame != null) {
+    if (last_frame) {
         var cur = new Date().getTime();
         while (list.length != 0) {
             body.removeChild(list.pop());
         }
         last_frame = null;
-        last_div = null;
         return true;
     }
     return false;
@@ -268,7 +265,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
         var newtop = y - document.getElementById("yddWrapper").clientHeight;
         frame.style.top = newtop + 'px';
     }
-    if (last_frame != null) {
+    if (last_frame) {
         if (last_frame.style.top == frame.style.top && last_frame.style.left == frame.style.left) {
             body.removeChild(frame);
             list.pop();
