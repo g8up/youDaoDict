@@ -41,14 +41,14 @@
     vertical-align: top;
 }
 #ydd-voice.ydd-void-icon {
+    width: 13px;
+	height: 15px;
+    vertical-align: text-top;
 	display: inline-block;
 	margin-left: 3px;
-	height: 19px;
-    width: 14px;
-	background-size: 30px 20px;
 	background:url("chrome-extension://__MSG_@@extension_id__/voice-btn.png") no-repeat;
+    background-size: 26px 15px;
 	cursor: pointer;
-    vertical-align: top;
 }
 #ydd-detail{
 	margin-left: 3px;
