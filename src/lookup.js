@@ -294,8 +294,8 @@ function renderAudio() {
                 });
             }
         }
+        speech.innerHTML = '';
     }
-    speech.innerHTML = '';
 }
 
 function getYoudaoDict(word, x, y, screenX, screenY, next) {
