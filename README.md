@@ -8,3 +8,8 @@
 
 鸣谢：
 感谢网友 john_shao 对 Ver 3.0.8 提供的更新意见。
+
+# Distribute
+```
+npm run dist
+```

@@ -64,6 +64,6 @@
  	grunt.loadNpmTasks('grunt-contrib-compress');
 
  	grunt.registerTask('dist', ['clean:dist', 'uglify', 'cssmin', 'copy']);
- 	grunt.registerTask('release', ['clean:dist', 'uglify', 'compress']); //完整流程
+ 	grunt.registerTask('release', ['clean:dist', 'uglify', 'cssmin', 'copy', 'compress']); //完整流程
  	grunt.registerTask('package', ['compress']); //仅打包
  };
