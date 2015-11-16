@@ -38,16 +38,20 @@
 #ydd-phonetic{
 	margin-left: 3px;
 	display: inline-block;
-    vertical-align: top;
+	vertical-align: top;
+	max-width: 140px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 #ydd-voice.ydd-void-icon {
-    width: 13px;
+	width: 13px;
 	height: 15px;
-    vertical-align: text-top;
+	vertical-align: text-top;
 	display: inline-block;
 	margin-left: 3px;
 	background:url("chrome-extension://__MSG_@@extension_id__/voice-btn.png") no-repeat;
-    background-size: 26px 15px;
+	background-size: 26px 15px;
 	cursor: pointer;
 }
 #ydd-detail{
