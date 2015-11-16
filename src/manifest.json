@@ -25,7 +25,7 @@
 		"48": "icon-128.png"
 	},
 	"manifest_version": 2,
-	"version": "3.1.4",
+	"version": "3.1.5",
 	"name": "有道词典划词扩展 V3",
 	"short_name": "有道词典",
 	"options_page": "options.html",
