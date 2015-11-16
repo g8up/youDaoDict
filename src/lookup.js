@@ -80,6 +80,7 @@ function _onDictEvent(e) {
 
 function dealSelectEvent(){
     if ( getOptVal("dict_enable") ) {
+        body.removeEventListener("mouseup", _onDictEvent);
         body.addEventListener("mouseup", _onDictEvent);
     }else{
         body.removeEventListener("mouseup", _onDictEvent);
@@ -87,7 +88,6 @@ function dealSelectEvent(){
 }
 
 var prevC, prevO, c;
-
 // 指词即译
 function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
@@ -95,9 +95,6 @@ function _onScrTrans(e) {
         return;
     }
     window._ydTimer = setTimeout(function() {
-        if (!e.ctrlKey) {
-            return;
-        }
         var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (!caretRange) return true;
         pX = e.pageX;
@@ -142,6 +139,7 @@ function _onScrTrans(e) {
                 getYoudaoDict(word, pX, pY, e.screenX, e.screenY, function(data) {
                     createPopUpEx(data, xx, yy, sx, sy);
                 });
+                e = null;
             }, 50);
         }
     }, TriggerDelay);
@@ -149,6 +147,7 @@ function _onScrTrans(e) {
 
 function dealPointEvent(){
     if ( getOptVal("ctrl_only") ) {
+        document.removeEventListener('mousemove', _onScrTrans);
         document.addEventListener('mousemove', _onScrTrans);
     }else{
         document.removeEventListener('mousemove', _onScrTrans);
