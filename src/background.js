@@ -123,7 +123,7 @@ sprintfWrapper = {
 }
 sprintf = sprintfWrapper.init;
 
-function genTable(word, strpho, baseTrans, webTrans) {
+function genTable(word, speach, strpho, baseTrans, webTrans) {
     var lan = '';
     if (isContainKoera(word)) {
         lan = "&le=ko";
@@ -182,39 +182,43 @@ function genTable(word, strpho, baseTrans, webTrans) {
     res = fmt;
     noBaseTrans = false;
     noWebTrans = false;
-    speach = '';
     return res;
 }
 var noBaseTrans = false;
 var noWebTrans = false;
-var speach = '';
 //解析返回的查询结果
 function translateXML(xmlnode) {
     var translate = "<strong>查询:</strong><br/>";
     var root = xmlnode.getElementsByTagName("yodaodict")[0];
-    if ("" + root.getElementsByTagName("return-phrase")[0].childNodes[0] != "undefined") {
-        var retphrase = root.getElementsByTagName("return-phrase")[0].childNodes[0].nodeValue;
-    }
-    if ("" + root.getElementsByTagName("dictcn-speach")[0] != "undefined") {
-        speach = root.getElementsByTagName("dictcn-speach")[0].childNodes[0].nodeValue;
-    }
-    var lang = "&le=";
-    if ("" + root.getElementsByTagName("lang")[0] != "undefined") {
-        lang += root.getElementsByTagName("lang")[0].childNodes[0].nodeValue;
-    }
-    var strpho = "";
-    if ("" + root.getElementsByTagName("phonetic-symbol")[0] != "undefined") {
-        if ("" + root.getElementsByTagName("phonetic-symbol")[0].childNodes[0] != "undefined") {
-            var pho = root.getElementsByTagName("phonetic-symbol")[0].childNodes[0].nodeValue;
+
+    var retrieveDataMap = {
+        'phrase': 'return-phrase',// 查询的单词、短语
+        'speach': 'dictcn-speach',// 发音
+        'lang': 'lang',
+        'phonetic': 'phonetic-symbol'
+    };
+    var params = {};
+    for(var key in retrieveDataMap){
+        var node = retrieveDataMap[key];
+        var node = root.getElementsByTagName(node);
+        if( node.length ){
+            var el = node[0].childNodes[0];
+            if ( el != "undefined") {
+                params[key] = el.nodeValue;
+                continue;
+            }
         }
-        if (pho != null) {
-            strpho = "[" + pho + "]";
-        }
+        params[key] = '';
     }
-    if ("" + root.getElementsByTagName("translation")[0] == "undefined") {
+
+    if( params.phonetic ){
+        params.phonetic = "[" + params.phonetic + "]";
+    }
+
+    if ( typeof root.getElementsByTagName("translation")[0] == "undefined") {
         noBaseTrans = true;
     }
-    if ("" + root.getElementsByTagName("web-translation")[0] == "undefined") {
+    if ( typeof root.getElementsByTagName("web-translation")[0] == "undefined") {
         noWebTrans = true;
     }
     var basetrans = "";
@@ -222,7 +226,7 @@ function translateXML(xmlnode) {
     var translations;
     var webtranslations;
     if (noBaseTrans == false) {
-        if ("" + root.getElementsByTagName("translation")[0].childNodes[0] != "undefined") {
+        if ( typeof root.getElementsByTagName("translation")[0].childNodes[0] != "undefined") {
             translations = root.getElementsByTagName("translation");
         } else {
             noBaseTrans = true;
@@ -233,19 +237,19 @@ function translateXML(xmlnode) {
         basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>"; // 多余行？
     }
     if (noWebTrans == false) {
-        if ("" + root.getElementsByTagName("web-translation")[0].childNodes[0] != "undefined") {
+        if ( typeof root.getElementsByTagName("web-translation")[0].childNodes[0] != "undefined") {
             webtranslations = root.getElementsByTagName("web-translation");
         } else {
             noWebTrans = true;
         }
         for (var i = 0; i < webtranslations.length - 1; i++) {
-            webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
+            webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
             webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "<br /></div>";
         }
-        webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
+        webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
         webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "</div>";
     }
-    return genTable(retphrase, strpho, basetrans, webtrans);
+    return genTable( params.phrase, params.speach, params.phonetic, basetrans, webtrans);
     //return translate;
 }
 
@@ -307,7 +311,7 @@ function fetchWordOnline(word, callback) {
 
 var _word;
 var _timer;
-
+// deprecated
 function fetchWord(word, callback) {
     if (isContainKoera(word)) {
         fetchWordOnline(word, callback);
