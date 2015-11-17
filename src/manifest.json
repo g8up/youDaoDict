@@ -18,7 +18,7 @@
 		"matches": ["*://*/*"],
 		"css":["youdao-crx.css"]
 	}],
-	"description": "可记录、导出查询历史！（修复 N 多官方 Bug）",
+	"description": "可记录、导出查询历史！（为官方版擦屁股和脸）",
 	"icons": {
 		"128": "icon-128.png",
 		"64": "icon-128.png",
