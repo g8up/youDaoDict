@@ -58,7 +58,7 @@ function _onDictEvent(e) {
                 yy = e.pageY,
                 sx = e.screenX,
                 sy = e.screenY;
-            getYoudaoTrans(word, e.pageX, e.pageY, e.screenX, e.screenY, function(data) {
+            getYoudaoTrans(word, function(data) {
                 createPopUpEx(data, xx, yy, sx, sy);
             });
             return;
@@ -70,7 +70,7 @@ function _onDictEvent(e) {
                 yy = e.pageY,
                 sx = e.screenX,
                 sy = e.screenY;
-            getYoudaoDict(word, e.pageX, e.pageY, e.screenX, e.screenY, function(data) {
+            getYoudaoDict(word, function(data) {
                 createPopUpEx(data, xx, yy, sx, sy);
             });
             return;
@@ -97,8 +97,6 @@ function _onScrTrans(e) {
     window._ydTimer = setTimeout(function() {
         var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (!caretRange) return true;
-        pX = e.pageX;
-        pY = e.pageY;
         var so = caretRange.startOffset,
             eo = caretRange.endOffset;
         if (prevC === caretRange.startContainer && prevO === so) return true;
@@ -128,15 +126,15 @@ function _onScrTrans(e) {
         }
         var word = tr.toString();
         if (word.length >= 1) {
+            var xx = e.pageX,
+                yy = e.pageY,
+                sx = e.screenX,
+                sy = e.screenY;
             setTimeout(function() {
                 var selection = window.getSelection();
                 selection.removeAllRanges();
                 selection.addRange(tr);
-                var xx = pX,
-                    yy = pY,
-                    sx = e.screenX,
-                    sy = e.screenY;
-                getYoudaoDict(word, pX, pY, e.screenX, e.screenY, function(data) {
+                getYoudaoDict(word, function(data) {
                     createPopUpEx(data, xx, yy, sx, sy);
                 });
                 e = null;
@@ -297,27 +295,19 @@ function renderAudio() {
     }
 }
 
-function getYoudaoDict(word, x, y, screenX, screenY, next) {
+function getYoudaoDict(word, next) {
     chrome.extension.sendRequest({
         'action': 'dict',
-        'word': word,
-        'x': x,
-        'y': y,
-        'screenX': screenX,
-        'screenY': screenY
+        'word': word
     }, function(data) {
         next && next(data);
     });
 }
 
-function getYoudaoTrans(word, x, y, screenX, screenY, next) {
+function getYoudaoTrans(word, next) {
     chrome.extension.sendRequest({
         'action': 'translate',
-        'word': word,
-        'x': x,
-        'y': y,
-        'screenX': screenX,
-        'screenY': screenY
+        'word': word
     }, function(data) {
         next && next(data);
     });
