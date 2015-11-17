@@ -306,7 +306,6 @@ function fetchWordOnline(word, callback) {
 }
 
 var _word;
-var _callback;
 var _timer;
 
 function fetchWord(word, callback) {
@@ -316,18 +315,15 @@ function fetchWord(word, callback) {
     }
     var xhr = new XMLHttpRequest();
     _word = word;
-    _callback = callback;
     xhr.onreadystatechange = function(data) {
         clearTimeout(_timer);
     }
     var url = 'http://127.0.0.1:8999/word=' + word + '&';
     xhr.open('GET', url, true);
     xhr.send();
-    _timer = setTimeout(handleTimeout, 600);
-}
-
-function handleTimeout() {
-    fetchWordOnline(_word, _callback);
+    _timer = setTimeout(function handleTimeout() {
+        fetchWordOnline(_word, callback);
+    }, 600);
 }
 
 function fetchTranslate(words, callback) {
@@ -346,7 +342,6 @@ function fetchTranslate(words, callback) {
     xhr.open('GET', url, true);
     xhr.send();
 }
-
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
     var _action = request.action;
     switch (_action) {
@@ -377,13 +372,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             break;
     }
 });
-
 /**
  * 将配置更新通知已经打开的 Tab
  */
 function publishOptionChangeToTabs() {
     chrome.tabs.query({
-        status:"complete"
+        status: "complete"
     }, function(tabs) {
         if (tabs.length) {
             tabs.forEach(function(tab) {
