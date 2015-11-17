@@ -91,7 +91,7 @@ var prevC, prevO, c;
 // 指词即译
 function _onScrTrans(e) {
     clearTimeout(window._ydTimer);
-    if (!e.ctrlKey) {
+    if (!window.event.ctrlKey) {
         return;
     }
     window._ydTimer = setTimeout(function() {
@@ -137,7 +137,6 @@ function _onScrTrans(e) {
                 getYoudaoDict(word, function(data) {
                     createPopUpEx(data, xx, yy, sx, sy);
                 });
-                e = null;
             }, 50);
         }
     }, TriggerDelay);
