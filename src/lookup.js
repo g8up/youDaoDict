@@ -92,7 +92,7 @@ var _ydTimerPoint = null;
 // 指词即译
 function _onScrTrans(e) {
 	clearTimeout(_ydTimerPoint);
-	if (!window.event.ctrlKey) {
+	if (!window.event.ctrlKey || window.event.shiftKey || window.event.altKey) {
 		return;
 	}
 	_ydTimerPoint = setTimeout(function() {
