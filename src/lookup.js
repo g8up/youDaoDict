@@ -91,56 +91,56 @@ var prevC, prevO, c;
 var _ydTimerPoint = null;
 // 指词即译
 function _onScrTrans(e) {
-    clearTimeout(_ydTimerPoint);
-    if (!window.event.ctrlKey) {
-        return;
-    }
-    _ydTimerPoint = setTimeout(function() {
-        var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
-        if (!caretRange) return true;
-        var so = caretRange.startOffset,
-            eo = caretRange.endOffset;
-        if (prevC === caretRange.startContainer && prevO === so) return true;
-        prevC = caretRange.startContainer;
-        prevO = so;
-        var tr = caretRange.cloneRange(),
-            text = '';
-        if (caretRange.startContainer.data) {
-            while (so >= 1) {
-                tr.setStart(caretRange.startContainer, --so);
-                text = tr.toString();
-                if (!isAlpha(text.charAt(0))) {
-                    tr.setStart(caretRange.startContainer, so + 1);
-                    break;
-                }
-            }
-        }
-        if (caretRange.endContainer.data) {
-            while (eo < caretRange.endContainer.data.length) {
-                tr.setEnd(caretRange.endContainer, ++eo);
-                text = tr.toString();
-                if (!isAlpha(text.charAt(text.length - 1))) {
-                    tr.setEnd(caretRange.endContainer, eo - 1);
-                    break;
-                }
-            }
-        }
-        var word = tr.toString();
-        if (word.length >= 1) {
-            var xx = e.pageX,
-                yy = e.pageY,
-                sx = e.screenX,
-                sy = e.screenY;
-            setTimeout(function() {
-                var selection = window.getSelection();
-                selection.removeAllRanges();
-                selection.addRange(tr);
-                getYoudaoDict(word, function(data) {
-                    createPopUpEx(data, xx, yy, sx, sy);
-                });
-            }, 50);
-        }
-    }, TriggerDelay);
+	clearTimeout(_ydTimerPoint);
+	if (!window.event.ctrlKey || window.event.shiftKey || window.event.altKey) {
+		return;
+	}
+	_ydTimerPoint = setTimeout(function() {
+		var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
+		if (!caretRange) return true;
+		var so = caretRange.startOffset,
+			eo = caretRange.endOffset;
+		if (prevC === caretRange.startContainer && prevO === so) return true;
+		prevC = caretRange.startContainer;
+		prevO = so;
+		var tr = caretRange.cloneRange(),
+			text = '';
+		if (caretRange.startContainer.data) {
+			while (so >= 1) {
+				tr.setStart(caretRange.startContainer, --so);
+				text = tr.toString();
+				if (!isAlpha(text.charAt(0))) {
+					tr.setStart(caretRange.startContainer, so + 1);
+					break;
+				}
+			}
+		}
+		if (caretRange.endContainer.data) {
+			while (eo < caretRange.endContainer.data.length) {
+				tr.setEnd(caretRange.endContainer, ++eo);
+				text = tr.toString();
+				if (!isAlpha(text.charAt(text.length - 1))) {
+					tr.setEnd(caretRange.endContainer, eo - 1);
+					break;
+				}
+			}
+		}
+		var word = tr.toString();
+		if (word.length >= 1) {
+			var xx = e.pageX,
+				yy = e.pageY,
+				sx = e.screenX,
+				sy = e.screenY;
+			setTimeout(function() {
+				var selection = window.getSelection();
+				selection.removeAllRanges();
+				selection.addRange(tr);
+				getYoudaoDict(word, function(data) {
+					createPopUpEx(data, xx, yy, sx, sy);
+				});
+			}, 50);
+		}
+	}, TriggerDelay);
 }
 
 function dealPointEvent(){

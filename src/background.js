@@ -123,7 +123,7 @@ sprintfWrapper = {
 }
 sprintf = sprintfWrapper.init;
 
-function genTable(word, speach, strpho, baseTrans, webTrans) {
+function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) {
     var lan = '';
     if (isContainKoera(word)) {
         lan = "&le=ko";
@@ -180,14 +180,13 @@ function genTable(word, speach, strpho, baseTrans, webTrans) {
     }
     fmt += '</div></div>';
     res = fmt;
-    noBaseTrans = false;
-    noWebTrans = false;
     return res;
 }
-var noBaseTrans = false;
-var noWebTrans = false;
+
 //解析返回的查询结果
 function translateXML(xmlnode) {
+    var noBaseTrans = false;
+    var noWebTrans = false;
     var translate = "<strong>查询:</strong><br/>";
     var root = xmlnode.getElementsByTagName("yodaodict")[0];
 
@@ -215,42 +214,35 @@ function translateXML(xmlnode) {
         params.phonetic = "[" + params.phonetic + "]";
     }
 
-    if ( typeof root.getElementsByTagName("translation")[0] == "undefined") {
-        noBaseTrans = true;
-    }
-    if ( typeof root.getElementsByTagName("web-translation")[0] == "undefined") {
-        noWebTrans = true;
-    }
     var basetrans = "";
+    var $translations = root.getElementsByTagName("translation");
+    if ( !$translations.length ) {
+        noBaseTrans = true;
+    } else if (typeof $translations[0].childNodes[0] == "undefined") {
+        noBaseTrans = true;
+    } else {
+        for (var i = 0; i < $translations.length; i++) {
+            var transContVal = $translations[i].getElementsByTagName("content")[0].textContent;
+            basetrans += '<div class="ydd-trans-container ydd-padding010">' + transContVal + "</div>";
+        }
+    }
+
     var webtrans = "";
-    var translations;
-    var webtranslations;
-    if (noBaseTrans == false) {
-        if ( typeof root.getElementsByTagName("translation")[0].childNodes[0] != "undefined") {
-            translations = root.getElementsByTagName("translation");
-        } else {
-            noBaseTrans = true;
+    var $webtranslations = root.getElementsByTagName("web-translation");
+    if ( !$webtranslations.length ) {
+        noWebTrans = true;
+    }else if (typeof $webtranslations[0].childNodes[0] == "undefined") {
+        noWebTrans = true;
+    }else{
+        for (var i = 0; i < $webtranslations.length; i++) {
+            var key = $webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
+            var val = $webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue;
+            webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(key) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + key + ":</a> ";
+            webtrans += val + "<br /></div>";
         }
-        for (var i = 0; i < translations.length - 1; i++) {
-            basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>";
-        }
-        basetrans += '<div class="ydd-trans-container ydd-padding010">' + translations[i].getElementsByTagName("content")[0].childNodes[0].nodeValue + "</div>"; // 多余行？
+
     }
-    if (noWebTrans == false) {
-        if ( typeof root.getElementsByTagName("web-translation")[0].childNodes[0] != "undefined") {
-            webtranslations = root.getElementsByTagName("web-translation");
-        } else {
-            noWebTrans = true;
-        }
-        for (var i = 0; i < webtranslations.length - 1; i++) {
-            webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
-            webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "<br /></div>";
-        }
-        webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue + ":</a> ";
-        webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "</div>";
-    }
-    return genTable( params.phrase, params.speach, params.phonetic, basetrans, webtrans);
-    //return translate;
+    return genTable( params.phrase, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
 }
 
 function translateTransXML(xmlnode) {
