@@ -25,7 +25,8 @@
  		// 代码压缩
  		uglify: {
  			options:{
- 				compress:true
+ 				compress:true,
+ 				banner:'/**\n * <%=pkg.homepage%>\n */\n'
  			},
  			dist: {
  				expand: true,
