@@ -38,42 +38,39 @@ getOptions();
 function _onDictEvent(e) {
 	clearTimeout(window._ydTimerSelect);
 	window._ydTimerSelect = setTimeout(function() {
+		if (inDictPannel) return;
+		OnCheckCloseWindow();
 		var word = window.getSelection().toString();
 		if (word !== '') {
 			word = word.trim();
 		}
 		if (word.length < 1 || word.length > 2000) {
-			OnCheckCloseWindow();
 			return;
 		}
-		if (inDictPannel) return;
-		OnCheckCloseWindow();
+		var xx = e.pageX,
+			yy = e.pageY,
+			sx = e.screenX,
+			sy = e.screenY;
+		var isContainJapanese = isContainJapanese(word),
+			isContainChinese = isContainChinese(word);
 		if (getOptVal("english_only")) {
-			if (isContainJapanese(word) || isContainKoera(word) || isContainChinese(word)) {
+			var isContainKoera = isContainKoera(word);
+			if ( isContainJapanese || isContainChinese || isContainKoera) {
 				return;
 			}
 			word = ExtractEnglish(word);
-		} else if ((!isContainChinese(word) && spaceCount(word) >= 3) || (isContainChinese(word) && word.length > 4) || isContainJapanese(word) && word.length > 4) {
-			var xx = e.pageX,
-				yy = e.pageY,
-				sx = e.screenX,
-				sy = e.screenY;
+			// TODO: add isEnglish function
+			if( word !== ''){
+				getYoudaoDict(word, function(data) {
+					createPopUpEx(data, xx, yy, sx, sy);
+				});
+			}
+		} else if ((!isContainChinese && spaceCount(word) >= 3)
+				|| (isContainChinese && word.length > 4)
+				|| isContainJapanese && word.length > 4) {
 			getYoudaoTrans(word, function(data) {
 				createPopUpEx(data, xx, yy, sx, sy);
 			});
-			return;
-		}
-		// TODO: add isEnglish function
-		if (word != '') {
-			OnCheckCloseWindowForce();
-			var xx = e.pageX,
-				yy = e.pageY,
-				sx = e.screenX,
-				sy = e.screenY;
-			getYoudaoDict(word, function(data) {
-				createPopUpEx(data, xx, yy, sx, sy);
-			});
-			return;
 		}
 	}, TriggerDelay);
 }
@@ -172,7 +169,7 @@ function OnCheckCloseWindow() {
 	return false
 }
 
-function OnCheckCloseWindowForce() {
+function closeWindow() {
 	inDictPannel = false;
 	if (last_frame) {
 		var cur = new Date().getTime();
@@ -186,7 +183,7 @@ function OnCheckCloseWindowForce() {
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
-	OnCheckCloseWindowForce();
+	closeWindow();
 	var sel = window.getSelection();
 	if( sel && sel.rangeCount ){
 		createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
@@ -251,7 +248,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 	// 关闭按钮
 	var closeBtn = document.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
-		OnCheckCloseWindowForce();
+		closeWindow();
 	};
 	closeBtn = null;
 	// 语音播放
