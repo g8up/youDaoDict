@@ -316,3 +316,28 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		dealPointEvent();
 	}
 });
+
+function get(option) {
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function (data) {
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200) {
+				var dataText = xhr.responseText;
+				option.success && option.success( dataText );
+			}
+		}
+	}
+	xhr.open('GET', option.url, true);
+	xhr.send();
+}
+
+get({
+	url: chrome.extension.getURL("webcomponent-panel.html"),
+	success: function( textData ){
+		var cont = document.createElement('div');
+		cont.innerHTML = textData;
+		body.appendChild( cont );
+
+		body.appendChild( document.createElement('youdao-dict-panel') );
+	}
+});

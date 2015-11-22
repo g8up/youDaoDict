@@ -31,5 +31,5 @@
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png"]
+	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png", "webcomponent-panel.html"]
 }
