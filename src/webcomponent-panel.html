@@ -1,48 +1,9 @@
-<template id="tmpl-panel">
-	<link rel="stylesheet" href="youdao-crx.css">
-
-    <div id="yddWrapper" draggable="true" style="left: 10px; top: 10px; position: absolute;">
-        <div id="yddContainer">
-            <div id="yddTop" class="ydd-sp">
-                <div id="yddTopBorderlr"><a id="yddKeyTitle" href="http://dict.youdao.com/search?q=developers&amp;keyfrom=chrome.extension" target="_blank" title="查看完整释义">developers</a><span id="ydd-phonetic" style="font-weight:normal;font-size:10px;"></span><span id="ydd-voice"></span><a id="ydd-detail" href="http://dict.youdao.com/search?q=developers&amp;keyfrom=chrome.extension" target="_blank">详细</a><a class="ydd-close">×</a></div>
-            </div>
-            <div id="yddMiddle" draggable="true">
-                <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">
-                    <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>
-                    <div class="ydd-trans-container ydd-padding010">n. 开发商；发展者；[摄] 显影剂（developer的复数）</div>
-                </div>
-                <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">
-                    <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>
-                    <div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=Developers&amp;keyfrom=chrome.extensioneng" target="_blank">Developers:</a> 开发商
-                        <br>
-                    </div>
-                    <div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=XDA%20Developers&amp;keyfrom=chrome.extensioneng" target="_blank">XDA Developers:</a> XDA developers
-                        <br>
-                    </div>
-                    <div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=Photographic%20developers&amp;keyfrom=chrome.extensioneng" target="_blank">Photographic developers:</a> 摄影显影剂
-                        <br>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+<template id="yodaoDictPanel">
+    <style> @import "chrome-extension://nfgfijaedapejnbpfnloblfedmnhifij/youdao-crx.css"; </style>
+    <div id="content"></div>
 </template>
 
 <script>
-	var tmpl = document.currentScript.ownerDocument.querySelector('#tmpl-panel');
-	// Create a prototype for a new element that extends HTMLElement
-	var YoudaoDictPanelProto = Object.create(HTMLElement.prototype);
 
-	// Setup our Shadow DOM and clone the template
-	YoudaoDictPanelProto.createdCallback = function () {
-		var root = this.createShadowRoot();
-		root.appendChild( document.importNode( tmpl.content, true) );
-	};
 
-	// Register our new element
-	var Panel = document.registerElement('youdao-dict-panel', {
-		prototype: YoudaoDictPanelProto
-	});
-    console.log('processing');
 </script>
