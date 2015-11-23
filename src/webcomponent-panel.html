@@ -1,42 +1,4 @@
 <template id="yodaoDictPanel">
-    <style> @import "chrome-extension://nfgfijaedapejnbpfnloblfedmnhifij/youdao-crx.css"; </style>
+    <style> @import "chrome-extension://__MSG_@@extension_id__/youdao-crx.css"; </style>
     <div id="content"></div>
 </template>
-
-<script>
-	document.querySelector('#yddMiddle').setAttribute('draggable', true);
-	document.querySelector('#yddMiddle').ondragstart = function(e) {
-	    e.preventDefault();
-	};
-	// 关闭按钮
-	var closeBtn = document.querySelector('.ydd-close');
-	closeBtn.onclick = function(e) {
-	    closeWindow();
-	};
-	closeBtn = null;
-	// 语音播放
-	renderAudio();
-
-	function renderAudio() {
-	    var speech = document.getElementById("ydd-voice");
-	    if (speech) {
-	        if (window.location.protocol == 'http:') {
-	            if (speech.innerHTML != '') {
-	                speech.classList.add('ydd-void-icon');
-	                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
-	                var audio = document.createElement('audio');
-	                if (getOptVal('auto_speech')) {
-	                    // audio.play();
-	                    audio.autoplay = true;
-	                }
-	                audio.src = audioSrc;
-	                speech.addEventListener('click', function(e){
-	                    audio.play();
-	                });
-	            }
-	        }
-	        speech.innerHTML = '';
-	    }
-	}
-
-</script>

@@ -146,7 +146,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
                             '<a class="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
                             '<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
                             '<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '<a class="ydd-close">&times;</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
                     '<div class="yddMiddle">'
@@ -159,7 +159,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
                             '<span class="ydd-phonetic" style="font-weight:normal;font-size:10px;">', strpho, '</span>',
                             '<span class="ydd-voice">', speach, '</span>',
                             '<a class="ydd-detail" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank>详细</a>',
-                            '<a class="ydd-close">&times;</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
                     '<div class="yddMiddle">'
@@ -269,7 +269,7 @@ function translateTransXML(xmlnode) {
                             '<span style="float:right;font-size:10px">',
                                 '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
                             '</span>',
-                            '<a class="ydd-close">&times;</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
                     '<div class="yddMiddle">',

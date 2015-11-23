@@ -1,10 +1,4 @@
-.yddWrapper {
-	min-width: 250px;
-	max-width: 400px;
-	-webkit-user-drag: element;
-	color: #252525;
-	z-index: 10001;
-	box-shadow: 2px 2px 4px gray;
+:host-context(#yddWrapper) {
 }
 #yddContainer {
 	display: block;
@@ -16,98 +10,105 @@
 	border: 1px solid #4b7598;
 	background: #fff;
 	text-align: left;
+	min-width: 250px;
+	max-width: 400px;
+	-webkit-user-drag: element;
+	color: #252525;
+	z-index: 10001;
+	box-shadow: 2px 2px 4px gray;
 	a,a:hover,a:visited{
 		color: #50799b;
 		text-decoration: none!important;
 	}
-	.yddTop {
+}
+
+.yddTop {
+	display: block;
+	height: 22px;
+	cursor: move;
+	border-bottom: 1px solid #d7e3eb;
+	background: #e1f1fb;
+
+	.yddTopBorderlr {
 		display: block;
 		height: 22px;
-		cursor: move;
-		border-bottom: 1px solid #d7e3eb;
-		background: #e1f1fb;
+		line-height: 22px;
+		font-size: 12px;
+		color: #5079bb;
+		.yddKeyTitle {
+			margin-left:3px;
+			padding-left: 20px; /*给图标预留至少 17px 的宽度*/
+			font-weight: bold;
+			background: url("icon-yd-dict.png") no-repeat;
+			vertical-align: top;
+		    color: #5079bb;
+		}
+		.ydd-phonetic{
+			margin-left: 3px;
+			display: inline-block;
+			vertical-align: top;
+			max-width: 140px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-		.yddTopBorderlr {
-			display: block;
+		.ydd-voice.ydd-void-icon {
+			width: 13px;
+			height: 15px;
+			vertical-align: text-top;
+			display: inline-block;
+			margin-left: 3px;
+			background:url("voice-btn.png") no-repeat;
+			background-size: 26px 15px;
+			cursor: pointer;
+		}
+		.ydd-voice.ydd-void-icon:hover{
+			background-position-x: -13px;
+		}
+		.ydd-detail{
+			margin-left: 3px;
+		}
+		.ydd-close {
+			display: inline-block;
+			width: 16px;
 			height: 22px;
 			line-height: 22px;
-			font-size: 12px;
-			color: #5079bb;
-			.yddKeyTitle {
-				margin-left:3px;
-				padding-left: 20px; /*给图标预留至少 17px 的宽度*/
-				font-weight: bold;
-				background: url("icon-yd-dict.png") no-repeat;
-				vertical-align: top;
-			    color: #5079bb;
-			}
-			.ydd-phonetic{
-				margin-left: 3px;
-				display: inline-block;
-				vertical-align: top;
-				max-width: 140px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.ydd-voice.ydd-void-icon {
-				width: 13px;
-				height: 15px;
-				vertical-align: text-top;
-				display: inline-block;
-				margin-left: 3px;
-				background:url("voice-btn.png") no-repeat;
-				background-size: 26px 15px;
-				cursor: pointer;
-			}
-			.ydd-voice.ydd-void-icon:hover{
-				background-position-x: -13px;
-			}
-			.ydd-detail{
-				margin-left: 3px;
-			}
-			.ydd-close {
-				display: inline-block;
-				width: 16px;
-				height: 22px;
-				line-height: 22px;
-				font-size: 16px;
-				position: absolute;
-				right: 0;
-				cursor: pointer;
-			}
+			font-size: 16px;
+			position: absolute;
+			right: 0;
+			cursor: pointer;
 		}
 	}
-	.yddMiddle {
-		display: block;
-		margin-bottom: 10px;
-		.ydd-trans-wrapper{
-			.ydd-tabs{
+}
+.yddMiddle {
+	display: block;
+	margin-bottom: 10px;
+	.ydd-trans-wrapper{
+		.ydd-tabs{
+			display: block;
+			margin: 5px 0;
+			padding: 0 5px;
+			height: 18px;
+			border-bottom: 1px solid;
+			border-color: #d5e7f3;
+			.ydd-tab {
 				display: block;
-				margin: 5px 0;
-				padding: 0 5px;
+				float: left;
 				height: 18px;
-				border-bottom: 1px solid;
+				margin: 0 5px -1px 0;
+				padding: 0 4px;
+				line-height: 18px;
+				border: 1px solid;
+				border-bottom: none;
+				background: #fff;
 				border-color: #d5e7f3;
-				.ydd-tab {
-					display: block;
-					float: left;
-					height: 18px;
-					margin: 0 5px -1px 0;
-					padding: 0 4px;
-					line-height: 18px;
-					border: 1px solid;
-					border-bottom: none;
-					background: #fff;
-					border-color: #d5e7f3;
-				}
 			}
-			.ydd-trans-container{
-				display: block;
-				line-height: 160%;
-				padding: 0 10px;
-			}
+		}
+		.ydd-trans-container{
+			display: block;
+			line-height: 160%;
+			padding: 0 10px;
 		}
 	}
 }

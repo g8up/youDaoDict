@@ -1,11 +1,3 @@
-.yddWrapper {
-  min-width: 250px;
-  max-width: 400px;
-  -webkit-user-drag: element;
-  color: #252525;
-  z-index: 10001;
-  box-shadow: 2px 2px 4px gray;
-}
 #yddContainer {
   display: block;
   font-family: "Microsoft YaHei";
@@ -16,6 +8,12 @@
   border: 1px solid #4b7598;
   background: #fff;
   text-align: left;
+  min-width: 250px;
+  max-width: 400px;
+  -webkit-user-drag: element;
+  color: #252525;
+  z-index: 10001;
+  box-shadow: 2px 2px 4px gray;
 }
 #yddContainer a,
 #yddContainer a:hover,
@@ -23,30 +21,30 @@
   color: #50799b;
   text-decoration: none!important;
 }
-#yddContainer .yddTop {
+.yddTop {
   display: block;
   height: 22px;
   cursor: move;
   border-bottom: 1px solid #d7e3eb;
   background: #e1f1fb;
 }
-#yddContainer .yddTop .yddTopBorderlr {
+.yddTop .yddTopBorderlr {
   display: block;
   height: 22px;
   line-height: 22px;
   font-size: 12px;
   color: #5079bb;
 }
-#yddContainer .yddTop .yddTopBorderlr .yddKeyTitle {
+.yddTop .yddTopBorderlr .yddKeyTitle {
   margin-left: 3px;
   padding-left: 20px;
   /*给图标预留至少 17px 的宽度*/
   font-weight: bold;
-  background: url("chrome-extension://__MSG_@@extension_id__/icon-yd-dict.png") no-repeat;
+  background: url("icon-yd-dict.png") no-repeat;
   vertical-align: top;
   color: #5079bb;
 }
-#yddContainer .yddTop .yddTopBorderlr .ydd-phonetic {
+.yddTop .yddTopBorderlr .ydd-phonetic {
   margin-left: 3px;
   display: inline-block;
   vertical-align: top;
@@ -55,23 +53,23 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-#yddContainer .yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon {
+.yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon {
   width: 13px;
   height: 15px;
   vertical-align: text-top;
   display: inline-block;
   margin-left: 3px;
-  background: url("chrome-extension://__MSG_@@extension_id__/voice-btn.png") no-repeat;
+  background: url("voice-btn.png") no-repeat;
   background-size: 26px 15px;
   cursor: pointer;
 }
-#yddContainer .yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon:hover {
+.yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon:hover {
   background-position-x: -13px;
 }
-#yddContainer .yddTop .yddTopBorderlr .ydd-detail {
+.yddTop .yddTopBorderlr .ydd-detail {
   margin-left: 3px;
 }
-#yddContainer .yddTop .yddTopBorderlr .ydd-close {
+.yddTop .yddTopBorderlr .ydd-close {
   display: inline-block;
   width: 16px;
   height: 22px;
@@ -81,11 +79,11 @@
   right: 0;
   cursor: pointer;
 }
-#yddContainer .yddMiddle {
+.yddMiddle {
   display: block;
   margin-bottom: 10px;
 }
-#yddContainer .yddMiddle .ydd-trans-wrapper .ydd-tabs {
+.yddMiddle .ydd-trans-wrapper .ydd-tabs {
   display: block;
   margin: 5px 0;
   padding: 0 5px;
@@ -93,7 +91,7 @@
   border-bottom: 1px solid;
   border-color: #d5e7f3;
 }
-#yddContainer .yddMiddle .ydd-trans-wrapper .ydd-tabs .ydd-tab {
+.yddMiddle .ydd-trans-wrapper .ydd-tabs .ydd-tab {
   display: block;
   float: left;
   height: 18px;
@@ -105,7 +103,7 @@
   background: #fff;
   border-color: #d5e7f3;
 }
-#yddContainer .yddMiddle .ydd-trans-wrapper .ydd-trans-container {
+.yddMiddle .ydd-trans-wrapper .ydd-trans-container {
   display: block;
   line-height: 160%;
   padding: 0 10px;
