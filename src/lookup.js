@@ -278,7 +278,8 @@ function addContentEvent(){
 	function renderAudio() {
 	    var speech = content.querySelector(".ydd-voice");
 	    if (speech) {
-	        if (window.location.protocol == 'http:') {
+	    	var protocol = window.location.protocol
+	        if ( protocol == 'http:' || protocol == 'file:') {
 	            if (speech.innerHTML != '') {
 	                speech.classList.add('ydd-void-icon');
 	                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
