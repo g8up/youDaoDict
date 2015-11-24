@@ -237,7 +237,7 @@ function translateXML(xmlnode) {
         for (var i = 0; i < $webtranslations.length; i++) {
             var key = $webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
             var val = $webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue;
-            webtrans += '<div class="ydd-trans-container"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(key) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + key + ":</a> ";
+            webtrans += '<div class="ydd-trans-container"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(key) + '&keyfrom=chrome.extension&le=' + params.lang + '" target=_blank>' + key + ":</a> ";
             webtrans += val + "<br /></div>";
         }
 
