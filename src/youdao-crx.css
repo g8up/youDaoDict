@@ -1,9 +1,13 @@
 #yddContainer {
+  display: block;
   font-family: "Microsoft YaHei";
   position: relative;
+  width: 100%;
+  height: 100%;
   font-size: 12px;
   border: 1px solid #4b7598;
   background: #fff;
+  text-align: left;
   min-width: 250px;
   max-width: 400px;
   -webkit-user-drag: element;
@@ -15,11 +19,9 @@
 #yddContainer a:hover,
 #yddContainer a:visited {
   color: #50799b;
-  text-decoration: none;
+  text-decoration: none!important;
 }
 .yddTop {
-  display: block;
-  height: 22px;
   cursor: move;
   border-bottom: 1px solid #d7e3eb;
   background: #e1f1fb;
@@ -29,6 +31,7 @@
   line-height: 22px;
   font-size: 12px;
   color: #5079bb;
+  padding-right: 16px;
 }
 .yddTop .yddTopBorderlr .yddKeyTitle {
   margin-left: 3px;
@@ -41,7 +44,6 @@
 }
 .yddTop .yddTopBorderlr .ydd-phonetic {
   margin-left: 3px;
-  display: inline-block;
   vertical-align: top;
   max-width: 140px;
   overflow: hidden;
@@ -49,10 +51,10 @@
   white-space: nowrap;
 }
 .yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon {
+  display: inline-block;
   width: 13px;
   height: 15px;
   vertical-align: text-top;
-  display: inline-block;
   margin-left: 3px;
   background: url("voice-btn.png") no-repeat;
   background-size: 26px 15px;
@@ -65,18 +67,18 @@
   margin-left: 3px;
 }
 .yddTop .yddTopBorderlr .ydd-close {
-  position: absolute;
-  right: 0;
-  top: 0;
+  display: inline-block;
   width: 16px;
   height: 22px;
   line-height: 22px;
   font-size: 16px;
+  position: absolute;
+  right: 0;
   cursor: pointer;
 }
 .yddMiddle {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
 }
 .yddMiddle .ydd-trans-wrapper .ydd-tabs {
   display: block;
