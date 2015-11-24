@@ -1,13 +1,9 @@
 #yddContainer {
-  display: block;
   font-family: "Microsoft YaHei";
   position: relative;
-  width: 100%;
-  height: 100%;
   font-size: 12px;
   border: 1px solid #4b7598;
   background: #fff;
-  text-align: left;
   min-width: 250px;
   max-width: 400px;
   -webkit-user-drag: element;
@@ -19,7 +15,7 @@
 #yddContainer a:hover,
 #yddContainer a:visited {
   color: #50799b;
-  text-decoration: none!important;
+  text-decoration: none;
 }
 .yddTop {
   display: block;
@@ -29,7 +25,6 @@
   background: #e1f1fb;
 }
 .yddTop .yddTopBorderlr {
-  display: block;
   height: 22px;
   line-height: 22px;
   font-size: 12px;
@@ -70,18 +65,18 @@
   margin-left: 3px;
 }
 .yddTop .yddTopBorderlr .ydd-close {
-  display: inline-block;
+  position: absolute;
+  right: 0;
+  top: 0;
   width: 16px;
   height: 22px;
   line-height: 22px;
   font-size: 16px;
-  position: absolute;
-  right: 0;
   cursor: pointer;
 }
 .yddMiddle {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .yddMiddle .ydd-trans-wrapper .ydd-tabs {
   display: block;

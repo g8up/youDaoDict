@@ -261,20 +261,23 @@ function translateTransXML(xmlnode) {
         input_str_tmp = input_str_tmp.substring(0, 15) + ' ...';
     }
     if (trans_str_tmp == input_str_tmp) return null;
-    var res = ['<div id="yddContainer" align="left">',
+    var res = ['<div id="yddContainer">',
                     '<div class="yddTop" class="ydd-sp">',
                         '<div class="yddTopBorderlr">',
                             '<a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&keyfrom=chrome" target=_blank">有道词典</a>',
-                            '<div style="display: inline;">' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</div>',
-                            '<span style="float:right;font-size:10px">',
-                                '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '</span>',
+                            '<span>' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</span>',
+                            '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
                             '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
                     '<div class="yddMiddle">',
                         '<div class="yddSimpleTrans ydd-trans-wrapper">',
-                            '<div class="ydd-trans-container">' + trans_str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") ,
+                            '<div class="ydd-trans-container">',
+                                trans_str.replace(/&/g, '&amp;')
+                                    .replace(/</g, '&lt;')
+                                    .replace(/>/g, '&gt;')
+                                    .replace(/"/g, "&quot;")
+                                    .replace(/'/g, "&#39;") ,
                             '</div>',
                         '</div>',
                     '</div>',
@@ -322,6 +325,7 @@ function fetchWord(word, callback) {
     }, 600);
 }
 
+// 划词翻译
 function fetchTranslate(words, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(data) {
