@@ -166,6 +166,7 @@ function OnCheckCloseWindow() {
 
 function closePanel() {
 	if( content ) {
+		content.classList.remove('fadeIn');
 		content.innerHTML = '';
 	}
 }
@@ -203,7 +204,6 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 		frame_top = (y - frame_height - 2 * padding);
 	}
 	frame.style.top = frame_top + 10 + 'px';
-	frame.style.position = 'absolute';
 	if (frame.style.left + frame_width > screen_width) {
 		frame.style.left -= frame.style.left + frame_width - screen_width;
 	}
@@ -213,12 +213,10 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 		frame.style.top = newtop + 'px';
 	}
 
-	body.appendChild(frame);
 	list.push(frame);
 	last_time = new Date().getTime();
 	last_frame = frame;
 }
-
 
 var content = null;
 function getYoudaoDictPanelCont( html ){
@@ -227,6 +225,7 @@ function getYoudaoDictPanelCont( html ){
 	if( !panel ){
 		panel = document.createElement('div');
 		panel.id = panelId;
+		body.appendChild(panel);
 		addPanelEvent( panel );
 
 		var tmpl = genTmpl();
@@ -235,6 +234,7 @@ function getYoudaoDictPanelCont( html ){
 		content = root.querySelector('#content');
 	}
 	content.innerHTML = html;
+	content.classList.add('fadeIn');
 	addContentEvent();
 	return panel;
 }

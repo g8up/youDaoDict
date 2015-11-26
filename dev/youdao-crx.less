@@ -1,9 +1,17 @@
 :host-context(#yddWrapper) {
+	position: absolute;
+	transition: all 0.2s;
+}
+#content{
+	opacity: 0;
+	transition:opacity 0.5s 0.1s;
+	&.fadeIn{
+		opacity: 1;
+	}
 }
 #yddContainer {
 	display: block;
 	font-family: "Microsoft YaHei";
-	position: relative;
 	width: 100%;
 	height: 100%;
 	font-size: 12px;
@@ -28,6 +36,7 @@
 	background: #e1f1fb;
 	@closeBtnWidth:16px;
 	.yddTopBorderlr {
+		position: relative;
 		height: 22px;
 		line-height: 22px;
 		font-size: 12px;
