@@ -31,7 +31,5 @@
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	// "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsIt6HM0FcY9FkwRTgpaBGCaEatCluFe+ik5du4Ea+5tqiB/q+ebZMqDGr4CvbvTFBImQ2q1/dax9KvMUkDUJHzrgyWTt5C2Wh/n97HqRWZrrmGUgvRSS2t7d7sRFLCdqU56yGgCBDwCWBPZJpgf8ltdvH7HhFpNSUjmrNEdE85Ef7kmBI/V0zVxS+BuFVN17bIw/nZpj1OvOBYI3I2nWg7RP5BlcEbl8wVbgQDNSof6FxhKUceTo1RqCZLToS/zuuHtk24UD45r/QoqiM1juq99YKXhObZDHA7LulallJWIt+wqSz0oG36YgxHfeHql3UgmV5Zjz9cg1+qIqkbOPqQIDAQAB",
 	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png", "webcomponent-panel.html", "youdao-crx.css"]
-
 }
