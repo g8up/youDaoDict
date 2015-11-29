@@ -231,7 +231,7 @@ function getYoudaoDictPanelCont( html ){
 		var tmpl = genTmpl();
 		var root = panel.createShadowRoot();
 		root.appendChild( document.importNode( tmpl.content, true) );
-		content = root.querySelector('#content');
+		content = root.querySelector('#ydd-content');
 	}
 	content.innerHTML = html;
 	content.classList.add('fadeIn');
@@ -367,7 +367,7 @@ function genTmpl(){
 		var _tmpl = document.createElement('template');
 		_tmpl.id = tmplId;
 		var cssUrl = chrome.extension.getURL('youdao-crx.css');
-		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="content"></div>'; // for panel content
+		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="ydd-content"></div>'; // for panel content
 		body.appendChild( _tmpl );
 		return _tmpl;
 	}
