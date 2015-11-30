@@ -1,4 +1,15 @@
 {
+	"manifest_version": 2,
+	"version": "3.1.6",
+	"name": "有道词典划词扩展 V3",
+	"short_name": "有道词典",
+	"description": "可记录、导出查询历史！（为官方版擦屁股和脸）",
+	"icons": {
+		"128": "icon-128.png",
+		"64": "icon-128.png",
+		"48": "icon-128.png"
+	},
+
 	"background": {
 		"scripts": ["common.js", "util.js", "background.js"]
 	},
@@ -15,21 +26,10 @@
 	},
 	"content_scripts": [{
 		"js": ["util.js", "lookup.js"],
-		"matches": ["*://*/*", "file://*"],
-		"css":["youdao-crx.css"]
+		"matches": ["*://*/*", "file://*"]
 	}],
-	"description": "可记录、导出查询历史！（为官方版擦屁股和脸）",
-	"icons": {
-		"128": "icon-128.png",
-		"64": "icon-128.png",
-		"48": "icon-128.png"
-	},
-	"manifest_version": 2,
-	"version": "3.1.5",
-	"name": "有道词典划词扩展 V3",
-	"short_name": "有道词典",
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png"]
+	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png", "youdao-crx.css"]
 }

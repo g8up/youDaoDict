@@ -141,37 +141,37 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
     var fmt = '';
     if (noBaseTrans && noWebTrans) {
         fmt = [ '<div id="yddContainer">',
-                    '<div id="yddTop" class="ydd-sp">',
-                        '<div id="yddTopBorderlr">',
-                            '<a id="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
-                            '<span id="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
-                            '<a id="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '<a class="ydd-close">&times;</a>',
+                    '<div class="yddTop" class="ydd-sp">',
+                        '<div class="yddTopBorderlr">',
+                            '<a class="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
+                            '<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
+                            '<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
-                    '<div id="yddMiddle">'
+                    '<div class="yddMiddle">'
         ].join('');
     } else {
         fmt = ['<div id="yddContainer">',
-                    '<div id="yddTop" class="ydd-sp">',
-                        '<div id="yddTopBorderlr">',
-                            '<a id="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
-                            '<span id="ydd-phonetic" style="font-weight:normal;font-size:10px;">', strpho, '</span>',
-                            '<span id="ydd-voice">', speach, '</span>',
-                            '<a id="ydd-detail" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank>详细</a>',
-                            '<a class="ydd-close">&times;</a>',
+                    '<div class="yddTop" class="ydd-sp">',
+                        '<div class="yddTopBorderlr">',
+                            '<a class="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
+                            '<span class="ydd-phonetic" style="font-weight:normal;font-size:10px;">', strpho, '</span>',
+                            '<span class="ydd-voice">', speach, '</span>',
+                            '<a class="ydd-detail" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank>详细</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
-                    '<div id="yddMiddle">'
+                    '<div class="yddMiddle">'
         ].join('');
     }
     if (noBaseTrans == false) {
-        var base = ['<div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px" id="yddSimpleTrans">', '      <div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>', '      %s', '</div>'].join('');
+        var base = ['<div class="ydd-trans-wrapper" id="yddSimpleTrans">', '<div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>', '      %s', '</div>'].join('');
         base = sprintf(base, baseTrans);
         fmt += base;
     }
     if (noWebTrans == false) {
-        var web = [' <div class="ydd-trans-wrapper" style="display:block;padding:0px 0px 0px 0px">', '  <div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>', '  %s', '</div>'].join('');
+        var web = [' <div class="ydd-trans-wrapper">', '<div class="ydd-tabs"><span class="ydd-tab">网络释义</span></div>', '  %s', '</div>'].join('');
         web = sprintf(web, webTrans);
         fmt += web;
     }
@@ -223,7 +223,7 @@ function translateXML(xmlnode) {
     } else {
         for (var i = 0; i < $translations.length; i++) {
             var transContVal = $translations[i].getElementsByTagName("content")[0].textContent;
-            basetrans += '<div class="ydd-trans-container ydd-padding010">' + transContVal + "</div>";
+            basetrans += '<div class="ydd-trans-container">' + transContVal + "</div>";
         }
     }
 
@@ -237,7 +237,7 @@ function translateXML(xmlnode) {
         for (var i = 0; i < $webtranslations.length; i++) {
             var key = $webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
             var val = $webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue;
-            webtrans += '<div class="ydd-trans-container ydd-padding010"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(key) + '&keyfrom=chrome.extension' + params.lang + '" target=_blank>' + key + ":</a> ";
+            webtrans += '<div class="ydd-trans-container"><a href="http://dict.youdao.com/search?q=' + encodeURIComponent(key) + '&keyfrom=chrome.extension&le=' + params.lang + '" target=_blank>' + key + ":</a> ";
             webtrans += val + "<br /></div>";
         }
 
@@ -261,20 +261,23 @@ function translateTransXML(xmlnode) {
         input_str_tmp = input_str_tmp.substring(0, 15) + ' ...';
     }
     if (trans_str_tmp == input_str_tmp) return null;
-    var res = ['<div id="yddContainer" align=left style="padding:0px 0px 0px 0px;" >',
-                    '<div id="yddTop" class="ydd-sp">',
-                        '<div id="yddTopBorderlr">',
+    var res = ['<div id="yddContainer">',
+                    '<div class="yddTop" class="ydd-sp">',
+                        '<div class="yddTopBorderlr">',
                             '<a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&keyfrom=chrome" target=_blank">有道词典</a>',
-                            '<div style="display: inline;">' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</div>',
-                            '<span style="float:right;font-size:10px">',
-                                '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '</span>',
-                            '<a class="ydd-close">&times;</a>',
+                            '<span>' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</span>',
+                            '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
+                            '<span class="ydd-close">&times;</span>',
                         '</div>',
                     '</div>',
-                    '<div id="yddMiddle">',
-                        '<div id="yddSimpleTrans" class="ydd-trans-wrapper">',
-                            '<div class="ydd-trans-container ydd-padding010">' + trans_str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") ,
+                    '<div class="yddMiddle">',
+                        '<div class="yddSimpleTrans ydd-trans-wrapper">',
+                            '<div class="ydd-trans-container">',
+                                trans_str.replace(/&/g, '&amp;')
+                                    .replace(/</g, '&lt;')
+                                    .replace(/>/g, '&gt;')
+                                    .replace(/"/g, "&quot;")
+                                    .replace(/'/g, "&#39;") ,
                             '</div>',
                         '</div>',
                     '</div>',
@@ -322,6 +325,7 @@ function fetchWord(word, callback) {
     }, 600);
 }
 
+// 划词翻译
 function fetchTranslate(words, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(data) {

@@ -39,7 +39,6 @@ function onSelectToTrans(e) {
 	clearTimeout(window._ydTimerSelect);
 	window._ydTimerSelect = setTimeout(function() {
 		if (inDictPannel) return;
-		OnCheckCloseWindow();
 		var word = window.getSelection().toString();
 		if (word !== '') {
 			word = word.trim();
@@ -158,30 +157,21 @@ function OnCheckCloseWindow() {
 		if (cur - last_time < 500) {
 			return;
 		}
-		while (list.length != 0) {
-			body.removeChild(list.pop());
-		}
+		closePanel();
 		last_frame = null;
 		return true;
 	}
 	return false
 }
 
-function closeWindow() {
-	inDictPannel = false;
-	if (last_frame) {
-		var cur = new Date().getTime();
-		while (list.length != 0) {
-			body.removeChild(list.pop());
-		}
-		last_frame = null;
-		return true;
+function closePanel() {
+	if( content ) {
+		content.classList.remove('fadeIn');
+		content.innerHTML = '';
 	}
-	return false;
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
-	closeWindow();
 	var sel = window.getSelection();
 	if( sel && sel.rangeCount ){
 		createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
@@ -196,9 +186,10 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 	var padding = 10;
 	var frame_left = 0;
 	var frame_top = 0;
-	var frame = document.createElement('div');
-	frame.id = 'yddWrapper';
-	frame.setAttribute('draggable', true);
+	var frame = getYoudaoDictPanelCont( html );
+
+	body.style.position = "static";
+	// 确定位置
 	var screen_width = screen.availWidth;
 	var screen_height = screen.availHeight;
 	if (screenX + frame_width < screen_width) {
@@ -213,80 +204,98 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 		frame_top = (y - frame_height - 2 * padding);
 	}
 	frame.style.top = frame_top + 10 + 'px';
-	frame.style.position = 'absolute';
 	if (frame.style.left + frame_width > screen_width) {
 		frame.style.left -= frame.style.left + frame_width - screen_width;
 	}
-	frame.innerHTML += html;
-	frame.onmouseover = function(e) {
-		inDictPannel = true;
-	};
-	frame.onmouseout = function(e) {
-		inDictPannel = false;
-	};
-	body.style.position = "static";
-	body.appendChild(frame);
-	list.push(frame);
-	// 拖放
-	var distanceX, distanceY;
-	frame.ondragstart = function(e) {
-		distanceX = e.x - parseInt(frame.style.left);
-		distanceY = e.y - parseInt(frame.style.top);
-	};
-	frame.ondragend = function(e) {
-		frame.style.left = e.x - distanceX + 'px';
-		frame.style.top = e.y - distanceY + 'px';
-		distanceX = 0;
-		distanceY = 0;
-	};
-	document.querySelector('#yddMiddle').setAttribute('draggable', true);
-	document.querySelector('#yddMiddle').ondragstart = function(e) {
-		e.preventDefault();
-	};
-	// 关闭按钮
-	var closeBtn = document.querySelector('.ydd-close');
-	closeBtn.onclick = function(e) {
-		closeWindow();
-	};
-	closeBtn = null;
-	// 语音播放
-	renderAudio();
-	// 确定位置
-	var leftbottom = frame_top + 10 + document.getElementById("yddWrapper").clientHeight;
+	var leftbottom = frame_top + 10 + frame.clientHeight;
 	if (leftbottom < y) {
-		var newtop = y - document.getElementById("yddWrapper").clientHeight;
+		var newtop = y - frame.clientHeight;
 		frame.style.top = newtop + 'px';
 	}
-	if (last_frame) {
-		if (last_frame.style.top == frame.style.top && last_frame.style.left == frame.style.left) {
-			body.removeChild(frame);
-			list.pop();
-			return;
-		}
-	}
+
+	list.push(frame);
 	last_time = new Date().getTime();
 	last_frame = frame;
 }
 
-function renderAudio() {
-	var speech = document.getElementById("ydd-voice");
-	if (speech) {
-		if (window.location.protocol == 'http:') {
-			if (speech.innerHTML != '') {
-				speech.classList.add('ydd-void-icon');
-				var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
-				var audio = document.createElement('audio');
-				if (getOptVal('auto_speech')) {
-					// audio.play();
-					audio.autoplay = true;
-				}
-				audio.src = audioSrc;
-				speech.addEventListener('click', function(e){
-					audio.play();
-				});
-			}
-		}
-		speech.innerHTML = '';
+var content = null;
+function getYoudaoDictPanelCont( html ){
+	var panelId = 'yddWrapper';
+	var panel = document.querySelector('div#yddWrapper');
+	if( !panel ){
+		panel = document.createElement('div');
+		panel.id = panelId;
+		body.appendChild(panel);
+		addPanelEvent( panel );
+
+		var tmpl = genTmpl();
+		var root = panel.createShadowRoot();
+		root.appendChild( document.importNode( tmpl.content, true) );
+		content = root.querySelector('#ydd-content');
+	}
+	content.innerHTML = html;
+	content.classList.add('fadeIn');
+	addContentEvent();
+	return panel;
+}
+
+function addPanelEvent( panel ){
+	panel.setAttribute('draggable', true);
+	// panel.innerHTML += html;
+
+	panel.onmouseover = function(e) {
+		inDictPannel = true;
+	};
+	panel.onmouseout = function(e) {
+		inDictPannel = false;
+	};
+
+	// 拖放
+	var distanceX, distanceY;
+	panel.ondragstart = function(e) {
+		distanceX = e.x - parseInt(panel.style.left);
+		distanceY = e.y - parseInt(panel.style.top);
+	};
+	panel.ondragend = function(e) {
+		panel.style.left = e.x - distanceX + 'px';
+		panel.style.top = e.y - distanceY + 'px';
+		distanceX = 0;
+		distanceY = 0;
+	};
+
+}
+
+function addContentEvent(){
+	// 关闭按钮
+	var closeBtn = content.querySelector('.ydd-close');
+	closeBtn.onclick = function(e) {
+	    closePanel();
+	};
+	closeBtn = null;
+	// 语音播放
+	renderAudio();
+
+	function renderAudio() {
+	    var speech = content.querySelector(".ydd-voice");
+	    if (speech) {
+	    	var protocol = window.location.protocol
+	        if ( protocol == 'http:' || protocol == 'file:') {
+	            if (speech.innerHTML != '') {
+	                speech.classList.add('ydd-void-icon');
+	                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+	                var audio = document.createElement('audio');
+	                if (getOptVal('auto_speech')) {
+	                    // audio.play();
+	                    audio.autoplay = true;
+	                }
+	                audio.src = audioSrc;
+	                speech.addEventListener('click', function(e){
+	                    audio.play();
+	                });
+	            }
+	        }
+	        speech.innerHTML = '';
+	    }
 	}
 }
 
@@ -316,3 +325,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		dealPointEvent();
 	}
 });
+
+function genTmpl(){
+	var tmplId = 'yodaoDictPanel';
+	var tmpl = document.querySelector('template#' + tmplId );
+	if( tmpl ){
+		return tmpl;
+	}else{
+		var _tmpl = document.createElement('template');
+		_tmpl.id = tmplId;
+		var cssUrl = chrome.extension.getURL('youdao-crx.css');
+		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="ydd-content"></div>'; // for panel content
+		body.appendChild( _tmpl );
+		return _tmpl;
+	}
+}
