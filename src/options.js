@@ -233,7 +233,7 @@ function exportHistory() {
 		var version = extDetail.version;
 		var banner = ['【' + extName + '】Ver' + version + ' 查询历史备份文件',
 			new Date().toString().slice(0, 24),
-			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil'
+			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
 			new Array(25).join('='),
 		].join('\r\n');
 		var content = banner + '\r\n' + cachedWords.replace(/\,/g, '\r\n');
