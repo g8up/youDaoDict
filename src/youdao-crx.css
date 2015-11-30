@@ -1,12 +1,13 @@
 :host-context(#yddWrapper) {
   position: absolute;
   transition: all 0.2s;
+  z-index: 999999999;
 }
-#content {
+#ydd-content {
   opacity: 0;
   transition: opacity 0.5s 0.1s;
 }
-#content.fadeIn {
+#ydd-content.fadeIn {
   opacity: 1;
 }
 #yddContainer {

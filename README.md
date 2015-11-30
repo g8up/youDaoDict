@@ -19,5 +19,5 @@
 npm run dist
 ```
 # 致谢
-感谢 XGHeaven 对 v3.1.4 提出的更新建议；
-感谢 john_shao 对 v3.0.8 提出的更新建议；
+- 感谢 XGHeaven 对 v3.1.4 提出的更新建议；
+- 感谢 john_shao 对 v3.0.8 提出的更新建议；
