@@ -326,38 +326,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-function get( url ) {
-	return new Promise(function(resolve, reject){
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function () {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200) {
-					var dataText = xhr.responseText;
-					resolve( dataText );
-				}else{
-					reject( xhr.statusText );
-				}
-			}
-		}
-		req.onerror = function() {
-	    	reject( "Network Error" );
-	    };
-		xhr.open('GET', url, true);
-		xhr.send();
-	});
-}
-
-function getCSS( callback ){
-	return new Promise(function( resolve, reject){
-		var url = chrome.extension.getURL("youdao-crx.css");
-		get( url).then(function(css){
-			var style = document.createElement('style');
-			style.textContent = css;
-			resolve( style );
-		});
-	});
-}
-
 function genTmpl(){
 	var tmplId = 'yodaoDictPanel';
 	var tmpl = document.querySelector('template#' + tmplId );
@@ -372,14 +340,3 @@ function genTmpl(){
 		return _tmpl;
 	}
 }
-
-function getTmpl( callback ){
-	return new Promise(function(resolve, reject) {
-		var url = chrome.extension.getURL("webcomponent-panel.html");
-		get( url).then(function( tmplHTML ){
-			resolve(tmplHTML);
-		});
-	});
-
-}
-
