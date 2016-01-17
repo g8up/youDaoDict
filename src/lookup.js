@@ -151,7 +151,6 @@ document.onmousedown = function(e) {
 }
 
 function OnCheckCloseWindow() {
-<<<<<<< HEAD
 	if (inDictPannel) return;
 	if (last_frame) {
 		var cur = new Date().getTime();
@@ -170,34 +169,6 @@ function closePanel() {
 		content.classList.remove('fadeIn');
 		content.innerHTML = '';
 	}
-=======
-    if (inDictPannel) return;
-    if (last_frame) {
-        var cur = new Date().getTime();
-        if (cur - last_time < 500) {
-            return;
-        }
-        while (list.length != 0) {
-            body.removeChild(list.pop());
-        }
-        last_frame = null;
-        return true;
-    }
-    return false
-}
-
-function closeWindow() {
-    inDictPannel = false;
-    if (last_frame) {
-        var cur = new Date().getTime();
-        while (list.length != 0) {
-            body.removeChild(list.pop());
-        }
-        last_frame = null;
-        return true;
-    }
-    return false;
->>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
@@ -298,57 +269,26 @@ function addContentEvent(){
 	// 关闭按钮
 	var closeBtn = content.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
-	    closePanel();
+		closePanel();
 	};
 	closeBtn = null;
 	// 语音播放
-	renderAudio();
-
-<<<<<<< HEAD
-	function renderAudio() {
-	    var speech = content.querySelector(".ydd-voice");
-	    if (speech) {
-	    	var protocol = window.location.protocol
-	        if ( protocol == 'http:' || protocol == 'file:') {
-	            if (speech.innerHTML != '') {
-	                speech.classList.add('ydd-void-icon');
-	                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
-	                var audio = document.createElement('audio');
-	                if (getOptVal('auto_speech')) {
-	                    // audio.play();
-	                    audio.autoplay = true;
-	                }
-	                audio.src = audioSrc;
-	                speech.addEventListener('click', function(e){
-	                    audio.play();
-	                });
-	            }
-	        }
-	        speech.innerHTML = '';
-	    }
-	}
-=======
-function renderAudio() {
-    var speech = document.getElementById("ydd-voice");
-    if (speech) {
-        if (window.location.protocol == 'http:') {
-            if (speech.innerHTML != '') {
-                speech.classList.add('ydd-void-icon');
-                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
-                var audio = document.createElement('audio');
-                if (getOptVal('auto_speech')) {
-                    // audio.play();
-                    audio.autoplay = true;
-                }
-                audio.src = audioSrc;
-                speech.addEventListener('click', function(e){
-                    audio.play();
-                });
-            }
-        }
-        speech.innerHTML = '';
-    }
->>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
+	(function renderAudio() {
+		var speech = content.querySelector(".ydd-voice");
+		if (speech) {
+			if (speech.innerHTML != '') {
+				speech.classList.add('ydd-void-icon');
+				var audioUrl = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+				if (getOptVal('auto_speech')) {
+					playAudio( audioUrl );
+				}
+				speech.addEventListener('click', function(e){
+					playAudio( audioUrl );
+				});
+			}
+			speech.innerHTML = '';
+		}
+	})();
 }
 
 function getYoudaoDict(word, next) {
@@ -370,8 +310,6 @@ function getYoudaoTrans(word, next) {
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-<<<<<<< HEAD
-	// console.log( request.optionChanged);
 	if( request.optionChanged ){
 		Options = request.optionChanged;
 		dealSelectEvent();
@@ -392,19 +330,18 @@ function genTmpl(){
 		body.appendChild( _tmpl );
 		return _tmpl;
 	}
-=======
-    // console.log( request.optionChanged);
     if( request.optionChanged ){
         Options = request.optionChanged;
         dealSelectEvent();
         dealPointEvent();
     }
-});
+}
 
-var isDev = true;
-function log(){
-    if( isDev ){
-        console.log.apply(console, arguments);
-    }
->>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
+function playAudio( audioUrl ){
+	chrome.extension.sendRequest({
+		'action': 'speech',
+		'audioUrl': audioUrl
+	}, function(data) {
+		next && next(data);
+	});
 }
