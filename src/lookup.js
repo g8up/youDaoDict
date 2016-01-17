@@ -7,29 +7,29 @@
  */
 var body = document.querySelector('body');
 var Options = {},
-	last_frame;
+    last_frame;
 var list = [];
 var last_time = 0,
-	last_request_time = 0;
+    last_request_time = 0;
 var TriggerDelay = 350;
 
 function getOptions(next) {
-	chrome.extension.sendRequest({
-		'action': "getOptions"
-	}, function(response) {
-		if (response.ColorOptions) {
-			Options = response.ColorOptions;
-			dealSelectEvent();
-			dealPointEvent();
-		}
-		next && next();
-	});
+    chrome.extension.sendRequest({
+        'action': "getOptions"
+    }, function(response) {
+        if (response.ColorOptions) {
+            Options = response.ColorOptions;
+            dealSelectEvent();
+            dealPointEvent();
+        }
+        next && next();
+    });
 }
 
 function getOptVal(strKey) {
-	if (Options !== null) {
-		return Options[strKey][1];
-	}
+    if (Options !== null) {
+        return Options[strKey][1];
+    }
 }
 
 getOptions();
@@ -147,10 +147,11 @@ function dealPointEvent(){
 }
 
 document.onmousedown = function(e) {
-	OnCheckCloseWindow();
+    OnCheckCloseWindow();
 }
 
 function OnCheckCloseWindow() {
+<<<<<<< HEAD
 	if (inDictPannel) return;
 	if (last_frame) {
 		var cur = new Date().getTime();
@@ -169,6 +170,34 @@ function closePanel() {
 		content.classList.remove('fadeIn');
 		content.innerHTML = '';
 	}
+=======
+    if (inDictPannel) return;
+    if (last_frame) {
+        var cur = new Date().getTime();
+        if (cur - last_time < 500) {
+            return;
+        }
+        while (list.length != 0) {
+            body.removeChild(list.pop());
+        }
+        last_frame = null;
+        return true;
+    }
+    return false
+}
+
+function closeWindow() {
+    inDictPannel = false;
+    if (last_frame) {
+        var cur = new Date().getTime();
+        while (list.length != 0) {
+            body.removeChild(list.pop());
+        }
+        last_frame = null;
+        return true;
+    }
+    return false;
+>>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
@@ -275,6 +304,7 @@ function addContentEvent(){
 	// 语音播放
 	renderAudio();
 
+<<<<<<< HEAD
 	function renderAudio() {
 	    var speech = content.querySelector(".ydd-voice");
 	    if (speech) {
@@ -297,27 +327,50 @@ function addContentEvent(){
 	        speech.innerHTML = '';
 	    }
 	}
+=======
+function renderAudio() {
+    var speech = document.getElementById("ydd-voice");
+    if (speech) {
+        if (window.location.protocol == 'http:') {
+            if (speech.innerHTML != '') {
+                speech.classList.add('ydd-void-icon');
+                var audioSrc = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+                var audio = document.createElement('audio');
+                if (getOptVal('auto_speech')) {
+                    // audio.play();
+                    audio.autoplay = true;
+                }
+                audio.src = audioSrc;
+                speech.addEventListener('click', function(e){
+                    audio.play();
+                });
+            }
+        }
+        speech.innerHTML = '';
+    }
+>>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
 }
 
 function getYoudaoDict(word, next) {
-	chrome.extension.sendRequest({
-		'action': 'dict',
-		'word': word
-	}, function(data) {
-		next && next(data);
-	});
+    chrome.extension.sendRequest({
+        'action': 'dict',
+        'word': word
+    }, function(data) {
+        next && next(data);
+    });
 }
 
 function getYoudaoTrans(word, next) {
-	chrome.extension.sendRequest({
-		'action': 'translate',
-		'word': word
-	}, function(data) {
-		next && next(data);
-	});
+    chrome.extension.sendRequest({
+        'action': 'translate',
+        'word': word
+    }, function(data) {
+        next && next(data);
+    });
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+<<<<<<< HEAD
 	// console.log( request.optionChanged);
 	if( request.optionChanged ){
 		Options = request.optionChanged;
@@ -339,4 +392,19 @@ function genTmpl(){
 		body.appendChild( _tmpl );
 		return _tmpl;
 	}
+=======
+    // console.log( request.optionChanged);
+    if( request.optionChanged ){
+        Options = request.optionChanged;
+        dealSelectEvent();
+        dealPointEvent();
+    }
+});
+
+var isDev = true;
+function log(){
+    if( isDev ){
+        console.log.apply(console, arguments);
+    }
+>>>>>>> 16faffb9109a5389e64cdad0301312d4764511b1
 }
