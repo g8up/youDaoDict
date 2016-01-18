@@ -25,16 +25,12 @@ gulp.task('uglify', function () {
 gulp.task('less', function () {
   return gulp.src('dev/*.less')
     .pipe(less())
-    .pipe(gulp.dest('src/'));
-});
-
-gulp.task('cssmin', function () {
-  return gulp
-    .src('src/*.css')
+    .pipe( header( banner, { pkg: pkg} ) )
+    .pipe(gulp.dest('src/'))
+    // cssmin
     .pipe(cssmin())
     .pipe( header( banner, { pkg: pkg} ) )
     .pipe(gulp.dest('dist/'))
-  ;
 });
 
 gulp.task('copy', function () {
@@ -50,7 +46,7 @@ gulp.task('copy', function () {
 });
 
 gulp.task('js', ["uglify"]);
-gulp.task('css', ["less", "cssmin"]);
+gulp.task('css', ["less"]);
 gulp.task('html', ["copy"]);
 
 gulp.task('default', ["js", "css", "html"]);
