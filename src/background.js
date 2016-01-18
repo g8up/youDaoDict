@@ -18,11 +18,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
             publishOptionChangeToTabs();
             break;
         case 'dict':
-            if (navigator.appVersion.indexOf("Win") > -1) {
-                fetchWordOnline(request.word, sendResponse);
-            } else {
-                fetchWordOnline(request.word, sendResponse);
-            }
+            fetchWordOnline(request.word, sendResponse);
             break;
         case 'translate':
             fetchTranslate(request.word, sendResponse);
@@ -174,32 +170,22 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
         title = title.substring(0, 15) + ' ...';
     }
     var fmt = '';
-    if (noBaseTrans && noWebTrans) {
-        fmt = [ '<div id="yddContainer">',
-                    '<div class="yddTop" class="ydd-sp">',
-                        '<div class="yddTopBorderlr">',
-                            '<a class="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
-                            '<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
-                            '<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '<a class="ydd-close" href="javascript:void(0);">&times;</a>',
-                        '</div>',
+    var searchUrlPrefix = ( noBaseTrans && noWebTrans ) ? 'http://www.youdao.com/search?keyfrom=chrome.extension&ue=utf8'
+        : 'http://dict.youdao.com/search?keyfrom=chrome.extension';
+    var searchUrl = searchUrlPrefix + '&q=' + encodeURIComponent(word) + lan;
+
+    fmt = [ '<div id="yddContainer">',
+                '<div class="yddTop" class="ydd-sp">',
+                    '<div class="yddTopBorderlr">',
+                        '<a class="yddKeyTitle" href="', searchUrl, '" target=_blank title="查看完整释义">', title, '</a>',
+                        '<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
+                        '<span class="ydd-voice">', speach, '</span>',
+                        '<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
+                        '<a class="ydd-close" href="javascript:void(0);">&times;</a>',
                     '</div>',
-                    '<div class="yddMiddle">'
-        ].join('');
-    } else {
-        fmt = ['<div id="yddContainer">',
-                    '<div class="yddTop" class="ydd-sp">',
-                        '<div class="yddTopBorderlr">',
-                            '<a class="yddKeyTitle" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank title="查看完整释义">', title, '</a>',
-                            '<span class="ydd-phonetic" style="font-weight:normal;font-size:10px;">', strpho, '</span>',
-                            '<span class="ydd-voice">', speach, '</span>',
-                            '<a class="ydd-detail" href="http://dict.youdao.com/search?q=', encodeURIComponent(word), '&keyfrom=chrome.extension', lan, '" target=_blank>详细</a>',
-                            '<a class="ydd-close" href="javascript:void(0);">&times;</a>',
-                        '</div>',
-                    '</div>',
-                    '<div class="yddMiddle">'
-        ].join('');
-    }
+                '</div>',
+            '<div class="yddMiddle">'].join('');
+
     if (noBaseTrans == false) {
         var base = ['<div class="ydd-trans-wrapper" id="yddSimpleTrans">', '<div class="ydd-tabs"><span class="ydd-tab">基本翻译</span></div>', '      %s', '</div>'].join('');
         base = sprintf(base, baseTrans);
@@ -211,7 +197,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
         fmt += web;
     }
     if (noBaseTrans && noWebTrans) {
-        fmt += '&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="http://www.youdao.com/search?q=' + encodeURIComponent(word) + '&ue=utf8&keyfrom=chrome.extension" target=_blank>请尝试网页搜索</a>';
+        fmt += '&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="' + searchUrl + '" target=_blank>请尝试网页搜索</a>';
     }
     fmt += '</div></div>';
     res = fmt;
@@ -302,7 +288,7 @@ function translateTransXML(xmlnode) {
                             '<a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&keyfrom=chrome" target=_blank">有道词典</a>',
                             '<span>' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</span>',
                             '<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
-                            '<span class="ydd-close">&times;</span>',
+                            '<a class="ydd-close">&times;</a>',
                         '</div>',
                     '</div>',
                     '<div class="yddMiddle">',
@@ -339,28 +325,7 @@ function fetchWordOnline(word, callback) {
     xhr.send();
 }
 
-var _word;
-var _timer;
-// deprecated
-function fetchWord(word, callback) {
-    if (isContainKoera(word)) {
-        fetchWordOnline(word, callback);
-        return;
-    }
-    var xhr = new XMLHttpRequest();
-    _word = word;
-    xhr.onreadystatechange = function(data) {
-        clearTimeout(_timer);
-    }
-    var url = 'http://127.0.0.1:8999/word=' + word + '&';
-    xhr.open('GET', url, true);
-    xhr.send();
-    _timer = setTimeout(function handleTimeout() {
-        fetchWordOnline(_word, callback);
-    }, 600);
-}
-
-// 划词翻译
+// 查询英文之外的语言
 function fetchTranslate(words, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function(data) {
@@ -368,8 +333,6 @@ function fetchTranslate(words, callback) {
             if (xhr.status == 200) {
                 var dataText = translateTransXML(xhr.responseText);
                 if (dataText != null) callback(dataText);
-            } else {
-                //callback(null);
             }
         }
     }

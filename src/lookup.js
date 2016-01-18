@@ -309,6 +309,7 @@ function getYoudaoTrans(word, next) {
     });
 }
 
+// 获取配置修改的消息
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if( request.optionChanged ){
 		Options = request.optionChanged;
