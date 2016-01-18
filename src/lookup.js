@@ -277,7 +277,7 @@ function addContentEvent(){
 		var speech = content.querySelector(".ydd-voice");
 		if (speech) {
 			if (speech.innerHTML != '') {
-				speech.classList.add('ydd-void-icon');
+				speech.classList.add('ydd-voice-icon');
 				var audioUrl = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
 				if (getOptVal('auto_speech')) {
 					playAudio( audioUrl );

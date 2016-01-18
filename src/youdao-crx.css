@@ -1,7 +1,19 @@
+/**
+ * youDaoDict - 可记录、导出查询历史的有道词典划词扩展
+ * @version v3.1.7
+ * @link https://github.com/g8up/youDaoDict
+ * @author g8up
+ */
 :host-context(#yddWrapper) {
   position: absolute;
   transition: all 0.2s;
   z-index: 999999999;
+}
+a,
+a:hover,
+a:visited {
+  color: #50799b;
+  text-decoration: none!important;
 }
 #ydd-content {
   opacity: 0;
@@ -26,12 +38,6 @@
   z-index: 10001;
   box-shadow: 2px 2px 4px gray;
 }
-#yddContainer a,
-#yddContainer a:hover,
-#yddContainer a:visited {
-  color: #50799b;
-  text-decoration: none!important;
-}
 .yddTop {
   cursor: move;
   border-bottom: 1px solid #d7e3eb;
@@ -46,17 +52,19 @@
   padding-right: 22px;
 }
 .yddTop .yddTopBorderlr .yddKeyTitle {
+  display: inline-block;
   margin-left: 3px;
   padding-left: 20px;
   /*给图标预留至少 17px 的宽度*/
   font-weight: bold;
-  background: url("icon-yd-dict.png") no-repeat;
   vertical-align: top;
+  background: url("icon-yd-dict.png") no-repeat;
+  background-position-y: 3px;
   color: #5079bb;
 }
 .yddTop .yddTopBorderlr .ydd-phonetic {
+  display: inline-block;
   margin-left: 3px;
-  vertical-align: top;
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -65,19 +73,21 @@
 .yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon {
   display: inline-block;
   width: 13px;
-  height: 15px;
-  vertical-align: text-top;
+  height: inherit;
   margin-left: 3px;
   background: url("voice-btn.png") no-repeat;
   background-size: 26px 15px;
   background-position-x: -13px;
+  background-position-y: 4px;
   cursor: pointer;
 }
 .yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon:hover {
   background-position-x: 0;
 }
 .yddTop .yddTopBorderlr .ydd-detail {
+  display: inline-block;
   margin-left: 3px;
+  vertical-align: top;
 }
 .yddTop .yddTopBorderlr .ydd-close {
   display: inline-block;
