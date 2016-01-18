@@ -1,16 +1,56 @@
-var gulp = require('gulp'),
-    less = require('gulp-less');
-// var replace = require('gulp-replace');
+var pkg    = require('./package.json');
+var gulp   = require('gulp');
+var header = require('gulp-header');
+var uglify = require('gulp-uglify');
+var less   = require('gulp-less');
+var cssmin = require('gulp-cssmin');
 
-gulp.task('youdao', function () {
-    //编译src目录下的所有less文件
-    //除了reset.less和test.less（**匹配src/less的0个或多个子文件夹）
-    gulp.src(['dev/*.less'])
-        .pipe(less())
-        // .pipe(replace(/([^"]*\.png)/g, 'chrome-extension://__MSG_@@extension_id__/$1'))
-        .pipe(gulp.dest('src/'));
+var banner = ['/**',
+  ' * <%= pkg.name %> - <%= pkg.description %>',
+  ' * @version v<%= pkg.version %>',
+  ' * @link <%= pkg.homepage %>',
+  ' * @author <%= pkg.author %>',
+  ' */',
+  ''].join('\n');
+
+gulp.task('uglify', function () {
+  return gulp
+    .src('src/*.js')
+    .pipe( uglify() )
+    .pipe( header( banner, { pkg: pkg} ) )
+    .pipe(gulp.dest('dist/'))
+  ;
 });
 
-gulp.task('watch', function () {
-    gulp.watch('dev/*.less', ['youdao']);
+gulp.task('less', function () {
+  return gulp.src('dev/*.less')
+    .pipe(less())
+    .pipe(gulp.dest('src/'));
 });
+
+gulp.task('cssmin', function () {
+  return gulp
+    .src('src/*.css')
+    .pipe(cssmin())
+    .pipe( header( banner, { pkg: pkg} ) )
+    .pipe(gulp.dest('dist/'))
+  ;
+});
+
+gulp.task('copy', function () {
+  return gulp
+    .src([
+      'src/*.html',
+      'src/*.png',
+      'src/*.gif',
+      'src/*.json',
+      ])
+    .pipe(gulp.dest('dist/'))
+  ;
+});
+
+gulp.task('js', ["uglify"]);
+gulp.task('css', ["less", "cssmin"]);
+gulp.task('html', ["copy"]);
+
+gulp.task('default', ["js", "css", "html"]);
