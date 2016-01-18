@@ -7,29 +7,29 @@
  */
 var body = document.querySelector('body');
 var Options = {},
-    last_frame;
+	last_frame;
 var list = [];
 var last_time = 0,
-    last_request_time = 0;
+	last_request_time = 0;
 var TriggerDelay = 350;
 
 function getOptions(next) {
-    chrome.extension.sendRequest({
-        'action': "getOptions"
-    }, function(response) {
-        if (response.ColorOptions) {
-            Options = response.ColorOptions;
-            dealSelectEvent();
-            dealPointEvent();
-        }
-        next && next();
-    });
+	chrome.extension.sendRequest({
+		'action': "getOptions"
+	}, function(response) {
+		if (response.ColorOptions) {
+			Options = response.ColorOptions;
+			dealSelectEvent();
+			dealPointEvent();
+		}
+		next && next();
+	});
 }
 
 function getOptVal(strKey) {
-    if (Options !== null) {
-        return Options[strKey][1];
-    }
+	if (Options !== null) {
+		return Options[strKey][1];
+	}
 }
 
 getOptions();
@@ -147,7 +147,7 @@ function dealPointEvent(){
 }
 
 document.onmousedown = function(e) {
-    OnCheckCloseWindow();
+	OnCheckCloseWindow();
 }
 
 function OnCheckCloseWindow() {
@@ -292,21 +292,21 @@ function addContentEvent(){
 }
 
 function getYoudaoDict(word, next) {
-    chrome.extension.sendRequest({
-        'action': 'dict',
-        'word': word
-    }, function(data) {
-        next && next(data);
-    });
+	chrome.extension.sendRequest({
+		'action': 'dict',
+		'word': word
+	}, function(data) {
+		next && next(data);
+	});
 }
 
 function getYoudaoTrans(word, next) {
-    chrome.extension.sendRequest({
-        'action': 'translate',
-        'word': word
-    }, function(data) {
-        next && next(data);
-    });
+	chrome.extension.sendRequest({
+		'action': 'translate',
+		'word': word
+	}, function(data) {
+		next && next(data);
+	});
 }
 
 // 获取配置修改的消息
