@@ -1,6 +1,39 @@
 ﻿var ColorsChanged = true;
 initIcon();
 
+chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
+    var _action = request.action;
+    switch (_action) {
+        case 'getOptions':
+            if (ColorsChanged == true) {
+                sendResponse({
+                    init: "globalPages",
+                    ChangeColors: "true",
+                    ColorOptions: Options
+                });
+            }
+            break;
+        case 'setOptions':
+            Options = request.data;
+            publishOptionChangeToTabs();
+            break;
+        case 'dict':
+            if (navigator.appVersion.indexOf("Win") > -1) {
+                fetchWordOnline(request.word, sendResponse);
+            } else {
+                fetchWordOnline(request.word, sendResponse);
+            }
+            break;
+        case 'translate':
+            fetchTranslate(request.word, sendResponse);
+            break;
+        case 'speech':
+            playAudio( request.audioUrl );
+        default:
+            break;
+    }
+});
+
 function initIcon() {
     if (Options['dict_enable'][1] !== true) {
         chrome.browserAction.setIcon({
@@ -8,6 +41,7 @@ function initIcon() {
         });
     }
 }
+
 sprintfWrapper = {
     init: function() {
         if (typeof arguments == "undefined") {
@@ -120,7 +154,8 @@ sprintfWrapper = {
             }
         }
     }
-}
+};
+
 sprintf = sprintfWrapper.init;
 
 function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) {
@@ -342,36 +377,7 @@ function fetchTranslate(words, callback) {
     xhr.open('GET', url, true);
     xhr.send();
 }
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-    var _action = request.action;
-    switch (_action) {
-        case 'getOptions':
-            if (ColorsChanged == true) {
-                sendResponse({
-                    init: "globalPages",
-                    ChangeColors: "true",
-                    ColorOptions: Options
-                });
-            }
-            break;
-        case 'setOptions':
-            Options = request.data;
-            publishOptionChangeToTabs();
-            break;
-        case 'dict':
-            if (navigator.appVersion.indexOf("Win") > -1) {
-                fetchWordOnline(request.word, sendResponse);
-            } else {
-                fetchWordOnline(request.word, sendResponse);
-            }
-            break;
-        case 'translate':
-            fetchTranslate(request.word, sendResponse);
-            break;
-        default:
-            break;
-    }
-});
+
 /**
  * 将配置更新通知已经打开的 Tab
  */
@@ -389,4 +395,10 @@ function publishOptionChangeToTabs() {
             });
         }
     });
+}
+
+function playAudio( audioUrl ){
+    var audio = document.createElement('audio');
+    audio.autoplay = true;
+    audio.src = audioUrl;
 }
