@@ -43,7 +43,7 @@
   line-height: 22px;
   font-size: 12px;
   color: #5079bb;
-  padding-right: 16px;
+  padding-right: 22px;
 }
 .yddTop .yddTopBorderlr .yddKeyTitle {
   margin-left: 3px;
@@ -62,7 +62,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon {
+.yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon {
   display: inline-block;
   width: 13px;
   height: 15px;
@@ -70,17 +70,18 @@
   margin-left: 3px;
   background: url("voice-btn.png") no-repeat;
   background-size: 26px 15px;
+  background-position-x: -13px;
   cursor: pointer;
 }
-.yddTop .yddTopBorderlr .ydd-voice.ydd-void-icon:hover {
-  background-position-x: -13px;
+.yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon:hover {
+  background-position-x: 0;
 }
 .yddTop .yddTopBorderlr .ydd-detail {
   margin-left: 3px;
 }
 .yddTop .yddTopBorderlr .ydd-close {
   display: inline-block;
-  width: 16px;
+  width: 22px;
   height: 22px;
   line-height: 22px;
   font-size: 16px;
