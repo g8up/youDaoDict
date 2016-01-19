@@ -1,4 +1,4 @@
-﻿var ColorsChanged = true;
+var ColorsChanged = true;
 initIcon();
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
