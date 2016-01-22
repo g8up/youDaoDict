@@ -68,32 +68,29 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 						'<a class="ydd-close" href="javascript:void(0);">&times;</a>',
 					'</div>',
 				'</div>',
-			'<div class="yddMiddle">'].join('');
+				'<div class="yddMiddle">'
+				].join('');
 
-	if (noBaseTrans == false) {
-		var base = ['<div class="ydd-trans-wrapper" id="yddSimpleTrans">',
-                        '<div class="ydd-tabs">',
-                            '<span class="ydd-tab">基本翻译</span>',
-                        '</div>',
-                        baseTrans,
-                    '</div>'].join('');
-		fmt += base;
-	}
-	if (noWebTrans == false) {
-		var web = [' <div class="ydd-trans-wrapper">',
-                        '<div class="ydd-tabs">',
-                            '<span class="ydd-tab">网络释义</span>',
-                        '</div>',
-                        webTrans,
-                    '</div>'].join('');
-		fmt += web;
-	}
 	if (noBaseTrans && noWebTrans) {
 		fmt += '&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="' + searchUrl + '" target=_blank>请尝试网页搜索</a>';
+	}else {
+		fmt += ( noBaseTrans == false ? renderTransDetail( '基本翻译', baseTrans) : '');
+		fmt += ( noWebTrans == false ? renderTransDetail( '网络释义', webTrans) : '');
 	}
 	fmt += '</div></div>';
 	res = fmt;
 	return res;
+}
+
+function renderTransDetail( title, body){
+	return ['<div class="ydd-trans-wrapper">',
+				'<div class="ydd-tabs">',
+					'<span class="ydd-tab">',
+						title,
+					'</span>',
+				'</div>',
+				body,
+			'</div>'].join('');
 }
 
 //解析返回的查询结果
@@ -184,7 +181,7 @@ function translateTransXML(xmlnode) {
 						'</div>',
 					'</div>',
 					'<div class="yddMiddle">',
-						'<div class="yddSimpleTrans ydd-trans-wrapper">',
+						'<div class="ydd-trans-wrapper">',
 							'<div class="ydd-trans-container">',
 								trans_str.replace(/&/g, '&amp;')
 									.replace(/</g, '&lt;')
@@ -194,7 +191,7 @@ function translateTransXML(xmlnode) {
 							'</div>',
 						'</div>',
 					'</div>',
-			   '</div>'].join('');
+				'</div>'].join('');
 	return res;
 }
 
