@@ -1,0 +1,129 @@
+/**
+ * youDaoDict - 可记录、导出查询历史的有道词典划词扩展
+ * @version v3.1.7
+ * @link https://github.com/g8up/youDaoDict
+ * @author g8up
+ */
+body {
+  overflow-x: hidden;
+  width: 230px;
+  min-width: 200px;
+  margin: 0 auto;
+  padding: 10px;
+  font-family: "微软雅黑", 'Microsoft YaHei', Arial, sans-serif;
+  font-size: 13px;
+  color: #000000;
+  background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+}
+img {
+  margin: 5px;
+  border: 0px solid black;
+  vertical-align: middle;
+  width: 82px;
+  height: 22px;
+}
+.input-group {
+  position: relative;
+  display: table;
+  border-collapse: separate;
+  font-size: 0;
+}
+.form-control {
+  display: table-cell;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-size: 14px;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.form-control:focus {
+  border-color: #46c3c1;
+  box-shadow: inset 0 1px 1px rgba(102, 175, 233, 0.1), 0 0 5px rgba(102, 175, 233, 0.3);
+  outline: 0;
+}
+.btn {
+  border: 1px solid transparent;
+  box-shadow: none;
+  -webkit-user-select: none;
+  -webkit-appearance: button;
+}
+.btn:active {
+  background-color: #2b9d9b;
+  color: #fff;
+  border: #2b9d9b solid 1px;
+  -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+.btn:active,
+.btn:focus {
+  outline: none;
+}
+.form-control,
+.btn {
+  height: 30px;
+  padding: 4px 8px;
+  vertical-align: middle;
+  border-radius: 4px;
+  line-height: 1.428571429;
+  font-size: 14px;
+}
+.keyword {
+  width: 75%;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.search {
+  width: 25%;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+  border-color: #4685C3;
+  background-color: #469DC3;
+  color: white;
+}
+section + section {
+  margin-top: 5px;
+}
+#options {
+  width: 230px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #666;
+  -webkit-user-select: none;
+}
+#options input[type=checkbox] {
+  vertical-align: middle;
+}
+#options .conf-item {
+  height: 25px;
+  line-height: 25px;
+}
+/*
+ * 搜索历史
+ * @author Sigma
+ */
+#cache a {
+  cursor: pointer;
+  padding-left: 2px;
+  line-height: 20px;
+}
+#history_count {
+  width: 40px;
+  color: inherit;
+}
+#backup {
+  font-size: 10px;
+  margin-left: 2px;
+  cursor: pointer;
+}
+footer {
+  text-align: right;
+}
+footer a {
+  color: #b4b4b4;
+  font-size: 11px;
+  text-decoration: none;
+}
