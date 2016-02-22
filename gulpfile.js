@@ -57,7 +57,7 @@ gulp.task('copy', function () {
 		.pipe(gulp.dest('dist/'));
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', ['less'], function () {
 	gulp.watch( Asset.less, ['less']);
 });
 
