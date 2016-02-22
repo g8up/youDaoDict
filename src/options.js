@@ -309,3 +309,11 @@ document.getElementById("querybutton").onclick = function() {
 document.querySelector('#backup').onclick = function() {
 	exportHistory();
 };
+
+// 检测当前页面打开入口：option / popup
+(function(){
+	var hash = window.location.hash;
+	if( hash === '#popup' ){
+		document.body.classList.add('popup');
+	}
+})();
