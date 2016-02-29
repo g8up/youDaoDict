@@ -231,12 +231,15 @@ function exportHistory() {
 		var extDetail = chrome.app.getDetails();
 		var extName = extDetail.name;
 		var version = extDetail.version;
-		var banner = ['【' + extName + '】Ver' + version + ' 查询历史备份文件',
+		var br = '\r\n';
+		var banner = [
+			'【' + extName + '】Ver' + version + ' 查询历史备份文件',
 			new Date().toString().slice(0, 24),
 			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
 			new Array(25).join('='),
-		].join('\r\n');
-		var content = banner + '\r\n' + cachedWords.replace(/\,/g, '\r\n');
+			''
+		].join( br );
+		var content = banner + cachedWords.replace(/\,/g, br );
 		saveContent2File( content, 'youDaoCrx-history-' + +new Date() + '.txt' );
 	}
 }
