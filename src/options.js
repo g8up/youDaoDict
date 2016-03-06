@@ -191,7 +191,7 @@ function changeIcon() {
 	var isEnabled = dictBox.checked;
 	engBox.disabled = !isEnabled;
 	chrome.browserAction.setIcon({
-		path: isEnabled ? "icon-yd-dict.png" : "icon_nodict.gif"
+		path: isEnabled ? "image/icon-yd-dict.png" : "image/icon_nodict.gif"
 	});
 }
 

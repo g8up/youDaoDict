@@ -339,7 +339,5 @@ function playAudio( audioUrl ){
 	chrome.runtime.sendMessage({
 		'action': 'speech',
 		'audioUrl': audioUrl
-	}, function(data) {
-		next && next(data);
-	});
+	}, function() {});
 }
