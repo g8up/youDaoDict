@@ -1,4 +1,5 @@
 # Folders to ignore
 node_modules
+*.sublime-workspace
 dist
 *.zip

@@ -20,8 +20,7 @@ var Asset = {
 	static: [
 		'src/*.html',
 		'src/*.css',
-		'src/*.png',
-		'src/*.gif',
+		'src/image/*',
 		'src/*.json',
 	]
 };
@@ -43,7 +42,6 @@ gulp.task('less', function () {
 			pkg: pkg
 		}))
 		.pipe(gulp.dest('src/'))
-		// cssmin
 		.pipe(cssmin())
 		.pipe(header(banner, {
 			pkg: pkg
@@ -52,8 +50,9 @@ gulp.task('less', function () {
 });
 
 gulp.task('copy', function () {
+	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
-		.src(Asset.static)
+		.src(Asset.static,{base:'src/'})
 		.pipe(gulp.dest('dist/'));
 });
 
