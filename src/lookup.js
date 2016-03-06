@@ -14,7 +14,7 @@ var last_time = 0,
 var TriggerDelay = 350;
 
 function getOptions(next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': "getOptions"
 	}, function(response) {
 		if (response.ColorOptions) {
@@ -172,9 +172,11 @@ function closePanel() {
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
-	var sel = window.getSelection();
-	if( sel && sel.rangeCount ){
-		createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+	if( html !== undefined ){
+		var sel = window.getSelection();
+		if( sel && sel.rangeCount ){
+			createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+		}
 	}
 }
 // 鼠标是否在弹出框上
@@ -292,7 +294,7 @@ function addContentEvent(){
 }
 
 function getYoudaoDict(word, next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'dict',
 		'word': word
 	}, function(data) {
@@ -301,7 +303,7 @@ function getYoudaoDict(word, next) {
 }
 
 function getYoudaoTrans(word, next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'translate',
 		'word': word
 	}, function(data) {
@@ -334,7 +336,7 @@ function genTmpl(){
 }
 
 function playAudio( audioUrl ){
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'speech',
 		'audioUrl': audioUrl
 	}, function(data) {
