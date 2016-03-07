@@ -191,7 +191,7 @@ function changeIcon() {
 	var isEnabled = dictBox.checked;
 	engBox.disabled = !isEnabled;
 	chrome.browserAction.setIcon({
-		path: isEnabled ? "icon-yd-dict.png" : "icon_nodict.gif"
+		path: isEnabled ? "image/icon-yd-dict.png" : "image/icon_nodict.gif"
 	});
 }
 
@@ -263,7 +263,7 @@ function saveOptions() {
 		}
 	}
 	localStorage["ColorOptions"] = JSON.stringify(Options);
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'setOptions',
 		'data':Options
 	},function( rep ){});
