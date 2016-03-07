@@ -5,7 +5,8 @@ var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var cssmin = require('gulp-cssmin');
 
-var banner = ['/**',
+var banner = [
+	'/**',
 	' * <%= pkg.name %> - <%= pkg.description %>',
 	' * @version v<%= pkg.version %>',
 	' * @link <%= pkg.homepage %>',
@@ -43,7 +44,6 @@ gulp.task('less', function () {
 			pkg: pkg
 		}))
 		.pipe(gulp.dest('src/'))
-		// cssmin
 		.pipe(cssmin())
 		.pipe(header(banner, {
 			pkg: pkg
@@ -58,7 +58,7 @@ gulp.task('copy', function () {
 });
 
 gulp.task('watch', ['less'], function () {
-	gulp.watch( Asset.less, ['less']);
+	gulp.watch(Asset.less, ['less']);
 });
 
 gulp.task('js', ["uglify"]);
