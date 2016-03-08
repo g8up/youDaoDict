@@ -19,11 +19,10 @@ var Asset = {
 	js: 'src/*.js',
 	less: 'dev/*.less',
 	static: [
+		'src/image/*',
 		'src/*.html',
 		'src/*.css',
-		'src/image/*',
-		'src/*.json',
-		'src/*.svg',
+		'src/*.json'
 	]
 };
 
