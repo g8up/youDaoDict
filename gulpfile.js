@@ -23,6 +23,7 @@ var Asset = {
 		'src/*.css',
 		'src/image/*',
 		'src/*.json',
+		'src/*.svg',
 	]
 };
 

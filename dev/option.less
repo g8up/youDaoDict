@@ -9,7 +9,7 @@ body {
 	color: #000000;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
 }
-img {
+img.logo {
 	margin: 5px;
 	border: 0px solid black;
 	vertical-align: middle;
@@ -114,12 +114,19 @@ section + section {
 	margin-left: 2px;
 	cursor: pointer;
 }
+.feedback-icon(){
+	display: inline-block;
+	height: 22px;
+	width: 22px;
+}
 footer {
 	text-align: right;
 	a {
-		color: #b4b4b4;
-		font-size: 11px;
+		.feedback-icon;
 		text-decoration: none;
+		img{
+			.feedback-icon;
+		}
 	}
 }
 
