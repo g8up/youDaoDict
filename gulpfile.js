@@ -72,7 +72,7 @@ gulp.task('cleanZip', function(){
 			Release + zipFile
 		])
 })
-gulp.task('zip', ['cleanZip'], function(){
+gulp.task('zip', ['cleanZip',"default"], function(){
 	return gulp.src( Dist + '**/*')
 		.pipe(zip(zipFile))
 		.pipe( gulp.dest( Release ) );
@@ -86,4 +86,4 @@ gulp.task('js', ["uglify"]);
 gulp.task('static', ["copy"]);
 
 gulp.task('default', ["js", "less", "static"]);
-gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('release', ["zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
