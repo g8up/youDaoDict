@@ -25,7 +25,7 @@
     "gulp-less": "^3.0.5",
     "gulp-livereload": "^3.8.1",
     "gulp-uglify": "^1.5.1",
-    "gulp-zip": "Y3.2.0",
+    "gulp-zip": "^3.2.0",
     "del": "^2.2.0"
   }
 }
