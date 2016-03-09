@@ -4,6 +4,7 @@ var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var cssmin = require('gulp-cssmin');
+var del = require('del');
 
 var banner = [
 	'/**',
@@ -25,6 +26,7 @@ var Asset = {
 		'src/*.json'
 	]
 };
+var Dist = 'dist/';
 
 gulp.task('uglify', function () {
 	return gulp
@@ -33,7 +35,7 @@ gulp.task('uglify', function () {
 		.pipe(header(banner, {
 			pkg: pkg
 		}))
-		.pipe(gulp.dest('dist/'));
+		.pipe(gulp.dest( Dist ));
 });
 
 gulp.task('less', function () {
@@ -47,14 +49,20 @@ gulp.task('less', function () {
 		.pipe(header(banner, {
 			pkg: pkg
 		}))
-		.pipe(gulp.dest('dist/'))
+		.pipe(gulp.dest( Dist ))
 });
 
 gulp.task('copy', function () {
 	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
 		.src(Asset.static,{base:'src/'})
-		.pipe(gulp.dest('dist/'));
+		.pipe(gulp.dest( Dist ));
+});
+
+gulp.task('clean', function(){
+	return del([
+			Dist + '/**/*'
+		]);
 });
 
 gulp.task('watch', ['less'], function () {

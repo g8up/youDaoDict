@@ -1,6 +1,6 @@
 {
   "name": "youDaoDict",
-  "version": "3.1.8",
+  "version": "3.1.8.1",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "gulp-header": "^1.7.1",
     "gulp-less": "^3.0.5",
     "gulp-livereload": "^3.8.1",
-    "gulp-uglify": "^1.5.1"
+    "gulp-uglify": "^1.5.1",
+    "del": "^2.2.0"
   }
 }
