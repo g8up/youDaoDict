@@ -4,6 +4,7 @@ var header = require('gulp-header');
 var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var cssmin = require('gulp-cssmin');
+var zip = require('gulp-zip');
 var del = require('del');
 
 var banner = [
@@ -27,7 +28,7 @@ var Asset = {
 	]
 };
 var Dist = 'dist/';
-
+var Release = 'release/';
 gulp.task('uglify', function () {
 	return gulp
 		.src(Asset.js)
@@ -61,8 +62,15 @@ gulp.task('copy', function () {
 
 gulp.task('clean', function(){
 	return del([
-			Dist + '/**/*'
+			Dist + '**/*'
 		]);
+});
+
+gulp.task('zip', function(){
+	var zipFile = pkg.name + '-v' + pkg.version + '.zip';
+	return gulp.src( Dist + '**/*')
+		.pipe(zip(zipFile))
+		.pipe( gulp.dest( Release ) );
 });
 
 gulp.task('watch', ['less'], function () {
@@ -73,3 +81,4 @@ gulp.task('js', ["uglify"]);
 gulp.task('static', ["copy"]);
 
 gulp.task('default', ["js", "less", "static"]);
+gulp.task('release', ["zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
