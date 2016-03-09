@@ -1,11 +1,11 @@
-var pkg = require('./package.json');
-var gulp = require('gulp');
+var pkg    = require('./package.json');
+var gulp   = require('gulp');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
-var less = require('gulp-less');
+var less   = require('gulp-less');
 var cssmin = require('gulp-cssmin');
-var zip = require('gulp-zip');
-var del = require('del');
+var zip    = require('gulp-zip');
+var del    = require('del');
 
 var banner = [
 	'/**',
@@ -66,8 +66,13 @@ gulp.task('clean', function(){
 		]);
 });
 
-gulp.task('zip', function(){
-	var zipFile = pkg.name + '-v' + pkg.version + '.zip';
+var zipFile = pkg.name + '-v' + pkg.version + '.zip';
+gulp.task('cleanZip', function(){
+	return del([
+			Release + zipFile
+		])
+})
+gulp.task('zip', ['cleanZip'], function(){
 	return gulp.src( Dist + '**/*')
 		.pipe(zip(zipFile))
 		.pipe( gulp.dest( Release ) );
@@ -81,4 +86,4 @@ gulp.task('js', ["uglify"]);
 gulp.task('static', ["copy"]);
 
 gulp.task('default', ["js", "less", "static"]);
-gulp.task('release', ["zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
