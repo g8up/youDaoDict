@@ -227,6 +227,7 @@ function getYoudaoDictPanelCont( html ){
 	if( !panel ){
 		panel = document.createElement('div');
 		panel.id = panelId;
+		markTagOrigin( panel );
 		body.appendChild(panel);
 		addPanelEvent( panel );
 
@@ -328,10 +329,19 @@ function genTmpl(){
 	}else{
 		var _tmpl = document.createElement('template');
 		_tmpl.id = tmplId;
+		markTagOrigin( _tmpl );
 		var cssUrl = chrome.extension.getURL('youdao-crx.css');
 		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="ydd-content"></div>'; // for panel content
 		body.appendChild( _tmpl );
 		return _tmpl;
+	}
+}
+/**
+ * 给插入的节点做标识，以免 web page 的开发者迷惑。
+ */
+function markTagOrigin ( tag ){
+	if( tag ){
+		tag.setAttribute('tag-info', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
 	}
 }
 
