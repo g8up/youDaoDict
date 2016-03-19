@@ -214,7 +214,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 		var newtop = y - frame.clientHeight;
 		frame.style.top = newtop + 'px';
 	}
-
+	frame.style.display = '';// 设定了新节点位置，清除隐藏属性
 	list.push(frame);
 	last_time = new Date().getTime();
 	last_frame = frame;
@@ -226,6 +226,7 @@ function getYoudaoDictPanelCont( html ){
 	var panel = document.querySelector('div#yddWrapper');
 	if( !panel ){
 		panel = document.createElement('div');
+		panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
 		panel.id = panelId;
 		markTagOrigin( panel );
 		body.appendChild(panel);
