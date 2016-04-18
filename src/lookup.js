@@ -88,7 +88,7 @@ var _ydTimerPoint = null;
 // 指词即译
 function onPointToTrans(e) {
 	clearTimeout(_ydTimerPoint);
-	if (!window.event.ctrlKey || window.event.shiftKey || window.event.altKey) {
+	if (!e.ctrlKey || e.shiftKey || e.altKey) {
 		return;
 	}
 	_ydTimerPoint = setTimeout(function() {
@@ -282,12 +282,12 @@ function addContentEvent(){
 		if (speech) {
 			if (speech.innerHTML != '') {
 				speech.classList.add('ydd-voice-icon');
-				var audioUrl = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+				var wordAndType = speech.textContent;
 				if (getOptVal('auto_speech')) {
-					playAudio( audioUrl );
+					playAudio( wordAndType );
 				}
 				speech.addEventListener('click', function(e){
-					playAudio( audioUrl );
+					playAudio( wordAndType );
 				});
 			}
 			speech.innerHTML = '';
@@ -346,9 +346,9 @@ function markTagOrigin ( tag ){
 	}
 }
 
-function playAudio( audioUrl ){
+function playAudio( word ){
 	chrome.runtime.sendMessage({
 		'action': 'speech',
-		'audioUrl': audioUrl
+		'word': word
 	}, function() {});
 }

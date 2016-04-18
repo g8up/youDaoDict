@@ -26,7 +26,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			return true;
 			break;
 		case 'speech':
-			playAudio( request.audioUrl );
+			playAudio( request.word );
 		default:
 			break;
 	}
@@ -250,7 +250,8 @@ function publishOptionChangeToTabs() {
 	});
 }
 
-function playAudio( audioUrl ){
+function playAudio( word ){
+	var audioUrl = "http://dict.youdao.com/speech?audio=" + word;
 	var audio = document.createElement('audio');
 	audio.autoplay = true;
 	audio.src = audioUrl;
