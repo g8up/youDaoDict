@@ -1,5 +1,4 @@
 var ColorsChanged = true;
-initIcon();
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var action = request.action;
@@ -31,14 +30,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			break;
 	}
 });
-
-function initIcon() {
-	if (Options['dict_enable'][1] !== true) {
-		chrome.browserAction.setIcon({
-			path: "icon_nodict.gif"
-		});
-	}
-}
 
 function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) {
 	var lan = '';
