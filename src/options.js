@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author Dongxu Huang
  * @date   2010-2-21
  *
