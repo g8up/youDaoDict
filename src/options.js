@@ -300,11 +300,11 @@ optElem && (optElem.onmouseover = function() {
 
 document.getElementById("word").onkeydown = function() {
 	if (event.keyCode == 13) {
-		mainQuery(document.getElementsByName("word")[0].value, translateXML);
+		mainQuery(document.querySelector("#word").value, translateXML);
 	}
 };
 document.getElementById("querybutton").onclick = function() {
-	mainQuery(document.getElementsByName("word")[0].value, translateXML);
+	mainQuery(document.querySelector("#word").value, translateXML);
 };
 document.querySelector('#backup').onclick = function() {
 	exportHistory();
