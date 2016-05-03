@@ -1,6 +1,6 @@
 /**
  * youDaoDict - 可记录、导出查询历史的有道词典划词扩展
- * @version v3.1.8
+ * @version v3.1.9
  * @link https://github.com/g8up/youDaoDict
  * @author g8up
  */
@@ -15,7 +15,7 @@ body {
   color: #000000;
   background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
 }
-img {
+img.logo {
   margin: 5px;
   border: 0px solid black;
   vertical-align: middle;
@@ -123,10 +123,30 @@ footer {
   text-align: right;
 }
 footer a {
-  color: #b4b4b4;
-  font-size: 11px;
+  display: inline-block;
+  height: 22px;
+  width: 22px;
   text-decoration: none;
+}
+footer a img {
+  display: inline-block;
+  height: 22px;
+  width: 22px;
 }
 .popup .history-count {
   display: none;
+}
+.word-speech {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-left: 3px;
+  background: url("image/voice-btn.png") no-repeat;
+  background-size: 26px 14px;
+  background-position-x: -14px;
+  background-position-y: 0px;
+  cursor: pointer;
+}
+.word-speech:hover {
+  background-position-x: 0;
 }

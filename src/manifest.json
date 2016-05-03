@@ -1,20 +1,20 @@
 {
 	"manifest_version": 2,
-	"version": "3.1.8",
+	"version": "3.1.9",
 	"name": "有道词典划词扩展 V3",
 	"short_name": "有道词典",
 	"description": "可记录、导出查询历史！（为官方版擦屁股和脸）",
 	"icons": {
-		"128": "icon-128.png",
-		"64": "icon-128.png",
-		"48": "icon-128.png"
+		"128": "image/icon-128.png",
+		"64": "image/icon-128.png",
+		"48": "image/icon-128.png"
 	},
 
 	"background": {
 		"scripts": ["common.js", "util.js", "background.js"]
 	},
 	"browser_action": {
-		"default_icon": "icon-yd-dict.png",
+		"default_icon": "image/icon-128.png",
 		"default_popup": "options.html#popup"
 	},
 	"commands": {
@@ -31,5 +31,5 @@
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["icon-yd-dict.png", "voice-btn.png", "youdao-crx.css"]
+	"web_accessible_resources": ["image/icon-yd-dict.png", "image/voice-btn.png", "youdao-crx.css"]
 }

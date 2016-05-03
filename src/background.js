@@ -1,9 +1,8 @@
 var ColorsChanged = true;
-initIcon();
 
-chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-	var _action = request.action;
-	switch (_action) {
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+	var action = request.action;
+	switch ( action) {
 		case 'getOptions':
 			if (ColorsChanged == true) {
 				sendResponse({
@@ -19,24 +18,18 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 			break;
 		case 'dict':
 			fetchWordOnline(request.word, sendResponse);
+			return true;
 			break;
 		case 'translate':
 			fetchTranslate(request.word, sendResponse);
+			return true;
 			break;
 		case 'speech':
-			playAudio( request.audioUrl );
+			playAudio( request.word );
 		default:
 			break;
 	}
 });
-
-function initIcon() {
-	if (Options['dict_enable'][1] !== true) {
-		chrome.browserAction.setIcon({
-			path: "icon_nodict.gif"
-		});
-	}
-}
 
 function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) {
 	var lan = '';
@@ -46,13 +39,6 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 	if (isContainJapanese(word)) {
 		lan = "&le=jap";
 	}
-	var title = word;
-	if ((isContainChinese(title) || isContainJapanese(title) || isContainKoera(title)) && title.length > 15) {
-		title = title.substring(0, 10) + '...';
-	}
-	if (title.length > 25) {
-		title = title.substring(0, 15) + ' ...';
-	}
 	var fmt = '';
 	var searchUrlPrefix = ( noBaseTrans && noWebTrans ) ? 'http://www.youdao.com/search?keyfrom=chrome.extension&ue=utf8'
 		: 'http://dict.youdao.com/search?keyfrom=chrome.extension';
@@ -61,7 +47,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 	fmt = [ '<div id="yddContainer">',
 				'<div class="yddTop" class="ydd-sp">',
 					'<div class="yddTopBorderlr">',
-						'<a class="yddKeyTitle" href="', searchUrl, '" target=_blank title="查看完整释义">', title, '</a>',
+						'<a class="yddKeyTitle" href="', searchUrl, '" target=_blank title="查看完整释义">', word, '</a>',
 						'<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
 						'<span class="ydd-voice">', speach, '</span>',
 						'<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
@@ -83,14 +69,15 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 }
 
 function renderTransDetail( title, body){
-	return ['<div class="ydd-trans-wrapper">',
-				'<div class="ydd-tabs">',
-					'<span class="ydd-tab">',
-						title,
-					'</span>',
-				'</div>',
-				body,
-			'</div>'].join('');
+	return [
+		'<div class="ydd-trans-wrapper">',
+			'<div class="ydd-tabs">',
+				'<span class="ydd-tab">',
+					title,
+				'</span>',
+			'</div>',
+			body,
+		'</div>'].join('');
 }
 
 //解析返回的查询结果
@@ -119,6 +106,8 @@ function translateXML(xmlnode) {
 		}
 		params[key] = '';
 	}
+
+	var title = params.phrase;
 
 	if( params.phonetic ){
 		params.phonetic = "[" + params.phonetic + "]";
@@ -152,7 +141,7 @@ function translateXML(xmlnode) {
 		}
 
 	}
-	return genTable( params.phrase, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
+	return genTable( title, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
 }
 
 function translateTransXML(xmlnode) {
@@ -171,27 +160,28 @@ function translateTransXML(xmlnode) {
 		input_str_tmp = input_str_tmp.substring(0, 15) + ' ...';
 	}
 	if (trans_str_tmp == input_str_tmp) return null;
-	var res = ['<div id="yddContainer">',
-					'<div class="yddTop" class="ydd-sp">',
-						'<div class="yddTopBorderlr">',
-							'<a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&keyfrom=chrome" target=_blank">有道词典</a>',
-							'<span>' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</span>',
-							'<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
-							'<a class="ydd-close">&times;</a>',
-						'</div>',
+	var res = [
+		'<div id="yddContainer">',
+			'<div class="yddTop" class="ydd-sp">',
+				'<div class="yddTopBorderlr">',
+					'<a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&keyfrom=chrome" target=_blank">有道词典</a>',
+					'<span>' + input_str_tmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, "&quot;").replace(/'/g, "&#39;") + '</span>',
+					'<a href="http://fanyi.youdao.com/translate?i=' + encodeURIComponent(input_str) + '&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>',
+					'<a class="ydd-close">&times;</a>',
+				'</div>',
+			'</div>',
+			'<div class="yddMiddle">',
+				'<div class="ydd-trans-wrapper">',
+					'<div class="ydd-trans-container">',
+						trans_str.replace(/&/g, '&amp;')
+							.replace(/</g, '&lt;')
+							.replace(/>/g, '&gt;')
+							.replace(/"/g, "&quot;")
+							.replace(/'/g, "&#39;") ,
 					'</div>',
-					'<div class="yddMiddle">',
-						'<div class="ydd-trans-wrapper">',
-							'<div class="ydd-trans-container">',
-								trans_str.replace(/&/g, '&amp;')
-									.replace(/</g, '&lt;')
-									.replace(/>/g, '&gt;')
-									.replace(/"/g, "&quot;")
-									.replace(/'/g, "&#39;") ,
-							'</div>',
-						'</div>',
-					'</div>',
-				'</div>'].join('');
+				'</div>',
+			'</div>',
+		'</div>'].join('');
 	return res;
 }
 
@@ -221,7 +211,9 @@ function fetchTranslate(words, callback) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
 				var dataText = translateTransXML(xhr.responseText);
-				if (dataText != null) callback(dataText);
+				if (dataText != null) callback({
+					data:dataText
+				});
 			}
 		}
 	}
@@ -249,7 +241,8 @@ function publishOptionChangeToTabs() {
 	});
 }
 
-function playAudio( audioUrl ){
+function playAudio( word ){
+	var audioUrl = "http://dict.youdao.com/speech?audio=" + word;
 	var audio = document.createElement('audio');
 	audio.autoplay = true;
 	audio.src = audioUrl;

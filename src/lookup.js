@@ -14,7 +14,7 @@ var last_time = 0,
 var TriggerDelay = 350;
 
 function getOptions(next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': "getOptions"
 	}, function(response) {
 		if (response.ColorOptions) {
@@ -88,7 +88,7 @@ var _ydTimerPoint = null;
 // 指词即译
 function onPointToTrans(e) {
 	clearTimeout(_ydTimerPoint);
-	if (!window.event.ctrlKey || window.event.shiftKey || window.event.altKey) {
+	if (!e.ctrlKey || e.shiftKey || e.altKey) {
 		return;
 	}
 	_ydTimerPoint = setTimeout(function() {
@@ -172,9 +172,11 @@ function closePanel() {
 }
 
 function createPopUpEx(html, x, y, screenx, screeny) {
-	var sel = window.getSelection();
-	if( sel && sel.rangeCount ){
-		createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+	if( html !== undefined ){
+		var sel = window.getSelection();
+		if( sel && sel.rangeCount ){
+			createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+		}
 	}
 }
 // 鼠标是否在弹出框上
@@ -212,7 +214,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 		var newtop = y - frame.clientHeight;
 		frame.style.top = newtop + 'px';
 	}
-
+	frame.style.display = '';// 设定了新节点位置，清除隐藏属性
 	list.push(frame);
 	last_time = new Date().getTime();
 	last_frame = frame;
@@ -224,7 +226,9 @@ function getYoudaoDictPanelCont( html ){
 	var panel = document.querySelector('div#yddWrapper');
 	if( !panel ){
 		panel = document.createElement('div');
+		panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
 		panel.id = panelId;
+		markTagOrigin( panel );
 		body.appendChild(panel);
 		addPanelEvent( panel );
 
@@ -278,12 +282,12 @@ function addContentEvent(){
 		if (speech) {
 			if (speech.innerHTML != '') {
 				speech.classList.add('ydd-voice-icon');
-				var audioUrl = "http://dict.youdao.com/speech?audio=" + speech.innerHTML;
+				var wordAndType = speech.textContent;
 				if (getOptVal('auto_speech')) {
-					playAudio( audioUrl );
+					playAudio( wordAndType );
 				}
 				speech.addEventListener('click', function(e){
-					playAudio( audioUrl );
+					playAudio( wordAndType );
 				});
 			}
 			speech.innerHTML = '';
@@ -292,7 +296,7 @@ function addContentEvent(){
 }
 
 function getYoudaoDict(word, next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'dict',
 		'word': word
 	}, function(data) {
@@ -301,7 +305,7 @@ function getYoudaoDict(word, next) {
 }
 
 function getYoudaoTrans(word, next) {
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'translate',
 		'word': word
 	}, function(data) {
@@ -326,18 +330,18 @@ function genTmpl(){
 	}else{
 		var _tmpl = document.createElement('template');
 		_tmpl.id = tmplId;
+		markTagOrigin( _tmpl );
 		var cssUrl = chrome.extension.getURL('youdao-crx.css');
 		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="ydd-content"></div>'; // for panel content
 		body.appendChild( _tmpl );
 		return _tmpl;
 	}
 }
-
-function playAudio( audioUrl ){
-	chrome.extension.sendRequest({
-		'action': 'speech',
-		'audioUrl': audioUrl
-	}, function(data) {
-		next && next(data);
-	});
+/**
+ * 给插入的节点做标识，以免 web page 的开发者迷惑。
+ */
+function markTagOrigin ( tag ){
+	if( tag ){
+		tag.setAttribute('tag-info', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
+	}
 }

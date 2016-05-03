@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @author Dongxu Huang
  * @date   2010-2-21
  *
@@ -112,7 +112,7 @@ function buildSearchResult() {
 		if (langType == 'ko') basetrans = "<strong>韩汉翻译:</strong><br/>" + basetrans;
 		else if (langType == 'jap') basetrans = "<strong>日汉翻译:</strong><br/>" + basetrans;
 		else if (langType == 'fr') basetrans = "<strong>法汉翻译:</strong><br/>" + basetrans;
-		else basetrans = "<strong>英汉翻译:</strong><br/>" + basetrans;
+		else basetrans = "<strong>英汉翻译:</strong><span class='word-speech' data-toggle='play'></span><br/>" + basetrans;
 		res.innerHTML = basetrans;
 	}
 	if (noWebTrans == false) {
@@ -132,7 +132,7 @@ function buildSearchResult() {
 	retphrase = '';
 	webtrans = '';
 	basetrans = '';
-	_word = '';
+	// _word = '';
 	langType = '';
 	noBaseTrans = false;
 	noWebTrans = false;
@@ -190,13 +190,10 @@ function changeIcon() {
 		dictBox = document.getElementById('dict_enable');
 	var isEnabled = dictBox.checked;
 	engBox.disabled = !isEnabled;
-	chrome.browserAction.setIcon({
-		path: isEnabled ? "icon-yd-dict.png" : "icon_nodict.gif"
-	});
 }
 
 function check() {
-	var word = document.getElementsByName("word")[0].value;
+	var word = document.querySelector("#word").value;
 	window.open("http://dict.youdao.com/search?q=" + encodeURI(word) + "&ue=utf8&keyfrom=chrome.index.g8up");
 }
 /**
@@ -231,12 +228,15 @@ function exportHistory() {
 		var extDetail = chrome.app.getDetails();
 		var extName = extDetail.name;
 		var version = extDetail.version;
-		var banner = ['【' + extName + '】Ver' + version + ' 查询历史备份文件',
+		var br = '\r\n';
+		var banner = [
+			'【' + extName + '】Ver' + version + ' 查询历史备份文件',
 			new Date().toString().slice(0, 24),
 			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
 			new Array(25).join('='),
-		].join('\r\n');
-		var content = banner + '\r\n' + cachedWords.replace(/\,/g, '\r\n');
+			''
+		].join( br );
+		var content = banner + cachedWords.replace(/\,/g, br );
 		saveContent2File( content, 'youDaoCrx-history-' + +new Date() + '.txt' );
 	}
 }
@@ -260,7 +260,7 @@ function saveOptions() {
 		}
 	}
 	localStorage["ColorOptions"] = JSON.stringify(Options);
-	chrome.extension.sendRequest({
+	chrome.runtime.sendMessage({
 		'action': 'setOptions',
 		'data':Options
 	},function( rep ){});
@@ -300,11 +300,11 @@ optElem && (optElem.onmouseover = function() {
 
 document.getElementById("word").onkeydown = function() {
 	if (event.keyCode == 13) {
-		mainQuery(document.getElementsByName("word")[0].value, translateXML);
+		mainQuery(document.querySelector("#word").value, translateXML);
 	}
 };
 document.getElementById("querybutton").onclick = function() {
-	mainQuery(document.getElementsByName("word")[0].value, translateXML);
+	mainQuery(document.querySelector("#word").value, translateXML);
 };
 document.querySelector('#backup').onclick = function() {
 	exportHistory();
@@ -317,3 +317,9 @@ document.querySelector('#backup').onclick = function() {
 		document.body.classList.add('popup');
 	}
 })();
+
+document.body.addEventListener('click', function(e){
+	if( e.target.dataset.toggle === 'play'){
+		playAudio(_word);
+	}
+})
