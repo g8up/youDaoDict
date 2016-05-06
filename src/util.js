@@ -80,3 +80,10 @@ function ExtractEnglish(word) {
 	}
 	return '';
 }
+
+function playAudio( word ){
+	chrome.runtime.sendMessage({
+		'action': 'speech',
+		'word': word
+	}, function() {});
+}

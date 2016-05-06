@@ -345,10 +345,3 @@ function markTagOrigin ( tag ){
 		tag.setAttribute('tag-info', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
 	}
 }
-
-function playAudio( word ){
-	chrome.runtime.sendMessage({
-		'action': 'speech',
-		'word': word
-	}, function() {});
-}
