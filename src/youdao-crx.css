@@ -40,8 +40,8 @@ a:visited {
 }
 .yddTop {
   cursor: move;
-  border-bottom: 1px solid #d7e3eb;
   background: #e1f1fb;
+  overflow: hidden;
 }
 .yddTop .yddTopBorderlr {
   position: relative;
@@ -82,7 +82,7 @@ a:visited {
   cursor: pointer;
 }
 .yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon:hover {
-  background-position-x: 0;
+  background-position-x: 1px;
 }
 .yddTop .yddTopBorderlr .ydd-detail {
   display: inline-block;
@@ -103,6 +103,7 @@ a:visited {
 .yddMiddle {
   display: block;
   margin-bottom: 10px;
+  border-top: 1px solid #d7e3eb;
 }
 .yddMiddle .ydd-trans-wrapper .ydd-tabs {
   display: block;
