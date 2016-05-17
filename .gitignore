@@ -5,3 +5,5 @@ dist/
 *.sublime-workspace
 *.zip
 *.log
+*.pem
+*.crx
