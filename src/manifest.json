@@ -13,6 +13,10 @@
 	"background": {
 		"scripts": ["common.js", "util.js", "background.js"]
 	},
+	"content_scripts": [{
+		"js": ["util.js", "lookup.js"],
+		"matches": ["*://*/*", "file://*"]
+	}],
 	"browser_action": {
 		"default_icon": "image/icon-128.png",
 		"default_popup": "options.html#popup"
@@ -24,12 +28,8 @@
 			}
 		}
 	},
-	"content_scripts": [{
-		"js": ["util.js", "lookup.js"],
-		"matches": ["*://*/*", "file://*"]
-	}],
 	"options_page": "options.html",
 	"permissions": ["*://*/*"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["image/icon-yd-dict.png", "image/voice-btn.png", "youdao-crx.css"]
+	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "youdao-crx.css"]
 }
