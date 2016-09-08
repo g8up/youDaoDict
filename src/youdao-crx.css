@@ -58,7 +58,8 @@ a:visited {
   /*给图标预留至少 17px 的宽度*/
   font-weight: bold;
   vertical-align: top;
-  background: url("image/icon-yd-dict.png") no-repeat;
+  background: url("image/icon-128.png") no-repeat;
+  background-size: 16px 16px;
   background-position-y: 3px;
   color: #5079bb;
 }
