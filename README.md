@@ -3,6 +3,9 @@
 
 ![image](http://ww1.sinaimg.cn/mw1024/3eea7a48jw1et5qn33gzaj208x0cs75k.jpg)
 
+![Chrome Web Store](https://img.shields.io/chrome-web-store/v/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg)
+![Chrome Web Store](https://img.shields.io/chrome-web-store/d/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg?maxAge=2592000)
+
 在线安装：
 [https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil](https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil "Chrome Web Store")
 
@@ -14,10 +17,6 @@
 5. 采用新技术（shadowDOM）避免与浏览页面样式冲突（v3.1.6)
 6. 持续的优化
 
-# Distribute
-```
-npm run dist
-```
 # 致谢
 - 感谢 XGHeaven 对 v3.1.4 提出的更新建议；
 - 感谢 john_shao 对 v3.0.8 提出的更新建议；
