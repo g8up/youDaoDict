@@ -33,8 +33,8 @@ a,a:hover,a:visited{
 @titleHeight:22px;
 .yddTop {
 	cursor: move;
-	border-bottom: 1px solid #d7e3eb;
 	background: #e1f1fb;
+	overflow: hidden;
 	.yddTopBorderlr {
 		position: relative;
 		height: @titleHeight;
@@ -48,7 +48,8 @@ a,a:hover,a:visited{
 			padding-left: 20px; /*给图标预留至少 17px 的宽度*/
 			font-weight: bold;
 			vertical-align: top;
-			background: url("image/icon-yd-dict.png") no-repeat;
+			background: url("image/icon-128.png") no-repeat;
+			background-size: 16px 16px;
 			background-position-y: 3px;
 			color: #5079bb;
 		}
@@ -72,7 +73,7 @@ a,a:hover,a:visited{
 			background-position-y: 4px;
 			cursor: pointer;
 			&:hover{
-				background-position-x:0;
+				background-position-x: 1px;
 			}
 		}
 		.ydd-detail{
@@ -96,6 +97,7 @@ a,a:hover,a:visited{
 .yddMiddle {
 	display: block;
 	margin-bottom: 10px;
+	border-top: 1px solid #d7e3eb;
 	.ydd-trans-wrapper{
 		.ydd-tabs{
 			display: block;

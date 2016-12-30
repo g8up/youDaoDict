@@ -16,7 +16,8 @@
   },
   "homepage": "https://github.com/g8up/youDaoDict",
   "scripts": {
-    "dist": "gulp"
+    "dist": "gulp",
+    "dev": "gulp dev"
   },
   "devDependencies": {
     "gulp": "^3.9.0",
