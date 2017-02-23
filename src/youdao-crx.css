@@ -101,6 +101,13 @@ a:visited {
   cursor: pointer;
   text-align: center;
 }
+.yddTop .yddTopBorderlr #addToNote {
+  box-sizing: border-box;
+  width: 15px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+}
 .yddMiddle {
   display: block;
   margin-bottom: 10px;

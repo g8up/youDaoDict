@@ -293,6 +293,20 @@ function addContentEvent(){
 			speech.innerHTML = '';
 		}
 	})();
+	// 添加到单词本
+	var addBtn = content.querySelector('#addToNote');
+	addBtn.onclick = function(e){
+		e.preventDefault();
+		var word = content.querySelector('.yddKeyTitle').textContent.trim();
+		if( word ){
+			chrome.runtime.sendMessage({
+				action: 'youdao-add-word',
+				word: word
+			},function( rep ){
+				console.log( rep );
+			});
+		}
+	}
 }
 
 function getYoudaoDict(word, next) {

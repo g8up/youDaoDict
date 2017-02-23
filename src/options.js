@@ -309,7 +309,14 @@ document.getElementById("querybutton").onclick = function() {
 document.querySelector('#backup').onclick = function() {
 	exportHistory();
 };
-
+// 登录按钮
+document.querySelector('#login-youdao').addEventListener('click',function(){
+	chrome.runtime.sendMessage({
+		'action': 'login-youdao',
+	},function( rep ){
+		console.log( rep );
+	});
+});
 // 检测当前页面打开入口：option / popup
 (function(){
 	var hash = window.location.hash;
