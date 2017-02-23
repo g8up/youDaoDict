@@ -108,6 +108,9 @@ a:visited {
   font-weight: bold;
   font-size: 1.5em;
 }
+.yddTop .yddTopBorderlr #addToNote.green {
+  color: #5ad25a;
+}
 .yddMiddle {
   display: block;
   margin-bottom: 10px;

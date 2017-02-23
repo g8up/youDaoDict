@@ -34,9 +34,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			var word = request.word;
 			addWord( word , function(){
 				popBadgeTips('Ok', 'green');
+				sendResponse();
 			}, function(){
 				loginYoudao();
 			});
+			return true;
 			break;
 		default:
 			break;

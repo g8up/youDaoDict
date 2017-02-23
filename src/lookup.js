@@ -302,8 +302,8 @@ function addContentEvent(){
 			chrome.runtime.sendMessage({
 				action: 'youdao-add-word',
 				word: word
-			},function( rep ){
-				console.log( rep );
+			},function( resp ){
+				addBtn.classList.add('green');
 			});
 		}
 	}
