@@ -1,6 +1,6 @@
 /**
  * youDaoDict - 可记录、导出查询历史的有道词典划词扩展
- * @version v3.1.9
+ * @version v3.2.0
  * @link https://github.com/g8up/youDaoDict
  * @author g8up
  */
@@ -45,41 +45,43 @@ a:visited {
 }
 .yddTop .yddTopBorderlr {
   position: relative;
-  height: 22px;
-  line-height: 22px;
+  height: 25px;
+  line-height: 25px;
   font-size: 12px;
   color: #5079bb;
-  padding-right: 22px;
+  padding-right: 25px;
 }
 .yddTop .yddTopBorderlr .yddKeyTitle {
   display: inline-block;
-  margin-left: 3px;
+  margin-left: 4px;
   padding-left: 20px;
   /*给图标预留至少 17px 的宽度*/
   font-weight: bold;
   vertical-align: top;
   background: url("image/icon-128.png") no-repeat;
   background-size: 16px 16px;
-  background-position-y: 3px;
+  background-position-y: 5px;
   color: #5079bb;
+  line-height: 25px;
 }
 .yddTop .yddTopBorderlr .ydd-phonetic {
   display: inline-block;
-  margin-left: 3px;
+  margin-left: 4px;
   max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  line-height: 25px;
 }
 .yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon {
   display: inline-block;
   width: 13px;
   height: inherit;
-  margin-left: 3px;
+  margin-left: 4px;
   background: url("image/voice-btn.png") no-repeat;
   background-size: 26px 15px;
   background-position-x: -13px;
-  background-position-y: 4px;
+  background-position-y: 5px;
   cursor: pointer;
 }
 .yddTop .yddTopBorderlr .ydd-voice.ydd-voice-icon:hover {
@@ -87,29 +89,31 @@ a:visited {
 }
 .yddTop .yddTopBorderlr .ydd-detail {
   display: inline-block;
-  margin-left: 3px;
+  margin-left: 4px;
   vertical-align: top;
+  line-height: 25px;
+}
+.yddTop .yddTopBorderlr #addToNote {
+  box-sizing: border-box;
+  width: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-left: 4px;
+}
+.yddTop .yddTopBorderlr #addToNote.green {
+  color: #5ad25a;
 }
 .yddTop .yddTopBorderlr .ydd-close {
   display: inline-block;
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
   font-size: 16px;
   position: absolute;
   right: 0;
   cursor: pointer;
   text-align: center;
-}
-.yddTop .yddTopBorderlr #addToNote {
-  box-sizing: border-box;
-  width: 15px;
-  text-align: center;
-  font-weight: bold;
-  font-size: 1.5em;
-}
-.yddTop .yddTopBorderlr #addToNote.green {
-  color: #5ad25a;
 }
 .yddMiddle {
   display: block;
