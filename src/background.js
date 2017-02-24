@@ -264,7 +264,8 @@ function playAudio( word ){
 }
 
 // var YouDaoLoginUrl = "http://account.youdao.com/login";
-var YouDaoLoginUrl = "http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist";
+// var YouDaoLoginUrl = "http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist";
+var YouDaoLoginUrl = "http://dict.youdao.com/wordbook/wordlist";
 // 打开登录框
 function loginYoudao(){
 	var w = 500;
