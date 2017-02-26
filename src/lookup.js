@@ -5,7 +5,7 @@
  * @optimizing Simga
  * @date 2014.09.20 cut verbose code
  */
-var body = document.querySelector('body');
+var body = document.body;
 var Options = {},
 	last_frame;
 var list = [];
@@ -17,8 +17,8 @@ function getOptions(next) {
 	chrome.runtime.sendMessage({
 		'action': "getOptions"
 	}, function(response) {
-		if (response.ColorOptions) {
-			Options = response.ColorOptions;
+		if (response.options) {
+			Options = response.options;
 			dealSelectEvent();
 			dealPointEvent();
 		}

@@ -259,11 +259,8 @@ function saveOptions() {
 			Options[key] = elem.value;
 		}
 	}
-	localStorage["ColorOptions"] = JSON.stringify(Options);
-	chrome.runtime.sendMessage({
-		'action': 'setOptions',
-		'data':Options
-	},function( rep ){});
+	// https://developer.chrome.com/extensions/storage
+	chrome.storage.sync.set({'Options': Options}, function() {});
 }
 
 document.body.onload = function() {

@@ -1,20 +1,22 @@
-var ColorsChanged = true;
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+	for (var key in changes) {
+		if( key === 'Options' ){
+			var storageChange = changes[key];
+			Options = storageChange.newValue;
+			console.log(Options);
+			publishOptionChangeToTabs();
+			break;
+		}
+	}
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var action = request.action;
 	switch ( action) {
 		case 'getOptions':
-			if (ColorsChanged == true) {
-				sendResponse({
-					init: "globalPages",
-					ChangeColors: "true",
-					ColorOptions: Options
-				});
-			}
-			break;
-		case 'setOptions':
-			Options = request.data;
-			publishOptionChangeToTabs();
+			sendResponse({
+				options: Options
+			});
 			break;
 		case 'dict':
 			fetchWordOnline(request.word, sendResponse);
