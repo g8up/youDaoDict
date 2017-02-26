@@ -85,5 +85,6 @@ gulp.task('watch', ['less'], function () {
 gulp.task('js', ["uglify"]);
 gulp.task('static', ["copy"]);
 
+gulp.task('dev', ["watch"]);
 gulp.task('default', ["js", "less", "static"]);
 gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件

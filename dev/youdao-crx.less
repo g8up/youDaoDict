@@ -30,61 +30,77 @@ a,a:hover,a:visited{
 	z-index: 10001;
 	box-shadow: 2px 2px 4px gray;
 }
-@titleHeight:22px;
+@titleHeight: 25px;
+@marginLeft: 4px;
 .yddTop {
 	cursor: move;
-	border-bottom: 1px solid #d7e3eb;
 	background: #e1f1fb;
+	overflow: hidden;
 	.yddTopBorderlr {
 		position: relative;
 		height: @titleHeight;
-		line-height: 22px;
+		line-height: @titleHeight;
 		font-size: 12px;
 		color: #5079bb;
 		padding-right: @titleHeight;
 		.yddKeyTitle {
 			display: inline-block;
-			margin-left:3px;
+			margin-left: @marginLeft;
 			padding-left: 20px; /*给图标预留至少 17px 的宽度*/
 			font-weight: bold;
 			vertical-align: top;
-			background: url("image/icon-yd-dict.png") no-repeat;
-			background-position-y: 3px;
+			background: url("image/icon-128.png") no-repeat;
+			background-size: 16px 16px;
+			background-position-y: 5px;
 			color: #5079bb;
+			line-height: @titleHeight;
 		}
 		.ydd-phonetic{
 			display: inline-block;
-			margin-left: 3px;
+			margin-left: @marginLeft;
 			max-width: 140px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			line-height: @titleHeight;
 		}
 
 		.ydd-voice.ydd-voice-icon {
 			display: inline-block;
 			width: 13px;
 			height: inherit;
-			margin-left: 3px;
+			margin-left: @marginLeft;
 			background:url("image/voice-btn.png") no-repeat;
 			background-size: 26px 15px;
 			background-position-x: -13px;
-			background-position-y: 4px;
+			background-position-y: 5px;
 			cursor: pointer;
 			&:hover{
-				background-position-x:0;
+				background-position-x: 1px;
 			}
 		}
 		.ydd-detail{
 			display: inline-block;
-			margin-left: 3px;
+			margin-left: @marginLeft;
 			vertical-align: top;
+			line-height: @titleHeight;
+		}
+		#addToNote{
+			box-sizing: border-box;
+			width: 20px;
+			text-align: center;
+			font-weight: bold;
+			font-size: 1.5em;
+			margin-left: @marginLeft;
+			&.green{
+				color: #5ad25a;
+			}
 		}
 		.ydd-close {
 			display: inline-block;
 			width: @titleHeight;
-			height: 22px;
-			line-height: 22px;
+			height: @titleHeight;
+			line-height: @titleHeight;
 			font-size: 16px;
 			position: absolute;
 			right: 0;
@@ -96,6 +112,7 @@ a,a:hover,a:visited{
 .yddMiddle {
 	display: block;
 	margin-bottom: 10px;
+	border-top: 1px solid #d7e3eb;
 	.ydd-trans-wrapper{
 		.ydd-tabs{
 			display: block;

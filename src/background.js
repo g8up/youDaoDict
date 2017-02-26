@@ -28,6 +28,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			break;
 		case 'speech':
 			playAudio( request.word );
+			break;
+		case 'login-youdao':
+			loginYoudao();
+			break;
+		case 'youdao-add-word':
+			var word = request.word;
+			addWord( word , function(){
+				popBadgeTips('Ok', 'green');
+				sendResponse();
+			}, function(){
+				loginYoudao();
+			});
+			return true;
+			break;
 		default:
 			break;
 	}
@@ -53,6 +67,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 						'<span class="ydd-phonetic" style="font-size:10px;">', strpho, '</span>',
 						'<span class="ydd-voice">', speach, '</span>',
 						'<a class="ydd-detail" href="http://www.youdao.com/search?q=', encodeURIComponent(word), '&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
+						'<a class="ydd-detail" href="#" id="addToNote" title="添加到单词本">+</a>',
 						'<a class="ydd-close" href="javascript:void(0);">&times;</a>',
 					'</div>',
 				'</div>',
@@ -249,3 +264,65 @@ function playAudio( word ){
 	audio.autoplay = true;
 	audio.src = audioUrl;
 }
+
+// var YouDaoLoginUrl = "http://account.youdao.com/login";
+// var YouDaoLoginUrl = "http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist";
+var YouDaoLoginUrl = "http://dict.youdao.com/wordbook/wordlist";
+// 打开登录框
+function loginYoudao(){
+	var w = 500;
+	var h = 500;
+	// chrome.windows.create({
+	chrome.tabs.create({
+		url   : YouDaoLoginUrl,
+	// 	type  : "popup",
+	// 	width : w,
+	// 	height: h,
+	// 	left  : Math.floor(screen.width / 2 - (w + 1) / 2),
+	// 	top   : Math.floor(screen.height / 2 - h / 2)
+	}, function( win ){
+		// win.onload = function(){
+		// 	var formEl = win.document.querySelector('#login-form');
+		// 	if( formEl ){
+		// 		formEl.scrollIntoViewIfNeeded();
+		// 	}
+		// };
+	});
+}
+
+var YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax?action=addword';
+
+function addWord( word, success, fail ){
+	var xhr = new XMLHttpRequest();
+	xhr.onreadystatechange = function(data) {
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200) {
+				var result = JSON.parse(xhr.responseText);
+				var msg = result.message;
+				if ( msg === "adddone"){
+					success && success();
+				}
+				else if( msg === 'nouser'){
+					fail && fail();
+				}
+			}
+		}
+	}
+	var url = YouDaoAddWordUrl + '&le=eng&q=' + encodeURIComponent( word );
+	xhr.open('GET', url, true);
+	xhr.send();
+}
+
+function setBadge ( text , color ){
+	chrome.browserAction.setBadgeText({text});
+	color && chrome.browserAction.setBadgeBackgroundColor({color});
+};
+
+function hideBadge (){
+	setBadge('', '');
+};
+
+function popBadgeTips ( text, color){
+	setBadge( text + '', color);
+	setTimeout( hideBadge, 3e3);
+};

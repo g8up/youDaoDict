@@ -1,8 +1,8 @@
 (function(win) {
 	var _isDev = !1;
 	var _DefaultOptions = {
-		"dict_enable": ["checked", true],
-		"ctrl_only": ["checked", false],
+		"dict_enable": ["checked", false],
+		"ctrl_only": ["checked", true],
 		"english_only": ["checked", true],
 		"auto_speech": ["checked", true],
 		"history_count": 5
