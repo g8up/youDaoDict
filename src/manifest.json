@@ -1,9 +1,9 @@
 {
 	"manifest_version": 2,
-	"version": "3.2.0",
+	"version": "3.2.2",
 	"name": "有道词典划词扩展 V3",
 	"short_name": "有道词典",
-	"description": "可记录、导出查询历史！",
+	"description": "可添加单词本，记录、导出查询历史！",
 	"icons": {
 		"128": "image/icon-128.png",
 		"64": "image/icon-128.png",

@@ -1,6 +1,6 @@
 /**
- * youDaoDict - 可记录、导出查询历史的有道词典划词扩展
- * @version v3.2.0
+ * 有道词典划词扩展 V3 - 可添加单词本，记录、导出查询历史！
+ * @version v3.2.2
  * @link https://github.com/g8up/youDaoDict
  * @author g8up
  */
@@ -14,6 +14,11 @@ body {
   font-size: 13px;
   color: #3b4045;
   background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+}
+a,
+a:hover,
+a:visited {
+  text-decoration: none!important;
 }
 img.logo {
   margin: 5px;
@@ -149,6 +154,17 @@ footer a img {
 }
 .word-speech:hover {
   background-position-x: 0;
+}
+.add-to-note {
+  box-sizing: border-box;
+  width: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.5em;
+  color: #77b4e2;
+}
+.add-to-note:hover {
+  color: #3ba5d6;
 }
 #login-youdao {
   cursor: pointer;

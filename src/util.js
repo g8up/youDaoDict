@@ -87,3 +87,27 @@ function playAudio( word ){
 		'word': word
 	}, function() {});
 }
+
+function addToNote( word, callback ){
+	chrome.runtime.sendMessage({
+		action: 'youdao-add-word',
+		word: word
+	},function( resp ){
+		callback && callback( resp );
+	});
+}
+/**
+ * JSON 转 queryString
+ * @param  {JSON} params [description]
+ * @return {[type]}        [description]
+ */
+function queryString( params ){
+	if( params ){
+		var keyVal = Object.keys( params ).map( function( key ){
+			return [ encodeURIComponent(key), encodeURIComponent( params[key] ) ].join('=');
+		});
+		return keyVal.join('&');
+	}else{
+		return '';
+	}
+}

@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		case 'youdao-add-word':
 			var word = request.word;
 			addWord( word , function(){
-				popBadgeTips('Ok', 'green');
+				popBadgeTips('OK', 'green');
 				sendResponse();
 			}, function(){
 				loginYoudao();
@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			break;
 	}
 });
-
+// 页面中弹出的的面板
 function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) {
 	var lan = '';
 	if (isContainKoera(word)) {
@@ -213,7 +213,7 @@ function fetchWordOnline(word, callback) {
 				if (dataText != null) callback(dataText);
 			}
 		}
-	}
+	};
 	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng';
 	xhr.open('GET', url, true);
 	xhr.send();
@@ -312,8 +312,8 @@ function addWord( word, success, fail ){
 }
 
 function setBadge ( text , color ){
-	chrome.browserAction.setBadgeText({text});
-	color && chrome.browserAction.setBadgeBackgroundColor({color});
+	chrome.browserAction.setBadgeText({text: text});
+	color && chrome.browserAction.setBadgeBackgroundColor({color: color});
 };
 
 function hideBadge (){
