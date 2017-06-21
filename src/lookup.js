@@ -299,10 +299,7 @@ function addContentEvent(){
 		e.preventDefault();
 		var word = content.querySelector('.yddKeyTitle').textContent.trim();
 		if( word ){
-			chrome.runtime.sendMessage({
-				action: 'youdao-add-word',
-				word: word
-			},function( resp ){
+			addToNote( word, function( resp ){
 				addBtn.classList.add('green');
 			});
 		}

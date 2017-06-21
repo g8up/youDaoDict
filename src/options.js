@@ -96,15 +96,20 @@ function mainQuery(word, callback) {
 
 function buildSearchResult() {
 	document.querySelector('#options').style.display = "none"; //hide option pannel
+	var params = {
+		q: _word,
+		ue: 'utf8',
+		keyfrom: 'chrome.extension'
+	};
 	var lan = '';
 	if (isContainKoera(_word)) {
-		lan = "&le=ko";
+		params.le = 'ko';
 	}
 	if (isContainJapanese(_word)) {
-		lan = "&le=jap";
+		params.le = 'jap';
 	}
 	if (langType == 'fr') {
-		lan = "&le=fr";
+		params.le = 'fr';
 	}
 	var res = document.getElementById('result');
 	res.innerHTML = '';
@@ -112,7 +117,7 @@ function buildSearchResult() {
 		if (langType == 'ko') basetrans = "<strong>韩汉翻译:</strong><br/>" + basetrans;
 		else if (langType == 'jap') basetrans = "<strong>日汉翻译:</strong><br/>" + basetrans;
 		else if (langType == 'fr') basetrans = "<strong>法汉翻译:</strong><br/>" + basetrans;
-		else basetrans = "<strong>英汉翻译:</strong><span class='word-speech' data-toggle='play'></span><br/>" + basetrans;
+		else basetrans = "<strong>英汉翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>" + basetrans;
 		res.innerHTML = basetrans;
 	}
 	if (noWebTrans == false) {
@@ -120,11 +125,12 @@ function buildSearchResult() {
 		res.innerHTML += webtrans;
 	}
 	if (noBaseTrans == false || noWebTrans == false) {
-		res.innerHTML += "<a href ='http://dict.youdao.com/search?q=" + encodeURIComponent(_word) + "&ue=utf8&keyfrom=chrome.extension" + lan + "' target=_blank>点击 查看详细释义</a>";
+		var link = getLink( 'http://dict.youdao.com/search', params);
+		res.innerHTML += "<a href ='" + link + "' target='_blank'>点击 查看详细释义</a>";
 	}
 	if (noBaseTrans && noWebTrans) {
 		res.innerHTML = "未找到英汉翻译!";
-		res.innerHTML += "<br><a href ='http://www.youdao.com/search?q=" + encodeURIComponent(_word) + "&ue=utf8&keyfrom=chrome.extension' target=_blank>尝试用有道搜索</a>";
+		res.innerHTML += "<br><a href ='" + 'http://www.youdao.com/w/' + encodeURIComponent(_word) + "' target='_blank'>尝试用有道搜索</a>";
 	} else {
 		saveSearchedWord();
 	}
@@ -192,9 +198,9 @@ function changeIcon() {
 	engBox.disabled = !isEnabled;
 }
 
-function check() {
-	var word = document.querySelector("#word").value;
-	window.open("http://dict.youdao.com/search?q=" + encodeURI(word) + "&ue=utf8&keyfrom=chrome.index.g8up");
+function getLink( urlPrefix, params ) {
+	var url = urlPrefix + "?" + queryString(params);
+	return url;
 }
 /**
  * 读取配置信息
@@ -323,7 +329,10 @@ document.querySelector('#login-youdao').addEventListener('click',function(){
 })();
 
 document.body.addEventListener('click', function(e){
-	if( e.target.dataset.toggle === 'play'){
+	var toggle = e.target.dataset.toggle;
+	if( toggle === 'play'){
 		playAudio(_word);
+	}else if( toggle === 'addToNote') {
+		addToNote( _word );
 	}
-})
+});
