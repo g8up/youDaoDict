@@ -31,6 +31,7 @@ var Asset = {
 };
 var Dist = 'dist/';
 var Release = 'release/';
+
 gulp.task('uglify', function () {
 	return gulp
 		.src(Asset.js)
@@ -85,7 +86,7 @@ gulp.task('zip', ['cleanZip'], function(){
 
 gulp.task('watch', ['less'], function () {
 	gulp.watch(Asset.less, ['less']);
-	gulp.watch(Asset.js, ['unglify']);
+	gulp.watch(Asset.js, ['uglify']);
 	gulp.watch(Asset.static, ['copy']);
 });
 

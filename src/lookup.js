@@ -11,7 +11,7 @@ var Options = {},
 var list = [];
 var last_time = 0,
 	last_request_time = 0;
-var TriggerDelay = 350;
+var TriggerDelay = 250;
 
 function getOptions(next) {
 	chrome.runtime.sendMessage({
@@ -87,11 +87,12 @@ var prevC, prevO, c;
 var _ydTimerPoint = null;
 // 指词即译
 function onPointToTrans(e) {
-	clearTimeout(_ydTimerPoint);
 	if (!e.ctrlKey || e.shiftKey || e.altKey) {
 		return;
 	}
-	_ydTimerPoint = setTimeout(function() {
+
+	clearTimeout(_ydTimerPoint);
+	_ydTimerPoint = setTimeout(function () {
 		var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
 		if (!caretRange) return true;
 		var so = caretRange.startOffset,
