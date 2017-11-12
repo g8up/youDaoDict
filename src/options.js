@@ -6,12 +6,17 @@
  * @date 2014.04.24 支持缓存查询历史
  * @date 2014.08.05 支持导出查询历史
  */
+import {
+	getOption,
+	queryString,
+} from './util';
 var retphrase = '';
 var basetrans = '';
 var webtrans = '';
 var noBaseTrans = false;
 var noWebTrans = false;
 var langType = '';
+var Options = {};
 //布局结果页
 function translateXML(xmlnode) {
 	var translate = "<strong>查询:</strong><br/>";
@@ -205,11 +210,11 @@ function getLink( urlPrefix, params ) {
 /**
  * 读取配置信息
  */
-function restoreOptions() {
-	for (var key in Options) {
+function restoreOptions( option ) {
+	for (var key in option) {
 		var elem = document.getElementById(key);
 		if (elem) {
-			var val = Options[key];
+			var val = option[key];
 			if (!val) continue;
 			var elemType = elem.getAttribute('type');
 			switch (elemType) {
@@ -219,7 +224,7 @@ function restoreOptions() {
 					}
 					break;
 				case 'number':
-					elem.value = val || Options.history_count;
+					elem.value = val || option.history_count;
 					break;
 			}
 		}
@@ -269,12 +274,15 @@ function saveOptions() {
 	chrome.storage.sync.set({'Options': Options}, function() {});
 }
 
-document.body.onload = function() {
+window.onload = function() {
 	var word = document.getElementById('word');
 	word && word.focus();
-	restoreOptions();
-	changeIcon();
-	getCachedWord();
+	getOption( function( option ){
+		restoreOptions( option );
+		Options = option;
+		changeIcon();
+		getCachedWord();
+	});
 };
 /**
  * 配置项设置

@@ -5,20 +5,35 @@
  * @optimizing Simga
  * @date 2014.09.20 cut verbose code
  */
+import{
+	isEnglish,
+	isChinese,
+	isJapanese,
+	isKoera,
+	isContainChinese,
+	isContainJapanese,
+	isContainKoera,
+	isAlpha,
+	spaceCount,
+	ExtractEnglish,
+	playAudio,
+	addToNote,
+} from './util'
+
 var body = document.body;
-var Options = {},
-	last_frame;
+var Options = {};
+var	last_frame;
 var list = [];
 var last_time = 0,
 	last_request_time = 0;
 var TriggerDelay = 250;
 
-function getOptions(next) {
+function getOption(next) {
 	chrome.runtime.sendMessage({
-		'action': "getOptions"
-	}, function(response) {
-		if (response.options) {
-			Options = response.options;
+		'action': "getOption"
+	}, function(resp) {
+		if (resp && resp.option) {
+			Options = resp.option;
 			dealSelectEvent();
 			dealPointEvent();
 		}
@@ -32,7 +47,7 @@ function getOptVal(strKey) {
 	}
 }
 
-getOptions();
+getOption();
 
 // 划词翻译
 function onSelectToTrans(e) {
@@ -148,10 +163,10 @@ function dealPointEvent(){
 }
 
 document.onmousedown = function(e) {
-	OnCheckCloseWindow();
+	onCheckCloseWindow();
 }
 
-function OnCheckCloseWindow() {
+function onCheckCloseWindow() {
 	if (inDictPannel) return;
 	if (last_frame) {
 		var cur = new Date().getTime();
