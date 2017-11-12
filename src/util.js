@@ -1,7 +1,15 @@
 /**
  * util
  */
-function isEnglish(s) {
+import { DEFAULT_OPTION, OPTION_STORAGE_ITEM } from './config'
+
+export function getOption(callback) {
+	chrome.storage.sync.get(OPTION_STORAGE_ITEM , function (data) {
+		callback(data[OPTION_STORAGE_ITEM] || DEFAULT_OPTION);
+	});
+}
+
+export function isEnglish(s) {
 	for (var i = 0; i < s.length; i++) {
 		if (s.charCodeAt(i) > 126) {
 			return false;
@@ -10,19 +18,19 @@ function isEnglish(s) {
 	return true;
 }
 
-function isChinese(temp) {
+export function isChinese(temp) {
 	var re = /[^\u4e00-\u9fa5]/;
 	if (re.test(temp)) return false;
 	return true;
 }
 
-function isJapanese(temp) {
+export function isJapanese(temp) {
 	var re = /[^\u0800-\u4e00]/;
 	if (re.test(temp)) return false;
 	return true;
 }
 
-function isKoera(str) {
+export function isKoera(str) {
 	for (var i = 0, len = str.length; i < len; i++) {
 		if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F) || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
 			return true;
@@ -31,7 +39,7 @@ function isKoera(str) {
 	return false;
 }
 
-function isContainChinese(temp) {
+export function isContainChinese(temp) {
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isChinese(temp.charAt(i))) cnt++;
@@ -40,7 +48,7 @@ function isContainChinese(temp) {
 	return false;
 }
 
-function isContainJapanese(temp) {
+export function isContainJapanese(temp) {
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isJapanese(temp.charAt(i))) cnt++;
@@ -49,7 +57,7 @@ function isContainJapanese(temp) {
 	return false;
 }
 
-function isContainKoera(temp) {
+export function isContainKoera(temp) {
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isKoera(temp.charAt(i))) cnt++;
@@ -58,11 +66,11 @@ function isContainKoera(temp) {
 	return false;
 }
 
-function isAlpha(str) {
+export function isAlpha(str) {
 	return /[a-zA-Z']+/.test(str);
 }
 
-function spaceCount(temp) {
+export function spaceCount(temp) {
 	var cnt = 0;
 	for (var i = 0; i < temp.length; i++) {
 		if (temp.charAt(i) == ' ') {
@@ -72,7 +80,7 @@ function spaceCount(temp) {
 	return cnt;
 }
 
-function ExtractEnglish(word) {
+export function ExtractEnglish(word) {
 	var patt = new RegExp(/([a-zA-Z ]+)/);
 	var results = patt.exec(word);
 	if( results && results.length ){
@@ -81,14 +89,14 @@ function ExtractEnglish(word) {
 	return '';
 }
 
-function playAudio( word ){
+export function playAudio( word ){
 	chrome.runtime.sendMessage({
 		'action': 'speech',
 		'word': word
 	}, function() {});
 }
 
-function addToNote( word, callback ){
+export function addToNote( word, callback ){
 	chrome.runtime.sendMessage({
 		action: 'youdao-add-word',
 		word: word
@@ -101,12 +109,11 @@ function addToNote( word, callback ){
  * @param  {JSON} params [description]
  * @return {[type]}        [description]
  */
-function queryString( params ){
+export function queryString( params ){
 	if( params ){
-		var keyVal = Object.keys( params ).map( function( key ){
+		return Object.keys( params ).map( function( key ){
 			return [ encodeURIComponent(key), encodeURIComponent( params[key] ) ].join('=');
-		});
-		return keyVal.join('&');
+		}).join('&');
 	}else{
 		return '';
 	}

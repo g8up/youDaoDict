@@ -1,10 +1,18 @@
+import { OPTION_STORAGE_ITEM } from './config'
+import {
+	getOption,
+	isContainKoera,
+	isContainJapanese,
+} from './util'
+let Options = {};
+
 chrome.storage.onChanged.addListener(function (changes, namespace) {
 	for (var key in changes) {
-		if( key === 'Options' ){
+		if( key === OPTION_STORAGE_ITEM ){
 			var storageChange = changes[key];
 			Options = storageChange.newValue;
 			console.log(Options);
-			publishOptionChangeToTabs();
+			publishOptionChangeToTabs( Options );
 			break;
 		}
 	}
@@ -13,10 +21,13 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var action = request.action;
 	switch ( action) {
-		case 'getOptions':
-			sendResponse({
-				options: Options
+		case 'getOption':
+			getOption( function( option ){
+				sendResponse({
+					option: option
+				});
 			});
+			return true;
 			break;
 		case 'dict':
 			fetchWordOnline(request.word, sendResponse);
@@ -81,8 +92,7 @@ function genTable(word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 		fmt += ( noWebTrans == false ? renderTransDetail( '网络释义', webTrans) : '');
 	}
 	fmt += '</div></div>';
-	res = fmt;
-	return res;
+	return fmt;
 }
 
 function renderTransDetail( title, body){
@@ -242,14 +252,14 @@ function fetchTranslate(words, callback) {
 /**
  * 将配置更新通知已经打开的 Tab
  */
-function publishOptionChangeToTabs() {
+function publishOptionChangeToTabs( Options ) {
 	chrome.tabs.query({
 		status: "complete"
 	}, function(tabs) {
 		if (tabs.length) {
 			tabs.forEach(function(tab) {
 				chrome.tabs.sendMessage(tab.id, {
-					optionChanged: Options
+					optionChanged: Options,
 				}, function(rep) {
 					// console.log('option changed event has been published');
 				});

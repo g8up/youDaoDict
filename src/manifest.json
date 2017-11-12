@@ -11,10 +11,10 @@
 	},
 
 	"background": {
-		"scripts": ["common.js", "util.js", "background.js"]
+		"scripts": ["background.js"]
 	},
 	"content_scripts": [{
-		"js": ["util.js", "lookup.js"],
+		"js": ["lookup.js"],
 		"matches": ["*://*/*", "file://*"]
 	}],
 	"browser_action": {

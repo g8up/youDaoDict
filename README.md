@@ -19,5 +19,8 @@
 - 感谢 XGHeaven 对 v3.1.4 提出的更新建议
 - 感谢 john_shao 对 v3.0.8 提出的更新建议
 
+# 开发
+> npm run dev
+
 # Dependencies
 - [FileSaver.js](https://github.com/eligrey/FileSaver.js/)
