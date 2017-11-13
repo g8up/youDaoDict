@@ -18,6 +18,7 @@ import{
 	ExtractEnglish,
 	playAudio,
 	addToNote,
+	debounce,
 } from './util'
 
 var body = document.body;
@@ -50,44 +51,40 @@ function getOptVal(strKey) {
 getOption();
 
 // 划词翻译
-function onSelectToTrans(e) {
-	clearTimeout(window._ydTimerSelect);
-	window._ydTimerSelect = setTimeout(function() {
-		if (inDictPannel) return;
-		var word = window.getSelection().toString();
-		if (word !== '') {
-			word = word.trim();
-		}
-		if (word.length < 1 || word.length > 2000) {
+const onSelectToTrans = debounce((e) => {
+	if (inDictPannel) return;
+	var word = window.getSelection().toString().trim();
+	if (word.length < 1 || word.length > 2000) {
+		return;
+	}
+	let{
+		pageX: xx,
+		pageY: yy,
+		screenX: sx,
+		screenY: sy,
+	} = e;
+	let hasJapanese = isContainJapanese(word);
+	let	hasChinese = isContainChinese(word);
+	if (getOptVal("english_only")) {
+		let hasKoera = isContainKoera(word);
+		if (hasJapanese || hasChinese || hasKoera) {
 			return;
 		}
-		var xx = e.pageX,
-			yy = e.pageY,
-			sx = e.screenX,
-			sy = e.screenY;
-		var hasJapanese = isContainJapanese(word),
-			hasChinese = isContainChinese(word);
-		if (getOptVal("english_only")) {
-			var hasKoera = isContainKoera(word);
-			if ( hasJapanese || hasChinese || hasKoera) {
-				return;
-			}
-			word = ExtractEnglish(word);
-			// TODO: add isEnglish function
-			if( word !== ''){
-				getYoudaoDict(word, function(data) {
-					createPopUpEx(data, xx, yy, sx, sy);
-				});
-			}
-		} else if ((!hasChinese && spaceCount(word) >= 3)
-				|| (hasChinese && word.length > 4)
-				|| hasJapanese && word.length > 4) {
-			getYoudaoTrans(word, function(data) {
+		word = ExtractEnglish(word);
+		// TODO: add isEnglish function
+		if (word !== '') {
+			getYoudaoDict(word, function (data) {
 				createPopUpEx(data, xx, yy, sx, sy);
 			});
 		}
-	}, TriggerDelay);
-}
+	} else if ((!hasChinese && spaceCount(word) >= 3)
+		|| (hasChinese && word.length > 4)
+		|| hasJapanese && word.length > 4) {
+		getYoudaoTrans(word, function (data) {
+			createPopUpEx(data, xx, yy, sx, sy);
+		});
+	}
+});
 
 function dealSelectEvent(){
 	if ( getOptVal("dict_enable") ) {
@@ -99,59 +96,56 @@ function dealSelectEvent(){
 }
 
 var prevC, prevO, c;
-var _ydTimerPoint = null;
 // 指词即译
-function onPointToTrans(e) {
+const onPointToTrans = debounce((e)=>{
 	if (!e.ctrlKey || e.shiftKey || e.altKey) {
 		return;
 	}
-
-	clearTimeout(_ydTimerPoint);
-	_ydTimerPoint = setTimeout(function () {
-		var caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
-		if (!caretRange) return true;
-		var so = caretRange.startOffset,
-			eo = caretRange.endOffset;
-		if (prevC === caretRange.startContainer && prevO === so) return true;
-		prevC = caretRange.startContainer;
-		prevO = so;
-		var tr = caretRange.cloneRange(),
-			_tempText = '';
-		if (caretRange.startContainer.data) {
-			while (so >= 1) {
-				tr.setStart(caretRange.startContainer, --so);
-				_tempText = tr.toString();
-				if (!isAlpha(_tempText.charAt(0))) {
-					tr.setStart(caretRange.startContainer, so + 1);
-					break;
-				}
+	let caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
+	if (!caretRange) return true;
+	let so = caretRange.startOffset;
+	let	eo = caretRange.endOffset;
+	if (prevC === caretRange.startContainer && prevO === so) return true;
+	prevC = caretRange.startContainer;
+	prevO = so;
+	let tr = caretRange.cloneRange();
+	let	_tempText = '';
+	if (caretRange.startContainer.data) {
+		while (so >= 1) {
+			tr.setStart(caretRange.startContainer, --so);
+			_tempText = tr.toString();
+			if (!isAlpha(_tempText.charAt(0))) {
+				tr.setStart(caretRange.startContainer, so + 1);
+				break;
 			}
 		}
-		if (caretRange.endContainer.data) {
-			while (eo < caretRange.endContainer.data.length) {
-				tr.setEnd(caretRange.endContainer, ++eo);
-				_tempText = tr.toString();
-				if (!isAlpha(_tempText.charAt(_tempText.length - 1))) {
-					tr.setEnd(caretRange.endContainer, eo - 1);
-					break;
-				}
+	}
+	if (caretRange.endContainer.data) {
+		while (eo < caretRange.endContainer.data.length) {
+			tr.setEnd(caretRange.endContainer, ++eo);
+			_tempText = tr.toString();
+			if (!isAlpha(_tempText.charAt(_tempText.length - 1))) {
+				tr.setEnd(caretRange.endContainer, eo - 1);
+				break;
 			}
 		}
-		var word = tr.toString();
-		if (word.length >= 1) {
-			var xx = e.pageX,
-				yy = e.pageY,
-				sx = e.screenX,
-				sy = e.screenY;
-			var selection = window.getSelection();
-			selection.removeAllRanges();
-			selection.addRange(tr);
-			getYoudaoDict(word, function(data) {
-				createPopUpEx(data, xx, yy, sx, sy);
-			});
-		}
-	}, TriggerDelay);
-}
+	}
+	var word = tr.toString();
+	if (word.length >= 1) {
+		let {
+			pageX: xx,
+			pageY: yy,
+			screenX: sx,
+			screenY: sy,
+		} = e;
+		let selection = window.getSelection();
+		selection.removeAllRanges();
+		selection.addRange(tr);
+		getYoudaoDict(word, function (data) {
+			createPopUpEx(data, xx, yy, sx, sy);
+		});
+	}
+});
 
 function dealPointEvent(){
 	if ( getOptVal("ctrl_only") ) {

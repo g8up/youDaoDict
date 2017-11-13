@@ -118,3 +118,13 @@ export function queryString( params ){
 		return '';
 	}
 }
+// 去抖动
+export const debounce = ( fn, delay = 200) =>{
+	let timer = null;
+	return (...args)=>{
+		clearTimeout( timer );
+		timer = setTimeout(()=>{
+			fn.apply(null, args);
+		}, delay);
+	}
+}
