@@ -1,11 +1,3 @@
-/**
- * @author Dongxu Huang
- * @date   2010-2-21
- *
- * @optimizing Simga
- * @date 2014.04.24 支持缓存查询历史
- * @date 2014.08.05 支持导出查询历史
- */
 import {
 	getOption,
 	queryString,
@@ -233,22 +225,21 @@ function restoreOptions( option ) {
 /*
  * 导出单词查询历史
  */
-function exportHistory() {
-	var cachedWords = localStorage.getItem('wordcache');
+const exportHistory = () => {
+	const cachedWords = localStorage.getItem('wordcache');
 	if (cachedWords) {
-		var extDetail = chrome.app.getDetails();
-		var extName = extDetail.name;
-		var version = extDetail.version;
-		var br = '\r\n';
-		var banner = [
-			'【' + extName + '】Ver' + version + ' 查询历史备份文件',
-			new Date().toString().slice(0, 24),
-			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
-			new Array(25).join('='),
-			''
-		].join( br );
-		var content = banner + cachedWords.replace(/\,/g, br );
-		saveContent2File( content, 'youDaoCrx-history-' + +new Date() + '.txt' );
+		const extDetail = chrome.app.getDetails();
+		const extName = extDetail.name;
+		const version = extDetail.version;
+		const BR = '\r\n';
+		const banner = [
+			`【${extName}】V${version} 查询历史备份文件`,
+			`${new Date().toString().slice(0, 24)}`,
+			`By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil`,
+			`${new Array(25).join('=')}`
+		].join(BR).trim();
+		const content = `${banner}${BR}${cachedWords.replace(/\,/g, BR)}`;
+		saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
 	}
 }
 /*
