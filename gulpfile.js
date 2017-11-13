@@ -144,7 +144,7 @@ gulp.task('rollup', function () {
 	opts.forEach(compile);
 });
 
-gulp.task('rollup:w', function () {
+gulp.task('rollup:w', ['rollup'], function () {
 	gulp.watch('./src/**/*.js', function (event) {
 		const dir = event.path;
 		const entry = opts.filter(item => {

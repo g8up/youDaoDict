@@ -1,5 +1,5 @@
 {
-  "name": "youDaoDict",
+  "name": "youdao-dict",
   "version": "3.2.0",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "repository": {
@@ -36,8 +36,5 @@
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.2.6",
     "rollup-watch": "^3.2.2"
-  },
-  "dependencies": {
-    "rollup": "^0.41.6"
   }
 }
