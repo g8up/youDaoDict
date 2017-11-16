@@ -1,6 +1,3 @@
-/**
- * util
- */
 import { DEFAULT_OPTION, OPTION_STORAGE_ITEM } from './config'
 
 export function getOption(callback) {

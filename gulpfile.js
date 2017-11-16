@@ -1,6 +1,6 @@
 var path = require('path');
 var pkg = require('./package.json');
-var manifest = require('./dist/manifest.json');
+var manifest = require('./src/manifest.json');
 var gulp = require('gulp');
 var header = require('gulp-header');
 var uglify = require('gulp-uglify');
@@ -31,6 +31,9 @@ var Asset = {
 		'src/*.html',
 		'src/*.css',
 		'src/*.json',
+	],
+	lib:[
+		'src/lib/**',
 	],
 };
 var Dist = 'dist/';
@@ -65,7 +68,7 @@ gulp.task('less', function () {
 gulp.task('copy', function () {
 	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
-		.src(Asset.static, { base: 'src/' })
+		.src(Asset.static.concat(Asset.lib ), { base: 'src/' })
 		.pipe(gulp.dest(Dist));
 });
 
@@ -150,7 +153,7 @@ gulp.task('rollup:w', ['rollup'], function () {
 		const entry = opts.filter(item => {
 			return path.resolve(item.input) === dir;
 		});
-		if (entry) {
+		if (entry.length) {
 			console.log( entry );
 			entry.forEach(compile);
 		}
