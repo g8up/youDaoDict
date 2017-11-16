@@ -1,3 +1,4 @@
+import { Options } from './common.js'
 import {
 	getOption,
 	queryString,
@@ -10,7 +11,7 @@ var webtrans = '';
 var noBaseTrans = false;
 var noWebTrans = false;
 var langType = '';
-var Options = {};
+
 //布局结果页
 function translateXML(xmlnode) {
 	var translate = "<strong>查询:</strong><br/>";
@@ -272,7 +273,7 @@ window.onload = function() {
 	word && word.focus();
 	getOption( function( option ){
 		restoreOptions( option );
-		Options = option;
+		Object.assign(Options , option )
 		changeIcon();
 		getCachedWord();
 	});

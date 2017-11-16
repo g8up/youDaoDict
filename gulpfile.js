@@ -11,6 +11,9 @@ var del = require('del');
 var babel = require('gulp-babel');
 const rollup = require('rollup');
 const commonjs = require('rollup-plugin-commonjs');
+const rollupBabel = require('rollup-plugin-babel');
+const rollupUglify = require('rollup-plugin-uglify');
+const { minify } = require('uglify-js');
 
 const VERSION = manifest.version
 var banner = [
@@ -97,6 +100,12 @@ gulp.task('watch', ['less', 'copy'], function () {
 });
 
 const getRollupOption = ({ input, dist }) => {
+	let banner = `
+/**
+ * ${ pkg.name } - ${ pkg.description }
+ * @version v${ VERSION }
+ * @author ${ pkg.author }
+ */`.trim();
 	return {
 		read: {
 			input: input,
@@ -105,10 +114,16 @@ const getRollupOption = ({ input, dist }) => {
 				// chrome: 'chrome'
 			},
 			plugins: [
-				babel({
+				rollupBabel({
 					exclude: 'node_modules/**',
+					include: 'src/*.js'
 				}),
 				commonjs(),
+				rollupUglify({
+					output:{
+						preamble: banner,
+					},
+				}, minify),
 			],
 			watch: {
 				chokidar: true,
@@ -118,6 +133,7 @@ const getRollupOption = ({ input, dist }) => {
 		write: {
 			file: dist,
 			format: 'cjs',
+			banner,
 		}
 	}
 };
@@ -138,10 +154,10 @@ const opts = [{
 }, {
 	input: 'src/options.js',
 	dist: 'dist/options.js',
-	}, {
-		input: 'src/lookup.js',
-		dist: 'dist/lookup.js',
-	},
+}, {
+	input: 'src/lookup.js',
+	dist: 'dist/lookup.js',
+},
 ];
 gulp.task('rollup', function () {
 	opts.forEach(compile);

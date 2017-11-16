@@ -1,10 +1,3 @@
-/**
- * @author Dongxu Huang
- * @date   2010-2-21
- *
- * @optimizing Simga
- * @date 2014.09.20 cut verbose code
- */
 import{
 	isEnglish,
 	isChinese,
@@ -20,9 +13,9 @@ import{
 	addToNote,
 	debounce,
 } from './util'
+import { Options } from './common.js'
 
 var body = document.body;
-var Options = {};
 var	last_frame;
 var list = [];
 var last_time = 0,
@@ -34,7 +27,8 @@ function getOption(next) {
 		'action': "getOption"
 	}, function(resp) {
 		if (resp && resp.option) {
-			Options = resp.option;
+			Object.assign(Options, resp.option)
+
 			dealSelectEvent();
 			dealPointEvent();
 		}
@@ -333,7 +327,8 @@ function getYoudaoTrans(word, next) {
 // 获取配置修改的消息
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if( request.optionChanged ){
-		Options = request.optionChanged;
+		Object.assign(Options, request.optionChanged)
+
 		dealSelectEvent();
 		dealPointEvent();
 	}

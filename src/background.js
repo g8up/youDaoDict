@@ -1,16 +1,17 @@
+import { Options } from './common.js'
 import { OPTION_STORAGE_ITEM } from './config'
 import {
 	getOption,
 	isContainKoera,
 	isContainJapanese,
 } from './util'
-let Options = {};
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
 	for (var key in changes) {
 		if( key === OPTION_STORAGE_ITEM ){
 			var storageChange = changes[key];
-			Options = storageChange.newValue;
+			// Options = storageChange.newValue;
+			Object.assign(Options, storageChange.newValue)
 			console.log(Options);
 			publishOptionChangeToTabs( Options );
 			break;
