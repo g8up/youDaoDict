@@ -156,11 +156,7 @@ function dealPointEvent(){
 	}
 }
 
-document.onmousedown = function(e) {
-	onCheckCloseWindow();
-}
-
-function onCheckCloseWindow() {
+document.onmousedown = function onCheckCloseWindow() {
 	if (inDictPannel) return;
 	if (last_frame) {
 		var cur = new Date().getTime();

@@ -1,6 +1,8 @@
 import {
 	getOption,
 	queryString,
+	isContainKoera,
+	isContainJapanese,
 } from './util';
 var retphrase = '';
 var basetrans = '';
