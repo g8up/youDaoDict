@@ -18,9 +18,8 @@ import { Options } from './common.js'
 var body = document.body;
 var	last_frame;
 var list = [];
-var last_time = 0,
-	last_request_time = 0;
-var TriggerDelay = 250;
+var last_time = 0;
+var	last_request_time = 0;
 
 function getOption(next) {
 	chrome.runtime.sendMessage({
@@ -160,8 +159,7 @@ document.onmousedown = function onCheckCloseWindow() {
 		closePanel();
 		last_frame = null;
 		return true;
-	}
-	return false
+	} return false
 }
 
 function closePanel() {
@@ -220,26 +218,26 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 	last_frame = frame;
 }
 
-var content = null;
-function getYoudaoDictPanelCont( html ){
-	var panelId = 'yddWrapper';
-	var panel = document.querySelector('div#yddWrapper');
+let content = null;
+const getYoudaoDictPanelCont = ( html )=>{
+	const PANEL_ID = 'yddWrapper';
+	let panel = document.querySelector(`div#${PANEL_ID}`);
 	if( !panel ){
 		panel = document.createElement('div');
+		panel.id = PANEL_ID;
 		panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
-		panel.id = panelId;
 		markTagOrigin( panel );
 		body.appendChild(panel);
 		addPanelEvent( panel );
 
-		var tmpl = genTmpl();
-		var root = panel.createShadowRoot();
-		root.appendChild( document.importNode( tmpl.content, true) );
+		let tmpl = genTmpl();
+		let root = panel.createShadowRoot();
+		root.appendChild(document.importNode(tmpl.content, true) );
 		content = root.querySelector('#ydd-content');
 	}
 	content.innerHTML = html;
 	content.classList.add('fadeIn');
-	addContentEvent();
+	addContentEvent(content );
 	return panel;
 }
 
@@ -266,10 +264,9 @@ function addPanelEvent( panel ){
 		distanceX = 0;
 		distanceY = 0;
 	};
-
 }
 
-function addContentEvent(){
+const addContentEvent = (content )=>{
 	// 关闭按钮
 	var closeBtn = content.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
@@ -295,7 +292,7 @@ function addContentEvent(){
 	})();
 	// 添加到单词本
 	var addBtn = content.querySelector('#addToNote');
-	addBtn.onclick = function(e){
+	addBtn.addEventListener('click', function(e){
 		e.preventDefault();
 		var word = content.querySelector('.yddKeyTitle').textContent.trim();
 		if( word ){
@@ -303,7 +300,7 @@ function addContentEvent(){
 				addBtn.classList.add('green');
 			});
 		}
-	}
+	});
 }
 
 function getYoudaoDict(word, next) {
@@ -334,19 +331,20 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	}
 });
 
-function genTmpl(){
-	var tmplId = 'yodaoDictPanel';
-	var tmpl = document.querySelector('template#' + tmplId );
+const genTmpl = ()=>{
+	const TMPL_ID = 'youdaoDictPanel';
+	let tmpl = document.querySelector(`template#${tmplId}` );
 	if( tmpl ){
 		return tmpl;
-	}else{
-		var _tmpl = document.createElement('template');
-		_tmpl.id = tmplId;
-		markTagOrigin( _tmpl );
+	}
+	else{
+		tmpl = document.createElement('template');
+		tmpl.id = TMPL_ID;
+		markTagOrigin( tmpl );
 		var cssUrl = chrome.extension.getURL('youdao-crx.css');
-		_tmpl.innerHTML = '<style> @import "'+ cssUrl +'"; </style> <div id="ydd-content"></div>'; // for panel content
-		body.appendChild( _tmpl );
-		return _tmpl;
+		tmpl.innerHTML = `<style>@import "${cssUrl}"; </style><div id="ydd-content"></div>`; // for panel content
+		body.appendChild( tmpl );
+		return tmpl;
 	}
 }
 /**
@@ -354,6 +352,6 @@ function genTmpl(){
  */
 function markTagOrigin ( tag ){
 	if( tag ){
-		tag.setAttribute('tag-info', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
+		tag.setAttribute('data-comment', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
 	}
 }
