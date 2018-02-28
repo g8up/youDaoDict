@@ -59,6 +59,7 @@ gulp.task('less', function () {
 		.pipe(gulp.dest( Dist ))
 });
 
+// copy static assets
 gulp.task('copy', function () {
 	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
@@ -90,10 +91,8 @@ gulp.task('watch', ['less'], function () {
 	gulp.watch(Asset.static, ['copy']);
 });
 
-gulp.task('static', ["copy"]);
+gulp.task('dev', ["watch", "copy"]);
 
-gulp.task('dev', ["watch"]);
-
-gulp.task('default', ["uglify", "less", "static"]);
+gulp.task('default', ["uglify", "less", "copy"]);
 
 gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件

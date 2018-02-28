@@ -1,7 +1,12 @@
 {
-  "name": "youDaoDict",
+  "name": "youdao-dict",
   "version": "3.2.0",
   "description": "可记录、导出查询历史的有道词典划词扩展",
+  "scripts": {
+    "dev": "gulp dev",
+    "build": "gulp",
+    "release": "gulp release"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/g8up/youDaoDict.git"
@@ -15,11 +20,6 @@
     "url": "https://github.com/g8up/youDaoDict/issues"
   },
   "homepage": "https://github.com/g8up/youDaoDict",
-  "scripts": {
-    "dev": "gulp dev",
-    "build": "gulp",
-    "release": "gulp release"
-  },
   "devDependencies": {
     "del": "^2.2.0",
     "gulp": "^3.9.0",
