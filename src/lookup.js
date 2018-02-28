@@ -6,11 +6,9 @@
  * @date 2014.09.20 cut verbose code
  */
 var body = document.body;
-var Options = {},
-	last_frame;
+var Options = {};
 var list = [];
-var last_time = 0,
-	last_request_time = 0;
+var last_time = 0, last_frame;
 var TriggerDelay = 250;
 
 function getOptions(next) {
@@ -38,7 +36,6 @@ getOptions();
 function onSelectToTrans(e) {
 	clearTimeout(window._ydTimerSelect);
 	window._ydTimerSelect = setTimeout(function() {
-		if (inDictPannel) return;
 		var word = window.getSelection().toString();
 		if (word !== '') {
 			word = word.trim();
@@ -147,12 +144,7 @@ function dealPointEvent(){
 	}
 }
 
-document.onmousedown = function(e) {
-	OnCheckCloseWindow();
-}
-
 function OnCheckCloseWindow() {
-	if (inDictPannel) return;
 	if (last_frame) {
 		var cur = new Date().getTime();
 		if (cur - last_time < 500) {
@@ -160,10 +152,10 @@ function OnCheckCloseWindow() {
 		}
 		closePanel();
 		last_frame = null;
-		return true;
 	}
-	return false
 }
+
+document.addEventListener('click', OnCheckCloseWindow);
 
 function closePanel() {
 	if( content ) {
@@ -180,8 +172,6 @@ function createPopUpEx(html, x, y, screenx, screeny) {
 		}
 	}
 }
-// 鼠标是否在弹出框上
-var inDictPannel = false;
 
 function createPopUp(html, senctence, x, y, screenX, screenY) {
 	var frame_height = 150;
@@ -222,6 +212,7 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 }
 
 var content = null;
+
 function getYoudaoDictPanelCont( html ){
 	var panelId = 'yddWrapper';
 	var panel = document.querySelector('div#yddWrapper');
@@ -248,13 +239,6 @@ function addPanelEvent( panel ){
 	panel.setAttribute('draggable', true);
 	// panel.innerHTML += html;
 
-	panel.onmouseover = function(e) {
-		inDictPannel = true;
-	};
-	panel.onmouseout = function(e) {
-		inDictPannel = false;
-	};
-
 	// 拖放
 	var distanceX, distanceY;
 	panel.ondragstart = function(e) {
@@ -272,6 +256,13 @@ function addPanelEvent( panel ){
 
 function addContentEvent(){
 	// 关闭按钮
+	content.addEventListener('click', function (e) {
+		e.stopPropagation();
+	});
+	// 防止触发划词查询
+	content.addEventListener('mouseup', function (e) {
+		e.stopPropagation();
+	});
 	var closeBtn = content.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
 		closePanel();
