@@ -203,40 +203,54 @@ function translateTransXML(xmlnode) {
 }
 
 function fetchWordOnline(word, callback) {
-	var lang = '';
-	if (isContainKoera(word)) {
-		lang = '&le=ko';
-	}
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(data) {
-		if (xhr.readyState == 4) {
-			if (xhr.status == 200) {
-				var dataText = translateXML(xhr.responseXML);
-				if (dataText != null) callback(dataText);
+	ajax({
+		url: 'http://dict.youdao.com/fsearch',
+		data: {
+			client: 'deskdict',
+			keyfrom: 'chrome.extension',
+			xmlVersion: '3.2',
+			dogVersion: '1.0',
+			ue: 'utf8',
+			q: word,
+			doctype: 'xml',
+			pos: '-1',
+			vendor: 'unknown',
+			appVer: '3.1.17.4208',
+			le: isContainKoera(word) ? 'ko' : 'eng'
+		},
+		dataType: 'xml',
+		success: function (ret) {
+			var dataText = translateXML(ret);
+			if (dataText != null){
+				callback(dataText);
 			}
 		}
-	};
-	var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=unknown&appVer=3.1.17.4208&le=eng';
-	xhr.open('GET', url, true);
-	xhr.send();
+	});
 }
 
 // 查询英文之外的语言
 function fetchTranslate(words, callback) {
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(data) {
-		if (xhr.readyState == 4) {
-			if (xhr.status == 200) {
-				var dataText = translateTransXML(xhr.responseText);
-				if (dataText != null) callback({
-					data:dataText
+	ajax({
+		url: 'http://fanyi.youdao.com/translate',
+		data:{
+			client: 'deskdict',
+			keyfrom: 'chrome.extension',
+			xmlVersion: '1.1',
+			dogVersion: '1.0',
+			ue: 'utf8',
+			i: words,
+			doctype: 'xml'
+		},
+		dataType: 'xml',
+		success: function( ret ){
+			var dataText = translateTransXML(ret);
+			if (dataText != null){
+				callback({
+					data: dataText
 				});
 			}
 		}
-	}
-	var url = "http://fanyi.youdao.com/translate?client=deskdict&keyfrom=chrome.extension&xmlVersion=1.1&dogVersion=1.0&ue=utf8&i=" + encodeURIComponent(words) + "&doctype=xml";
-	xhr.open('GET', url, true);
-	xhr.send();
+	});
 }
 
 /**
@@ -290,27 +304,27 @@ function loginYoudao(){
 	});
 }
 
-var YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax?action=addword';
+var YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax';
 
 function addWord( word, success, fail ){
-	var xhr = new XMLHttpRequest();
-	xhr.onreadystatechange = function(data) {
-		if (xhr.readyState == 4) {
-			if (xhr.status == 200) {
-				var result = JSON.parse(xhr.responseText);
-				var msg = result.message;
-				if ( msg === "adddone"){
-					success && success();
-				}
-				else if( msg === 'nouser'){
-					fail && fail();
-				}
+	ajax({
+		url: YouDaoAddWordUrl,
+		data:{
+			action: 'addword',
+			le: 'eng',
+			q: word,
+		},
+		dataType: 'json',
+		success: function( ret ){
+			var msg = ret.message;
+			if (msg === "adddone") {
+				success && success();
 			}
-		}
-	}
-	var url = YouDaoAddWordUrl + '&le=eng&q=' + encodeURIComponent( word );
-	xhr.open('GET', url, true);
-	xhr.send();
+			else if (msg === 'nouser') {
+				fail && fail();
+			}
+		},
+	});
 }
 
 function setBadge ( text , color ){
