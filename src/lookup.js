@@ -16,7 +16,6 @@ import{
 import { Options } from './common.js'
 
 var body = document.body;
-var Options = {};
 var list = [];
 var last_time = 0, last_frame;
 var TriggerDelay = 250;
@@ -330,7 +329,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 
 const genTmpl = ()=>{
 	const TMPL_ID = 'youdaoDictPanel';
-	let tmpl = document.querySelector(`template#${tmplId}` );
+	let tmpl = document.querySelector(`template#${TMPL_ID}` );
 	if( tmpl ){
 		return tmpl;
 	}

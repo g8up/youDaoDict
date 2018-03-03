@@ -4,6 +4,7 @@ import {
 	queryString,
 	isContainKoera,
 	isContainJapanese,
+	ajax,
 } from './util';
 var retphrase = '';
 var basetrans = '';
@@ -75,22 +76,30 @@ function translateXML(xmlnode) {
 var _word;
 
 function mainQuery(word, callback) {
-	if( word !== '' ){
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function(data) {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200) {
-					var dataText = translateXML(xhr.responseXML);
-					if (dataText != null) callback(dataText);
+	if (word !== '') {
+		_word = word.trim();
+		ajax({
+			url: 'http://dict.youdao.com/fsearch',
+			dataType: 'xml',
+			data:{
+				client: 'deskdict',
+				keyfrom: 'chrome.extension.g8up',
+				q: _word,
+				pos: -1,
+				doctype: 'xml',
+				xmlVersion: '3.2',
+				dogVersion: '1.0',
+				vendor: 'g8up',
+				appVer: '3.1.17.4208',
+				le: 'eng'
+			},
+			success(ret) {
+				var dataText = translateXML(ret);
+				if (dataText != null) {
+					callback(dataText);
 				}
 			}
-		}
-		_word = word.trim();
-		if( _word !== '' ){
-			var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension.g8up&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=g8up&appVer=3.1.17.4208&le=eng'
-			xhr.open('GET', url, true);
-			xhr.send();
-		}
+		});
 	}
 }
 

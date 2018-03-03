@@ -134,7 +134,7 @@ function qs( json ){
 
 var noop = function(){}
 
-function ajax( option ){
+export const ajax = ( option ) => {
 	var url = option.url;
 	var type = option.type || 'GET';
 	var dataType = (option.dataType || '').toLowerCase();

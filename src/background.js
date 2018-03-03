@@ -4,6 +4,7 @@ import {
 	getOption,
 	isContainKoera,
 	isContainJapanese,
+	ajax,
 } from './util'
 
 chrome.storage.onChanged.addListener(function (changes, namespace) {
