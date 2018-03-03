@@ -16,10 +16,10 @@ import{
 import { Options } from './common.js'
 
 var body = document.body;
-var	last_frame;
+var Options = {};
 var list = [];
-var last_time = 0;
-var	last_request_time = 0;
+var last_time = 0, last_frame;
+var TriggerDelay = 250;
 
 function getOption(next) {
 	chrome.runtime.sendMessage({
@@ -45,7 +45,6 @@ getOption();
 
 // 划词翻译
 const onSelectToTrans = debounce((e) => {
-	if (inDictPannel) return;
 	var word = window.getSelection().toString().trim();
 	if (word.length < 1 || word.length > 2000) {
 		return;
@@ -149,8 +148,7 @@ function dealPointEvent(){
 	}
 }
 
-document.onmousedown = function onCheckCloseWindow() {
-	if (inDictPannel) return;
+function OnCheckCloseWindow() {
 	if (last_frame) {
 		var cur = new Date().getTime();
 		if (cur - last_time < 500) {
@@ -158,9 +156,10 @@ document.onmousedown = function onCheckCloseWindow() {
 		}
 		closePanel();
 		last_frame = null;
-		return true;
-	} return false
+	}
 }
+
+document.addEventListener('click', OnCheckCloseWindow);
 
 function closePanel() {
 	if( content ) {
@@ -177,8 +176,6 @@ function createPopUpEx(html, x, y, screenx, screeny) {
 		}
 	}
 }
-// 鼠标是否在弹出框上
-var inDictPannel = false;
 
 function createPopUp(html, senctence, x, y, screenX, screenY) {
 	var frame_height = 150;
@@ -245,13 +242,6 @@ function addPanelEvent( panel ){
 	panel.setAttribute('draggable', true);
 	// panel.innerHTML += html;
 
-	panel.onmouseover = function(e) {
-		inDictPannel = true;
-	};
-	panel.onmouseout = function(e) {
-		inDictPannel = false;
-	};
-
 	// 拖放
 	var distanceX, distanceY;
 	panel.ondragstart = function(e) {
@@ -268,6 +258,13 @@ function addPanelEvent( panel ){
 
 const addContentEvent = (content )=>{
 	// 关闭按钮
+	content.addEventListener('click', function (e) {
+		e.stopPropagation();
+	});
+	// 防止触发划词查询
+	content.addEventListener('mouseup', function (e) {
+		e.stopPropagation();
+	});
 	var closeBtn = content.querySelector('.ydd-close');
 	closeBtn.onclick = function(e) {
 		closePanel();

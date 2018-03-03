@@ -125,3 +125,50 @@ export const debounce = ( fn, delay = 200) =>{
 		}, delay);
 	}
 }
+
+function qs( json ){
+	return Object.keys(json).map(function( key ){
+		return key + '=' + encodeURIComponent( json[key] );
+	}).join('&');
+}
+
+var noop = function(){}
+
+function ajax( option ){
+	var url = option.url;
+	var type = option.type || 'GET';
+	var dataType = (option.dataType || '').toLowerCase();
+	var data = option.data;
+	var success = option.success || noop;
+	var error = option.error || noop;
+
+	var xhr = new XMLHttpRequest();
+
+	xhr.onreadystatechange = function (data) {
+		if (xhr.readyState == 4) {
+			if (xhr.status == 200) {
+				var ret = xhr.responseText;
+				if( dataType === 'json'){
+					try{
+						ret = JSON.parse(ret);
+					}
+					catch( err ){
+						error( err );
+					}
+				}
+				else if (dataType === 'xml' ){
+					ret = xhr.responseXML;
+				}
+				success( ret );
+			}
+		}
+	};
+
+	var queryString = qs(data);
+	if( type === 'GET' ){
+		url += '?' + queryString;
+	}
+
+	xhr.open(type, url, true);
+	xhr.send(type === 'GET' ? null : queryString);
+}

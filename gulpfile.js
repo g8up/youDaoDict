@@ -68,6 +68,7 @@ gulp.task('less', function () {
 		.pipe(gulp.dest(Dist))
 });
 
+// copy static assets
 gulp.task('copy', function () {
 	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
