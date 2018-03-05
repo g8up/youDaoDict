@@ -91,7 +91,7 @@ gulp.task('watch', ['less'], function () {
 	gulp.watch(Asset.static, ['copy']);
 });
 
-gulp.task('dev', ["watch", "copy"]);
+gulp.task('dev', ["uglify", "watch", "copy"]);
 
 gulp.task('default', ["uglify", "less", "copy"]);
 
