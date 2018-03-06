@@ -3,7 +3,6 @@ var pkg = require('./package.json');
 var manifest = require('./src/manifest.json');
 var gulp = require('gulp');
 var header = require('gulp-header');
-var uglify = require('gulp-uglify');
 var less = require('gulp-less');
 var cssmin = require('gulp-cssmin');
 var zip = require('gulp-zip');
@@ -13,7 +12,7 @@ const rollup = require('rollup');
 const commonjs = require('rollup-plugin-commonjs');
 const rollupBabel = require('rollup-plugin-babel');
 const rollupUglify = require('rollup-plugin-uglify');
-const { minify } = require('uglify-js');
+const { minify } = require('uglify-es');
 
 const VERSION = manifest.version
 var banner = [
@@ -41,20 +40,6 @@ var Asset = {
 };
 var Dist = 'dist/';
 var Release = 'release/';
-
-gulp.task('uglify', function () {
-	return gulp
-		.src(Asset.js)
-		.pipe(babel({
-			presets: ['es2015']
-		}))
-		// .pipe(uglify())
-		.pipe(header(banner, {
-			VERSION,
-			pkg: pkg
-		}))
-		.pipe(gulp.dest(Dist));
-});
 
 gulp.task('less', function () {
 	return gulp.src(Asset.less)
@@ -111,13 +96,15 @@ const getRollupOption = ({ input, dist }) => {
 		read: {
 			input: input,
 			// sourceMap: 'inline',
-			globals: {
-				// chrome: 'chrome'
+			output:{
+				globals: {
+					// chrome: 'chrome'
+				},
 			},
 			plugins: [
 				rollupBabel({
 					exclude: 'node_modules/**',
-					include: 'src/*.js'
+					include: 'src/**.js'
 				}),
 				commonjs(),
 				rollupUglify({
@@ -177,9 +164,6 @@ gulp.task('rollup:w', ['rollup'], function () {
 	});
 });
 
-gulp.task('js', ["uglify"]);
-gulp.task('static', ["copy"]);
-
 gulp.task('dev', ["watch", 'rollup:w']);
-gulp.task('default', ["js", "less", "static"]);
+gulp.task('default', ["rollup", "less", "copy"]);
 gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件

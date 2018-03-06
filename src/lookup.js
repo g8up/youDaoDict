@@ -13,8 +13,7 @@ import{
 	addToNote,
 	debounce,
 } from './util'
-import { Options } from './common.js'
-
+var Options = {};
 var body = document.body;
 var list = [];
 var last_time = 0, last_frame;

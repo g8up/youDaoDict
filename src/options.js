@@ -1,11 +1,12 @@
-import { Options } from './common.js'
+// import { Options } from './common.js'
+import Setting from './util/setting'
 import {
-	getOption,
 	queryString,
 	isContainKoera,
 	isContainJapanese,
 	ajax,
 } from './util';
+let Options = null;
 var retphrase = '';
 var basetrans = '';
 var webtrans = '';
@@ -13,6 +14,7 @@ var noBaseTrans = false;
 var noWebTrans = false;
 var langType = '';
 
+var setting = new Setting();
 //布局结果页
 function translateXML(xmlnode) {
 	var translate = "<strong>查询:</strong><br/>";
@@ -152,7 +154,8 @@ function buildSearchResult() {
 	noBaseTrans = false;
 	noWebTrans = false;
 }
-// 取缓存查询次
+
+// 取缓存查询词
 function getCachedWord() {
 	var html = [],
 		cache = localStorage.getItem('wordcache');
@@ -237,20 +240,20 @@ function restoreOptions( option ) {
 /*
  * 导出单词查询历史
  */
-const exportHistory = () => {
-	const cachedWords = localStorage.getItem('wordcache');
+var exportHistory = () => {
+	var cachedWords = localStorage.getItem('wordcache');
 	if (cachedWords) {
-		const extDetail = chrome.app.getDetails();
-		const extName = extDetail.name;
-		const version = extDetail.version;
-		const BR = '\r\n';
-		const banner = [
+		var extDetail = chrome.app.getDetails();
+		var extName = extDetail.name;
+		var version = extDetail.version;
+		var BR = '\r\n';
+		var banner = [
 			`【${extName}】V${version} 查询历史备份文件`,
 			`${new Date().toString().slice(0, 24)}`,
 			`By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil`,
 			`${new Array(25).join('=')}`
 		].join(BR).trim();
-		const content = `${banner}${BR}${cachedWords.replace(/\,/g, BR)}`;
+		var content = `${banner}${BR}${cachedWords.replace(/\,/g, BR)}`;
 		saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
 	}
 }
@@ -274,76 +277,75 @@ function saveOptions() {
 		}
 	}
 	// https://developer.chrome.com/extensions/storage
-	chrome.storage.sync.set({'Options': Options}, function() {});
+	setting.set(Options);
 }
 
 window.onload = function() {
-	var word = document.getElementById('word');
-	word && word.focus();
-	getOption( function( option ){
-		restoreOptions( option );
-		Object.assign(Options , option )
+	setting.get().then(data => {
+		Options = data;
+		console.log('option from sync storage', data);
+		restoreOptions(data);
 		changeIcon();
 		getCachedWord();
 	});
-};
-/**
- * 配置项设置
- */
-var optElem = document.querySelector('#options');
-optElem && (optElem.onmouseover = function() {
-	this.onmouseover = null;
-	document.getElementById("dict_enable").onclick = function() {
-		saveOptions();
-		changeIcon();
-	};
-	document.getElementById("ctrl_only").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("english_only").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("auto_speech").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
-		saveOptions();
-		getCachedWord();
-	};
-});
+	/**
+	 * 配置项设置
+	 */
+	var optElem = document.querySelector('#options');
+	optElem && (optElem.onmouseover = function() {
+		this.onmouseover = null;
+		document.getElementById("dict_enable").onclick = function() {
+			saveOptions();
+			changeIcon();
+		};
+		document.getElementById("ctrl_only").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("english_only").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("auto_speech").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
+			saveOptions();
+			getCachedWord();
+		};
+	});
 
-document.getElementById("word").onkeydown = function() {
-	if (event.keyCode == 13) {
+	document.getElementById("word").onkeydown = function() {
+		if (event.keyCode == 13) {
+			mainQuery(document.querySelector("#word").value, translateXML);
+		}
+	};
+	document.getElementById("querybutton").onclick = function() {
 		mainQuery(document.querySelector("#word").value, translateXML);
-	}
-};
-document.getElementById("querybutton").onclick = function() {
-	mainQuery(document.querySelector("#word").value, translateXML);
-};
-document.querySelector('#backup').onclick = function() {
-	exportHistory();
-};
-// 登录按钮
-document.querySelector('#login-youdao').addEventListener('click',function(){
-	chrome.runtime.sendMessage({
-		'action': 'login-youdao',
-	},function( rep ){
-		console.log( rep );
+	};
+	document.querySelector('#backup').onclick = function() {
+		exportHistory();
+	};
+	// 登录按钮
+	document.querySelector('#login-youdao').addEventListener('click',function(){
+		chrome.runtime.sendMessage({
+			'action': 'login-youdao',
+		},function( rep ){
+			console.log( rep );
+		});
 	});
-});
-// 检测当前页面打开入口：option / popup
-(function(){
-	var hash = window.location.hash;
-	if( hash === '#popup' ){
-		document.body.classList.add('popup');
-	}
-})();
+	// 检测当前页面打开入口：option / popup
+	(function(){
+		var hash = window.location.hash;
+		if( hash === '#popup' ){
+			document.body.classList.add('popup');
+		}
+	})();
 
-document.body.addEventListener('click', function(e){
-	var toggle = e.target.dataset.toggle;
-	if( toggle === 'play'){
-		playAudio(_word);
-	}else if( toggle === 'addToNote') {
-		addToNote( _word );
-	}
-});
+	document.body.addEventListener('click', function(e){
+		var toggle = e.target.dataset.toggle;
+		if( toggle === 'play'){
+			playAudio(_word);
+		}else if( toggle === 'addToNote') {
+			addToNote( _word );
+		}
+	});
+};

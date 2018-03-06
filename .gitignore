@@ -9,3 +9,4 @@ dist/
 *.crx
 src/youdao-crx.css
 src/option.css
+.DS_Store

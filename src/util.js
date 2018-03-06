@@ -1,11 +1,3 @@
-import { DEFAULT_OPTION, OPTION_STORAGE_ITEM } from './config'
-
-export function getOption(callback) {
-	chrome.storage.sync.get(OPTION_STORAGE_ITEM , function (data) {
-		callback(data[OPTION_STORAGE_ITEM] || DEFAULT_OPTION);
-	});
-}
-
 export function isEnglish(s) {
 	for (var i = 0; i < s.length; i++) {
 		if (s.charCodeAt(i) > 126) {
@@ -150,7 +142,7 @@ export const ajax = ( option ) => {
 				var ret = xhr.responseText;
 				if( dataType === 'json'){
 					try{
-						ret = JSON.parse(ret);
+						// ret = JSON.parse(ret);
 					}
 					catch( err ){
 						error( err );

@@ -1,17 +1,23 @@
-import { Options } from './common.js'
+import Setting from './util/setting'
 import { OPTION_STORAGE_ITEM } from './config'
 import {
-	getOption,
 	isContainKoera,
 	isContainJapanese,
 	ajax,
 } from './util'
+const setting = new Setting();
+let Options = null;
+setting.get().then( data =>{
+	Options = data;
+});
 
-chrome.storage.onChanged.addListener(function (changes, namespace) {
+chrome.storage.onChanged.addListener(function (changes, areaName) {
+	if (areaName !== 'sync'){
+		return;
+	}
 	for (var key in changes) {
 		if( key === OPTION_STORAGE_ITEM ){
 			var storageChange = changes[key];
-			// Options = storageChange.newValue;
 			Object.assign(Options, storageChange.newValue)
 			console.log(Options);
 			publishOptionChangeToTabs( Options );
@@ -24,11 +30,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	var action = request.action;
 	switch ( action) {
 		case 'getOption':
-			getOption( function( option ){
+			setting.get().then( data =>{
 				sendResponse({
-					option: option
+					option: data
 				});
-			});
+			})
 			return true;
 			break;
 		case 'dict':

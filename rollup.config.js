@@ -7,8 +7,11 @@ export default {
   dest: 'dist/background.js',
   format: 'iife',
   // sourceMap: 'inline',
-  globals: {
-    chrome: 'chrome'
+  output:{
+    globals: {
+      chrome: 'chrome',
+      JSON: 'JSON',
+    },
   },
   plugins: [
     babel({
