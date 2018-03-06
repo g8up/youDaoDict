@@ -67,7 +67,7 @@ gulp.task('clean', function () {
 	]);
 });
 
-var zipFile = pkg.name + '-v' + pkg.version + '.zip';
+var zipFile = pkg.name + '-v' + VERSION + '.zip';
 gulp.task('cleanZip', function () {
 	return del([
 		Release + zipFile
