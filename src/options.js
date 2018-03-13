@@ -1,15 +1,14 @@
-// import { Options } from './common.js'
 import Setting from './util/setting'
 import {
 	queryString,
 	isContainKoera,
 	isContainJapanese,
 	ajax,
+	addToNote,
+	playAudio,
 } from './util';
 let Options = null;
 var retphrase = '';
-var basetrans = '';
-var webtrans = '';
 var noBaseTrans = false;
 var noWebTrans = false;
 var langType = '';
@@ -17,6 +16,9 @@ var langType = '';
 var setting = new Setting();
 //布局结果页
 function translateXML(xmlnode) {
+	let basetrans = '';
+	var webtrans = '';
+
 	var translate = "<strong>查询:</strong><br/>";
 	var root = xmlnode.getElementsByTagName("yodaodict")[0];
 	var phrase = root.getElementsByTagName("return-phrase");
@@ -52,8 +54,7 @@ function translateXML(xmlnode) {
 				if (line.length > 50) {
 					var reg = /[;；]/;
 					var childs = line.split(reg);
-					line = '';
-					for (var j = 0; j < childs.length; j++) line += childs[j] + "<br/>";
+					line = childs.join('<br/>')
 				}
 				basetrans += line;
 			}
@@ -72,7 +73,7 @@ function translateXML(xmlnode) {
 			webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "<br/>";
 		}
 	}
-	buildSearchResult();
+	buildSearchResult({ basetrans, webtrans});
 	return;
 }
 var _word;
@@ -105,7 +106,7 @@ function mainQuery(word, callback) {
 	}
 }
 
-function buildSearchResult() {
+function buildSearchResult({ basetrans, webtrans }) {
 	document.querySelector('#options').style.display = "none"; //hide option pannel
 	var params = {
 		q: _word,
@@ -125,31 +126,27 @@ function buildSearchResult() {
 	var res = document.getElementById('result');
 	res.innerHTML = '';
 	if (noBaseTrans == false) {
-		if (langType == 'ko') basetrans = "<strong>韩汉翻译:</strong><br/>" + basetrans;
-		else if (langType == 'jap') basetrans = "<strong>日汉翻译:</strong><br/>" + basetrans;
-		else if (langType == 'fr') basetrans = "<strong>法汉翻译:</strong><br/>" + basetrans;
-		else basetrans = "<strong>英汉翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>" + basetrans;
-		res.innerHTML = basetrans;
+		const langTypeMap = {
+			ko: '韩汉',
+			jap: '日汉',
+			fr: '法汉',
+		};
+		res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>${basetrans}`;
 	}
 	if (noWebTrans == false) {
-		webtrans = "<strong>网络释义:</strong><br/>" + webtrans;
-		res.innerHTML += webtrans;
+		res.innerHTML += `<strong>网络释义:</strong><br/>${webtrans}`;
 	}
 	if (noBaseTrans == false || noWebTrans == false) {
 		var link = getLink( 'http://dict.youdao.com/search', params);
-		res.innerHTML += "<a href ='" + link + "' target='_blank'>点击 查看详细释义</a>";
+		res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
 	}
 	if (noBaseTrans && noWebTrans) {
-		res.innerHTML = "未找到英汉翻译!";
-		res.innerHTML += "<br><a href ='" + 'http://www.youdao.com/w/' + encodeURIComponent(_word) + "' target='_blank'>尝试用有道搜索</a>";
+		res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="http://www.youdao.com/w/${encodeURIComponent(_word)}" target="_blank">尝试用有道搜索</a>`;
 	} else {
 		saveSearchedWord();
 	}
 	getCachedWord();
 	retphrase = '';
-	webtrans = '';
-	basetrans = '';
-	// _word = '';
 	langType = '';
 	noBaseTrans = false;
 	noWebTrans = false;
@@ -340,12 +337,15 @@ window.onload = function() {
 		}
 	})();
 
-	document.body.addEventListener('click', function(e){
-		var toggle = e.target.dataset.toggle;
+	document.body.addEventListener('click', (e)=> {
+		let target = e.target;
+		let toggle = target.dataset.toggle;
 		if( toggle === 'play'){
 			playAudio(_word);
 		}else if( toggle === 'addToNote') {
-			addToNote( _word );
+			addToNote( _word, ()=>{
+				target.classList.add('green')
+			});
 		}
 	});
 };

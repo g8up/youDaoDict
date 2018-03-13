@@ -291,7 +291,7 @@ const addContentEvent = (content )=>{
 		e.preventDefault();
 		var word = content.querySelector('.yddKeyTitle').textContent.trim();
 		if( word ){
-			addToNote( word, function( resp ){
+			addToNote( word, ()=>{
 				addBtn.classList.add('green');
 			});
 		}
