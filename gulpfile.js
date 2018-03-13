@@ -19,7 +19,6 @@ var banner = [
 	'/**',
 	' * <%= pkg.name %> - <%= pkg.description %>',
 	' * @version v<%= VERSION %>',
-	' * @link <%= pkg.homepage %>',
 	' * @author <%= pkg.author %>',
 	' */',
 	''
@@ -88,7 +87,7 @@ gulp.task('watch', ['less', 'copy'], function () {
 const getRollupOption = ({ input, dist }) => {
 	let banner = `
 /**
- * ${ pkg.name } - ${ pkg.description }
+ * ${ manifest.name } - ${ pkg.description }
  * @version v${ VERSION }
  * @author ${ pkg.author }
  */`.trim();
