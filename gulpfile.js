@@ -43,7 +43,6 @@ var Release = 'release/';
 gulp.task('less', function () {
 	return gulp.src(Asset.less)
 		.pipe(less())
-		.pipe(gulp.dest('src/'))
 		.pipe(cssmin())
 		.pipe(header(banner, {
 			VERSION,
