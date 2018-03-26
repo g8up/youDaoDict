@@ -1,19 +1,24 @@
-/**
- * @author Dongxu Huang
- * @date   2010-2-21
- *
- * @optimizing Simga
- * @date 2014.04.24 支持缓存查询历史
- * @date 2014.08.05 支持导出查询历史
- */
+import Setting from './util/setting'
+import {
+	queryString,
+	isContainKoera,
+	isContainJapanese,
+	ajax,
+	addToNote,
+	playAudio,
+} from './util';
+let Options = null;
 var retphrase = '';
-var basetrans = '';
-var webtrans = '';
 var noBaseTrans = false;
 var noWebTrans = false;
 var langType = '';
+
+var setting = new Setting();
 //布局结果页
 function translateXML(xmlnode) {
+	let basetrans = '';
+	var webtrans = '';
+
 	var translate = "<strong>查询:</strong><br/>";
 	var root = xmlnode.getElementsByTagName("yodaodict")[0];
 	var phrase = root.getElementsByTagName("return-phrase");
@@ -49,8 +54,7 @@ function translateXML(xmlnode) {
 				if (line.length > 50) {
 					var reg = /[;；]/;
 					var childs = line.split(reg);
-					line = '';
-					for (var j = 0; j < childs.length; j++) line += childs[j] + "<br/>";
+					line = childs.join('<br/>')
 				}
 				basetrans += line;
 			}
@@ -69,32 +73,40 @@ function translateXML(xmlnode) {
 			webtrans += webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue + "<br/>";
 		}
 	}
-	buildSearchResult();
+	buildSearchResult({ basetrans, webtrans});
 	return;
 }
 var _word;
 
 function mainQuery(word, callback) {
-	if( word !== '' ){
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function(data) {
-			if (xhr.readyState == 4) {
-				if (xhr.status == 200) {
-					var dataText = translateXML(xhr.responseXML);
-					if (dataText != null) callback(dataText);
+	if (word !== '') {
+		_word = word.trim();
+		ajax({
+			url: 'http://dict.youdao.com/fsearch',
+			dataType: 'xml',
+			data:{
+				client: 'deskdict',
+				keyfrom: 'chrome.extension.g8up',
+				q: _word,
+				pos: -1,
+				doctype: 'xml',
+				xmlVersion: '3.2',
+				dogVersion: '1.0',
+				vendor: 'g8up',
+				appVer: '3.1.17.4208',
+				le: 'eng'
+			},
+			success(ret) {
+				var dataText = translateXML(ret);
+				if (dataText != null) {
+					callback(dataText);
 				}
 			}
-		}
-		_word = word.trim();
-		if( _word !== '' ){
-			var url = 'http://dict.youdao.com/fsearch?client=deskdict&keyfrom=chrome.extension.g8up&q=' + encodeURIComponent(word) + '&pos=-1&doctype=xml&xmlVersion=3.2&dogVersion=1.0&vendor=g8up&appVer=3.1.17.4208&le=eng'
-			xhr.open('GET', url, true);
-			xhr.send();
-		}
+		});
 	}
 }
 
-function buildSearchResult() {
+function buildSearchResult({ basetrans, webtrans }) {
 	document.querySelector('#options').style.display = "none"; //hide option pannel
 	var params = {
 		q: _word,
@@ -114,36 +126,33 @@ function buildSearchResult() {
 	var res = document.getElementById('result');
 	res.innerHTML = '';
 	if (noBaseTrans == false) {
-		if (langType == 'ko') basetrans = "<strong>韩汉翻译:</strong><br/>" + basetrans;
-		else if (langType == 'jap') basetrans = "<strong>日汉翻译:</strong><br/>" + basetrans;
-		else if (langType == 'fr') basetrans = "<strong>法汉翻译:</strong><br/>" + basetrans;
-		else basetrans = "<strong>英汉翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>" + basetrans;
-		res.innerHTML = basetrans;
+		const langTypeMap = {
+			ko: '韩汉',
+			jap: '日汉',
+			fr: '法汉',
+		};
+		res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>${basetrans}`;
 	}
 	if (noWebTrans == false) {
-		webtrans = "<strong>网络释义:</strong><br/>" + webtrans;
-		res.innerHTML += webtrans;
+		res.innerHTML += `<strong>网络释义:</strong><br/>${webtrans}`;
 	}
 	if (noBaseTrans == false || noWebTrans == false) {
 		var link = getLink( 'http://dict.youdao.com/search', params);
-		res.innerHTML += "<a href ='" + link + "' target='_blank'>点击 查看详细释义</a>";
+		res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
 	}
 	if (noBaseTrans && noWebTrans) {
-		res.innerHTML = "未找到英汉翻译!";
-		res.innerHTML += "<br><a href ='" + 'http://www.youdao.com/w/' + encodeURIComponent(_word) + "' target='_blank'>尝试用有道搜索</a>";
+		res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="http://www.youdao.com/w/${encodeURIComponent(_word)}" target="_blank">尝试用有道搜索</a>`;
 	} else {
 		saveSearchedWord();
 	}
 	getCachedWord();
 	retphrase = '';
-	webtrans = '';
-	basetrans = '';
-	// _word = '';
 	langType = '';
 	noBaseTrans = false;
 	noWebTrans = false;
 }
-// 取缓存查询次
+
+// 取缓存查询词
 function getCachedWord() {
 	var html = [],
 		cache = localStorage.getItem('wordcache');
@@ -205,11 +214,11 @@ function getLink( urlPrefix, params ) {
 /**
  * 读取配置信息
  */
-function restoreOptions() {
-	for (var key in Options) {
+function restoreOptions( option ) {
+	for (var key in option) {
 		var elem = document.getElementById(key);
 		if (elem) {
-			var val = Options[key];
+			var val = option[key];
 			if (!val) continue;
 			var elemType = elem.getAttribute('type');
 			switch (elemType) {
@@ -219,7 +228,7 @@ function restoreOptions() {
 					}
 					break;
 				case 'number':
-					elem.value = val || Options.history_count;
+					elem.value = val || option.history_count;
 					break;
 			}
 		}
@@ -228,22 +237,21 @@ function restoreOptions() {
 /*
  * 导出单词查询历史
  */
-function exportHistory() {
+var exportHistory = () => {
 	var cachedWords = localStorage.getItem('wordcache');
 	if (cachedWords) {
 		var extDetail = chrome.app.getDetails();
 		var extName = extDetail.name;
 		var version = extDetail.version;
-		var br = '\r\n';
+		var BR = '\r\n';
 		var banner = [
-			'【' + extName + '】Ver' + version + ' 查询历史备份文件',
-			new Date().toString().slice(0, 24),
-			'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
-			new Array(25).join('='),
-			''
-		].join( br );
-		var content = banner + cachedWords.replace(/\,/g, br );
-		saveContent2File( content, 'youDaoCrx-history-' + +new Date() + '.txt' );
+			`【${extName}】V${version} 查询历史备份文件`,
+			`${new Date().toString().slice(0, 24)}`,
+			`By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil`,
+			`${new Array(25).join('=')}`
+		].join(BR).trim();
+		var content = `${banner}${BR}${cachedWords.replace(/\,/g, BR)}`;
+		saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
 	}
 }
 /*
@@ -266,73 +274,78 @@ function saveOptions() {
 		}
 	}
 	// https://developer.chrome.com/extensions/storage
-	chrome.storage.sync.set({'Options': Options}, function() {});
+	setting.set(Options);
 }
 
-document.body.onload = function() {
-	var word = document.getElementById('word');
-	word && word.focus();
-	restoreOptions();
-	changeIcon();
-	getCachedWord();
-};
-/**
- * 配置项设置
- */
-var optElem = document.querySelector('#options');
-optElem && (optElem.onmouseover = function() {
-	this.onmouseover = null;
-	document.getElementById("dict_enable").onclick = function() {
-		saveOptions();
+window.onload = function() {
+	setting.get().then(data => {
+		Options = data;
+		console.log('option from sync storage', data);
+		restoreOptions(data);
 		changeIcon();
-	};
-	document.getElementById("ctrl_only").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("english_only").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("auto_speech").onclick = function() {
-		saveOptions();
-	};
-	document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
-		saveOptions();
 		getCachedWord();
-	};
-});
-
-document.getElementById("word").onkeydown = function() {
-	if (event.keyCode == 13) {
-		mainQuery(document.querySelector("#word").value, translateXML);
-	}
-};
-document.getElementById("querybutton").onclick = function() {
-	mainQuery(document.querySelector("#word").value, translateXML);
-};
-document.querySelector('#backup').onclick = function() {
-	exportHistory();
-};
-// 登录按钮
-document.querySelector('#login-youdao').addEventListener('click',function(){
-	chrome.runtime.sendMessage({
-		'action': 'login-youdao',
-	},function( rep ){
-		console.log( rep );
 	});
-});
-// 检测当前页面打开入口：option / popup
-(function(){
-	var hash = window.location.hash;
-	if( hash === '#popup' ){
-		document.body.classList.add('popup');
-	}
-})();
+	/**
+	 * 配置项设置
+	 */
+	var optElem = document.querySelector('#options');
+	optElem && (optElem.onmouseover = function() {
+		this.onmouseover = null;
+		document.getElementById("dict_enable").onclick = function() {
+			saveOptions();
+			changeIcon();
+		};
+		document.getElementById("ctrl_only").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("english_only").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("auto_speech").onclick = function() {
+			saveOptions();
+		};
+		document.getElementById("history_count").onclick = document.getElementById("history_count").onkeyup = function() {
+			saveOptions();
+			getCachedWord();
+		};
+	});
 
-document.body.addEventListener('click', function(e){
-	var toggle = e.target.dataset.toggle;
-	if( toggle === 'play'){
-		playAudio(_word);
-	}else if( toggle === 'addToNote') {
-		addToNote( _word );
-	}
-});
+	document.getElementById("word").onkeydown = function() {
+		if (event.keyCode == 13) {
+			mainQuery(document.querySelector("#word").value, translateXML);
+		}
+	};
+	document.getElementById("querybutton").onclick = function() {
+		mainQuery(document.querySelector("#word").value, translateXML);
+	};
+	document.querySelector('#backup').onclick = function() {
+		exportHistory();
+	};
+	// 登录按钮
+	document.querySelector('#login-youdao').addEventListener('click',function(){
+		chrome.runtime.sendMessage({
+			'action': 'login-youdao',
+		},function( rep ){
+			console.log( rep );
+		});
+	});
+	// 检测当前页面打开入口：option / popup
+	(function(){
+		var hash = window.location.hash;
+		if( hash === '#popup' ){
+			document.body.classList.add('popup');
+		}
+	})();
+
+	document.body.addEventListener('click', (e)=> {
+		let target = e.target;
+		let toggle = target.dataset.toggle;
+		if( toggle === 'play'){
+			playAudio(_word);
+		}else if( toggle === 'addToNote') {
+			addToNote( _word, ()=>{
+				target.classList.add('green')
+			});
+		}
+	});
+};
