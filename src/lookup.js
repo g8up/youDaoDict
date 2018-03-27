@@ -13,16 +13,16 @@ import{
 	addToNote,
 	debounce,
 } from './util'
-var Options = {};
-var body = document.body;
-var list = [];
-var last_time = 0, last_frame;
-var TriggerDelay = 250;
+let Options = {};
+let body = document.body;
+let list = [];
+let last_time = 0, last_frame;
+let TriggerDelay = 250;
 
-function getOption(next) {
+const getOption = (next) => {
 	chrome.runtime.sendMessage({
 		'action': "getOption"
-	}, function(resp) {
+	}, (resp) => {
 		if (resp && resp.option) {
 			Object.assign(Options, resp.option)
 
@@ -33,7 +33,7 @@ function getOption(next) {
 	});
 }
 
-function getOptVal(strKey) {
+const getOptVal = (strKey) => {
 	if (Options !== null) {
 		return Options[strKey][1];
 	}
@@ -43,7 +43,7 @@ getOption();
 
 // 划词翻译
 const onSelectToTrans = debounce((e) => {
-	var word = window.getSelection().toString().trim();
+	let word = window.getSelection().toString().trim();
 	if (word.length < 1 || word.length > 2000) {
 		return;
 	}
@@ -85,7 +85,7 @@ function dealSelectEvent(){
 	}
 }
 
-var prevC, prevO, c;
+let prevC, prevO, c;
 // 指词即译
 const onPointToTrans = debounce((e)=>{
 	if (!e.ctrlKey || e.shiftKey || e.altKey) {
@@ -120,7 +120,7 @@ const onPointToTrans = debounce((e)=>{
 			}
 		}
 	}
-	var word = tr.toString();
+	let word = tr.toString();
 	if (word.length >= 1) {
 		let {
 			pageX: xx,
@@ -137,7 +137,7 @@ const onPointToTrans = debounce((e)=>{
 	}
 });
 
-function dealPointEvent(){
+const dealPointEvent = () =>{
 	if ( getOptVal("ctrl_only") ) {
 		document.removeEventListener('mousemove', onPointToTrans);
 		document.addEventListener('mousemove', onPointToTrans);
@@ -146,9 +146,9 @@ function dealPointEvent(){
 	}
 }
 
-function OnCheckCloseWindow() {
+const OnCheckCloseWindow = () => {
 	if (last_frame) {
-		var cur = new Date().getTime();
+		let cur = new Date().getTime();
 		if (cur - last_time < 500) {
 			return;
 		}
@@ -159,34 +159,34 @@ function OnCheckCloseWindow() {
 
 document.addEventListener('click', OnCheckCloseWindow);
 
-function closePanel() {
+const closePanel = ()=> {
 	if( content ) {
 		content.classList.remove('fadeIn');
 		content.innerHTML = '';
 	}
 }
 
-function createPopUpEx(html, x, y, screenx, screeny) {
+const createPopUpEx = (html, x, y, screenx, screeny) => {
 	if( html !== undefined ){
-		var sel = window.getSelection();
+		let sel = window.getSelection();
 		if( sel && sel.rangeCount ){
 			createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
 		}
 	}
 }
 
-function createPopUp(html, senctence, x, y, screenX, screenY) {
-	var frame_height = 150;
-	var frame_width = 300;
-	var padding = 10;
-	var frame_left = 0;
-	var frame_top = 0;
-	var frame = getYoudaoDictPanelCont( html );
+const createPopUp = (html, senctence, x, y, screenX, screenY) => {
+	let frame_height = 150;
+	let frame_width = 300;
+	let padding = 10;
+	let frame_left = 0;
+	let frame_top = 0;
+	let frame = getYoudaoDictPanelCont( html );
 
 	body.style.position = "static";
 	// 确定位置
-	var screen_width = screen.availWidth;
-	var screen_height = screen.availHeight;
+	let screen_width = screen.availWidth;
+	let screen_height = screen.availHeight;
 	if (screenX + frame_width < screen_width) {
 		frame_left = x;
 	} else {
@@ -202,9 +202,9 @@ function createPopUp(html, senctence, x, y, screenX, screenY) {
 	if (frame.style.left + frame_width > screen_width) {
 		frame.style.left -= frame.style.left + frame_width - screen_width;
 	}
-	var leftbottom = frame_top + 10 + frame.clientHeight;
+	let leftbottom = frame_top + 10 + frame.clientHeight;
 	if (leftbottom < y) {
-		var newtop = y - frame.clientHeight;
+		let newtop = y - frame.clientHeight;
 		frame.style.top = newtop + 'px';
 	}
 	frame.style.display = '';// 设定了新节点位置，清除隐藏属性
@@ -236,17 +236,17 @@ const getYoudaoDictPanelCont = ( html )=>{
 	return panel;
 }
 
-function addPanelEvent( panel ){
+const addPanelEvent = (panel) => {
 	panel.setAttribute('draggable', true);
 	// panel.innerHTML += html;
 
 	// 拖放
-	var distanceX, distanceY;
-	panel.ondragstart = function(e) {
+	let distanceX, distanceY;
+	panel.ondragstart = (e) => {
 		distanceX = e.x - parseInt(panel.style.left);
 		distanceY = e.y - parseInt(panel.style.top);
 	};
-	panel.ondragend = function(e) {
+	panel.ondragend = (e) => {
 		panel.style.left = e.x - distanceX + 'px';
 		panel.style.top = e.y - distanceY + 'px';
 		distanceX = 0;
@@ -256,29 +256,29 @@ function addPanelEvent( panel ){
 
 const addContentEvent = (content )=>{
 	// 关闭按钮
-	content.addEventListener('click', function (e) {
+	content.addEventListener('click', (e) => {
 		e.stopPropagation();
 	});
 	// 防止触发划词查询
-	content.addEventListener('mouseup', function (e) {
+	content.addEventListener('mouseup', (e) => {
 		e.stopPropagation();
 	});
-	var closeBtn = content.querySelector('.ydd-close');
-	closeBtn.onclick = function(e) {
+	let closeBtn = content.querySelector('.ydd-close');
+	closeBtn.onclick = (e) => {
 		closePanel();
 	};
 	closeBtn = null;
 	// 语音播放
 	(function renderAudio() {
-		var speech = content.querySelector(".ydd-voice");
+		let speech = content.querySelector(".ydd-voice");
 		if (speech) {
 			if (speech.innerHTML != '') {
 				speech.classList.add('ydd-voice-icon');
-				var wordAndType = speech.textContent;
+				let wordAndType = speech.textContent;
 				if (getOptVal('auto_speech')) {
 					playAudio( wordAndType );
 				}
-				speech.addEventListener('click', function(e){
+				speech.addEventListener('click', (e) => {
 					playAudio( wordAndType );
 				});
 			}
@@ -286,10 +286,10 @@ const addContentEvent = (content )=>{
 		}
 	})();
 	// 添加到单词本
-	var addBtn = content.querySelector('#addToNote');
-	addBtn.addEventListener('click', function(e){
+	let addBtn = content.querySelector('#addToNote');
+	addBtn.addEventListener('click', (e) => {
 		e.preventDefault();
-		var word = content.querySelector('.yddKeyTitle').textContent.trim();
+		let word = content.querySelector('.yddKeyTitle').textContent.trim();
 		if( word ){
 			addToNote( word, ()=>{
 				addBtn.classList.add('green');
@@ -298,26 +298,26 @@ const addContentEvent = (content )=>{
 	});
 }
 
-function getYoudaoDict(word, next) {
+const getYoudaoDict = (word, next) => {
 	chrome.runtime.sendMessage({
 		'action': 'dict',
 		'word': word
-	}, function(data) {
+	}, (data) => {
 		next && next(data);
 	});
 }
 
-function getYoudaoTrans(word, next) {
+const getYoudaoTrans = (word, next) => {
 	chrome.runtime.sendMessage({
 		'action': 'translate',
 		'word': word
-	}, function(data) {
+	}, (data) => {
 		next && next(data);
 	});
 }
 
 // 获取配置修改的消息
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
 	if( request.optionChanged ){
 		Object.assign(Options, request.optionChanged)
 
@@ -336,7 +336,7 @@ const genTmpl = ()=>{
 		tmpl = document.createElement('template');
 		tmpl.id = TMPL_ID;
 		markTagOrigin( tmpl );
-		var cssUrl = chrome.extension.getURL('youdao-crx.css');
+		let cssUrl = chrome.extension.getURL('youdao-crx.css');
 		tmpl.innerHTML = `<style>@import "${cssUrl}"; </style><div id="ydd-content"></div>`; // for panel content
 		body.appendChild( tmpl );
 		return tmpl;
@@ -345,7 +345,7 @@ const genTmpl = ()=>{
 /**
  * 给插入的节点做标识，以免 web page 的开发者迷惑。
  */
-function markTagOrigin ( tag ){
+const markTagOrigin = (tag) => {
 	if( tag ){
 		tag.setAttribute('data-comment', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
 	}

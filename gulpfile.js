@@ -7,7 +7,7 @@ var less = require('gulp-less');
 var cssmin = require('gulp-cssmin');
 var zip = require('gulp-zip');
 var del = require('del');
-var babel = require('gulp-babel');
+
 const rollup = require('rollup');
 const commonjs = require('rollup-plugin-commonjs');
 const rollupBabel = require('rollup-plugin-babel');

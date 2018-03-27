@@ -1,4 +1,4 @@
-export function isEnglish(s) {
+export const isEnglish = (s) => {
 	for (var i = 0; i < s.length; i++) {
 		if (s.charCodeAt(i) > 126) {
 			return false;
@@ -7,19 +7,19 @@ export function isEnglish(s) {
 	return true;
 }
 
-export function isChinese(temp) {
+export const isChinese = (temp) => {
 	var re = /[^\u4e00-\u9fa5]/;
 	if (re.test(temp)) return false;
 	return true;
 }
 
-export function isJapanese(temp) {
+export const isJapanese = (temp)=> {
 	var re = /[^\u0800-\u4e00]/;
 	if (re.test(temp)) return false;
 	return true;
 }
 
-export function isKoera(str) {
+export const isKoera = (str) => {
 	for (var i = 0, len = str.length; i < len; i++) {
 		if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F) || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
 			return true;
@@ -28,7 +28,7 @@ export function isKoera(str) {
 	return false;
 }
 
-export function isContainChinese(temp) {
+export const isContainChinese = (temp)=> {
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isChinese(temp.charAt(i))) cnt++;
@@ -37,7 +37,7 @@ export function isContainChinese(temp) {
 	return false;
 }
 
-export function isContainJapanese(temp) {
+export const isContainJapanese = (temp) =>{
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isJapanese(temp.charAt(i))) cnt++;
@@ -46,7 +46,7 @@ export function isContainJapanese(temp) {
 	return false;
 }
 
-export function isContainKoera(temp) {
+export const isContainKoera = (temp) => {
 	var cnt = 0;
 	for (var i = 0, len = temp.length; i < len; i++) {
 		if (isKoera(temp.charAt(i))) cnt++;
@@ -55,11 +55,11 @@ export function isContainKoera(temp) {
 	return false;
 }
 
-export function isAlpha(str) {
+export const isAlpha = (str) => {
 	return /[a-zA-Z']+/.test(str);
 }
 
-export function spaceCount(temp) {
+export const spaceCount = (temp) => {
 	var cnt = 0;
 	for (var i = 0; i < temp.length; i++) {
 		if (temp.charAt(i) == ' ') {
@@ -69,7 +69,7 @@ export function spaceCount(temp) {
 	return cnt;
 }
 
-export function ExtractEnglish(word) {
+export const ExtractEnglish = (word) => {
 	var patt = new RegExp(/([a-zA-Z ]+)/);
 	var results = patt.exec(word);
 	if( results && results.length ){
@@ -78,18 +78,18 @@ export function ExtractEnglish(word) {
 	return '';
 }
 
-export function playAudio( word ){
+export const playAudio = (word) => {
 	chrome.runtime.sendMessage({
 		'action': 'speech',
 		'word': word
 	}, function() {});
 }
 
-export function addToNote( word, callback ){
+export const addToNote = (word, callback) => {
 	chrome.runtime.sendMessage({
 		action: 'youdao-add-word',
 		word: word
-	},function( resp ){
+	}, (resp) => {
 		callback && callback( resp );
 	});
 }
@@ -98,9 +98,9 @@ export function addToNote( word, callback ){
  * @param  {JSON} params [description]
  * @return {[type]}        [description]
  */
-export function queryString( params ){
+export const queryString = (params)=>{
 	if( params ){
-		return Object.keys( params ).map( function( key ){
+		return Object.keys( params ).map((key) => {
 			return [ encodeURIComponent(key), encodeURIComponent( params[key] ) ].join('=');
 		}).join('&');
 	}else{
