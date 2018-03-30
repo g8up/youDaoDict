@@ -85,7 +85,7 @@ const genTable = (word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webT
 						<a class="yddKeyTitle" href="${searchUrl}" target=_blank title="查看完整释义">${word}</a>
 						<span class="ydd-phonetic" style="font-size:10px;">${strpho}</span>
 						<span class="ydd-voice">${speach}</span>
-						<a class="ydd-detail" href="http://www.youdao.com/search?q=${encodeURIComponent(word)}&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>',
+						<a class="ydd-detail" href="http://www.youdao.com/search?q=${encodeURIComponent(word)}&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>
 						<a class="ydd-detail" href="#" id="addToNote" title="添加到单词本">+</a>
 						<a class="ydd-close" href="javascript:void(0);">&times;</a>
 					</div>
