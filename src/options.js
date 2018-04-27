@@ -170,8 +170,7 @@ const getCachedWord = () =>{
 			html.unshift('<strong>查询历史：</strong>');
 			cache.innerHTML = html.join('<br/>');
 			cache.onclick = (event) => { //查询
-				let e = event || window.event;
-				let a = e.target;
+				let a = event.target;
 				if (a.tagName.toLowerCase() == 'a') {
 					let w = a.innerText;
 					if (w) {
