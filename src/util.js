@@ -142,7 +142,7 @@ export const ajax = ( option ) => {
 				var ret = xhr.responseText;
 				if( dataType === 'json'){
 					try{
-						// ret = JSON.parse(ret);
+						ret = JSON.parse(ret); // 添加单词本接口返回内容需要 parse
 					}
 					catch( err ){
 						error( err );
