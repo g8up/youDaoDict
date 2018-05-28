@@ -5,22 +5,8 @@
   "scripts": {
     "dev": "gulp dev",
     "build": "gulp",
-    "dist": "gulp",
     "release": "gulp release"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/g8up/youDaoDict.git"
-  },
-  "keywords": [
-    "有道词典划词扩展"
-  ],
-  "author": "g8up",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/g8up/youDaoDict/issues"
-  },
-  "homepage": "https://github.com/g8up/youDaoDict",
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-preset-env": "^1.6.1",
@@ -37,9 +23,20 @@
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-commonjs": "^9.0.0",
     "rollup-plugin-uglify": "^3.0.0",
-    "rollup-watch": "^4.3.1"
-  },
-  "dependencies": {
+    "rollup-watch": "^4.3.1",
     "uglify-es": "github:mishoo/UglifyJS2#harmony"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/g8up/youDaoDict.git"
+  },
+  "keywords": [
+    "有道词典划词扩展"
+  ],
+  "author": "g8up",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/g8up/youDaoDict/issues"
+  },
+  "homepage": "https://github.com/g8up/youDaoDict"
 }
