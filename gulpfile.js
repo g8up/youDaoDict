@@ -40,7 +40,7 @@ var Asset = {
 var Dist = 'dist/';
 var Release = 'release/';
 
-gulp.task('less', function () {
+var lessIt = function () {
 	return gulp.src(Asset.less)
 		.pipe(less())
 		.pipe(cssmin())
@@ -49,38 +49,45 @@ gulp.task('less', function () {
 			pkg: pkg
 		}))
 		.pipe(gulp.dest(Dist))
-});
+};
 
 // copy static assets
-gulp.task('copy', function () {
+var copy = function () {
 	// 关于 base ：http://stackoverflow.com/questions/25038014/how-do-i-copy-directories-recursively-with-gulp#25038015
 	return gulp
 		.src(Asset.static.concat(Asset.lib ), { base: 'src/' })
 		.pipe(gulp.dest(Dist));
-});
+};
 
-gulp.task('clean', function () {
-	return del([
+var clean = function (cb) {
+	del([
 		Dist + '**/*'
 	]);
-});
+	cb();
+};
 
 var zipFile = pkg.name + '-v' + VERSION + '.zip';
-gulp.task('cleanZip', function () {
+
+var cleanZip = function () {
 	return del([
 		Release + zipFile
 	])
-})
-gulp.task('zip', ['cleanZip', "default"], function () {
+};
+
+exports.lessIt = lessIt;
+exports.copy = copy;
+exports.clean = clean;
+exports.cleanZip = cleanZip;
+
+var zip = gulp.series(cleanZip, function () {
 	return gulp.src(Dist + '**/*')
 		.pipe(zip(zipFile))
 		.pipe(gulp.dest(Release));
 });
 
-gulp.task('watch', ['less', 'copy'], function () {
-	gulp.watch(Asset.less, ['less']);
-	// gulp.watch(Asset.js, ['uglify']);
-	gulp.watch(Asset.static, ['copy']);
+var watch = gulp.series(lessIt, copy, function () {
+	gulp.watch(Asset.less, lessIt);
+	gulp.watch(Asset.static, copy);
 });
 
 const getRollupOption = ({ input, dist }) => {
@@ -145,23 +152,25 @@ const opts = [{
 	dist: 'dist/lookup.js',
 },
 ];
-gulp.task('rollup', function () {
-	opts.forEach(compile);
-});
 
-gulp.task('rollup:w', ['rollup'], function () {
+var rollupIt = function (cb) {
+	opts.forEach(compile);
+	cb();
+};
+
+var rollupW = gulp.series(rollupIt, function () {
 	gulp.watch('./src/**/*.js', function (event) {
 		const dir = event.path;
 		const entry = opts.filter(item => {
 			return path.resolve(item.input) === dir;
 		});
 		if (entry.length) {
-			console.log( entry );
+			console.log(entry);
 			entry.forEach(compile);
 		}
 	});
 });
 
-gulp.task('dev', ["watch", 'rollup:w']);
-gulp.task('default', ["rollup", "less", "copy"]);
-gulp.task('release', ["default", "zip"]);// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('dev', gulp.parallel(watch, rollupW));
+gulp.task('default', gulp.parallel(rollupIt, gulp.series(lessIt, copy, rollupIt)));
+gulp.task('release', gulp.series("default", zip));// 生成发布到 Chrome Web Store 的 zip 文件
