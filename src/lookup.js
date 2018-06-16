@@ -338,7 +338,7 @@ const genTmpl = ()=>{
 		markTagOrigin( tmpl );
 		let cssUrl = chrome.extension.getURL('youdao-crx.css');
 		tmpl.innerHTML = `<style>@import "${cssUrl}"; </style><div id="ydd-content"></div>`; // for panel content
-		body.appendChild( tmpl );
+		// body.appendChild( tmpl );
 		return tmpl;
 	}
 }
