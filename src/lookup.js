@@ -327,20 +327,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) =>{
 });
 
 const genTmpl = ()=>{
-	const TMPL_ID = 'youdaoDictPanel';
-	let tmpl = document.querySelector(`template#${TMPL_ID}` );
-	if( tmpl ){
-		return tmpl;
-	}
-	else{
-		tmpl = document.createElement('template');
-		tmpl.id = TMPL_ID;
-		markTagOrigin( tmpl );
-		let cssUrl = chrome.extension.getURL('youdao-crx.css');
-		tmpl.innerHTML = `<style>@import "${cssUrl}"; </style><div id="ydd-content"></div>`; // for panel content
-		// body.appendChild( tmpl );
-		return tmpl;
-	}
+	const tmpl = document.createElement('template');
+	markTagOrigin( tmpl );
+	let cssUrl = chrome.extension.getURL('youdao-crx.css');
+	tmpl.innerHTML = `<style>@import "${cssUrl}"; </style>
+			<div id="ydd-content">
+		</div>`; // for panel content
+	return tmpl;
 }
 /**
  * 给插入的节点做标识，以免 web page 的开发者迷惑。
