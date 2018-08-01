@@ -137,7 +137,7 @@ const compile = (opt) => {
 	rollup.rollup(config.read).then(bundle => {
 		bundle.write(config.write);
 	}, (err) => {
-		console.log(err);
+		console.log(err.SyntaxError);
 	}).catch(err => console.log(err));
 };
 
@@ -170,7 +170,7 @@ var rollupW = gulp.series(rollupIt, function () {
 		}
 	});
 });
-
+gulp.task('js', gulp.series(rollupIt));
 gulp.task('dev', gulp.parallel(watch, rollupW));
-gulp.task('default', gulp.parallel(rollupIt, gulp.series(lessIt, copy, rollupIt)));
-gulp.task('release', gulp.series("default", zip));// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy)));
+gulp.task('release', gulp.series('default', zip));// 生成发布到 Chrome Web Store 的 zip 文件
