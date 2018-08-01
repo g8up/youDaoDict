@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "gulp dev",
     "build": "gulp",
+    "js": "gulp js",
     "release": "gulp release"
   },
   "devDependencies": {
