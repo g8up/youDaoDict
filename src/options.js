@@ -7,6 +7,9 @@ import {
 	addToNote,
 	playAudio,
 } from './util';
+import{
+	fetchWordOnline,
+} from './http';
 let Options = null;
 let retphrase = '';
 let noBaseTrans = false;
@@ -82,6 +85,13 @@ const translateXML = (xmlnode) => {
 let _word;
 
 const mainQuery = (word, callback) => {
+  return fetchWordOnline(word).then((ret)=>{
+			_word = word;
+			let dataText = translateXML(ret);
+    if (dataText != null) {
+			callback(dataText);
+    }
+  });
 	if (word !== '') {
 		_word = word.trim();
 		ajax({

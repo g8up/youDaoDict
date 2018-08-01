@@ -124,43 +124,42 @@ function qs( json ){
 	}).join('&');
 }
 
-var noop = function(){}
-
 export const ajax = ( option ) => {
-	var url = option.url;
-	var type = option.type || 'GET';
-	var dataType = (option.dataType || '').toLowerCase();
-	var data = option.data;
-	var success = option.success || noop;
-	var error = option.error || noop;
+	return new Promise( (resolve, reject)=>{
+		let url = option.url;
+		const type = option.type || 'GET';
+		const dataType = (option.dataType || '').toLowerCase();
+		const data = option.data;
 
-	var xhr = new XMLHttpRequest();
+		const xhr = new XMLHttpRequest();
 
-	xhr.onreadystatechange = function (data) {
-		if (xhr.readyState == 4) {
-			if (xhr.status == 200) {
-				var ret = xhr.responseText;
-				if( dataType === 'json'){
-					try{
-						ret = JSON.parse(ret); // 添加单词本接口返回内容需要 parse
+		xhr.onreadystatechange = (data) => {
+			if (xhr.readyState === 4) {
+				if (xhr.status === 200) {
+					let ret = xhr.responseText;
+					if( dataType === 'json'){
+						try{
+							ret = JSON.parse(ret); // 添加单词本接口返回内容需要 parse
+						}
+						catch( err ){
+							reject( err );
+							return;
+						}
 					}
-					catch( err ){
-						error( err );
+					else if (dataType === 'xml' ){
+						ret = xhr.responseXML;
 					}
+					resolve( ret );
 				}
-				else if (dataType === 'xml' ){
-					ret = xhr.responseXML;
-				}
-				success( ret );
 			}
+		};
+
+		const queryString = qs(data);
+		if( type === 'GET' ){
+			url += '?' + queryString;
 		}
-	};
 
-	var queryString = qs(data);
-	if( type === 'GET' ){
-		url += '?' + queryString;
-	}
-
-	xhr.open(type, url, true);
-	xhr.send(type === 'GET' ? null : queryString);
-}
+		xhr.open(type, url, true);
+		xhr.send(type === 'GET' ? null : queryString);
+	});
+};

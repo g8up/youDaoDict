@@ -3,8 +3,14 @@ import { OPTION_STORAGE_ITEM } from './config'
 import {
 	isContainKoera,
 	isContainJapanese,
-	ajax,
-} from './util'
+} from './util';
+import{
+	addWord,
+	fetchWordOnline,
+	fetchTranslate,
+} from './http';
+import Render from './render'
+
 const setting = new Setting();
 let Options = null;
 setting.get().then( data =>{
@@ -27,7 +33,7 @@ chrome.storage.onChanged.addListener((changes, areaName) =>{
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-	let action = request.action;
+	const {action} = request;
 	switch ( action) {
 		case 'getOption':
 			setting.get().then( data =>{
@@ -38,11 +44,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			return true;
 			break;
 		case 'dict':
-			fetchWordOnline(request.word, sendResponse);
+			fetchWordOnline(request.word).then(ret=>{
+				const dataText = translateXML(ret);
+				if (dataText != null){
+					sendResponse(dataText);
+				}
+			});
 			return true;
 			break;
 		case 'translate':
-			fetchTranslate(request.word, sendResponse);
+			fetchTranslate(request.word).then(ret=>{
+				let dataText = translateTransXML(ret);
+				if (dataText != null){
+					sendResponse({
+						data: dataText
+					});
+				}
+			});
 			return true;
 			break;
 		case 'speech':
@@ -52,11 +70,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			loginYoudao();
 			break;
 		case 'youdao-add-word':
-			let word = request.word;
-			addWord( word , () =>{
+			const word = request.word;
+			addWord( word ).then( () =>{
 				popBadgeTips('OK', 'green');
 				sendResponse();
-			}, function(){
+			}, () => {
 				loginYoudao();
 			});
 			return true;
@@ -65,53 +83,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 			break;
 	}
 });
-// 页面中弹出的的面板
-const genTable = (word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, webTrans) => {
-	let lan = '';
-	if (isContainKoera(word)) {
-		lan = "&le=ko";
-	}
-	if (isContainJapanese(word)) {
-		lan = "&le=jap";
-	}
-	let fmt = '';
-	let searchUrlPrefix = ( noBaseTrans && noWebTrans ) ? 'http://www.youdao.com/search?keyfrom=chrome.extension&ue=utf8'
-		: 'http://dict.youdao.com/search?keyfrom=chrome.extension';
-	let searchUrl = searchUrlPrefix + '&q=' + encodeURIComponent(word) + lan;
-
-	fmt = `<div id="yddContainer">
-				  <div class="yddTop" class="ydd-sp">
-					<div class="yddTopBorderlr">
-						<a class="yddKeyTitle" href="${searchUrl}" target=_blank title="查看完整释义">${word}</a>
-						<span class="ydd-phonetic" style="font-size:10px;">${strpho}</span>
-						<span class="ydd-voice">${speach}</span>
-						<a class="ydd-detail" href="http://www.youdao.com/search?q=${encodeURIComponent(word)}&ue=utf8&keyfrom=chrome.extension" target=_blank>详细</a>
-						<a class="ydd-detail" href="#" id="addToNote" title="添加到单词本">+</a>
-						<a class="ydd-close" href="javascript:void(0);">&times;</a>
-					</div>
-				</div>
-				<div class="yddMiddle">`;
-
-	if (noBaseTrans && noWebTrans) {
-		fmt += `&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="${searchUrl}" target=_blank>请尝试网页搜索</a>`;
-	}else {
-		fmt += ( noBaseTrans == false ? renderTransDetail( '基本翻译', baseTrans) : '');
-		fmt += ( noWebTrans == false ? renderTransDetail( '网络释义', webTrans) : '');
-	}
-	fmt += `</div></div>`;
-	return fmt;
-}
-
-const renderTransDetail = (title, body) => {
-	return `<div class="ydd-trans-wrapper">
-			<div class="ydd-tabs">
-				<span class="ydd-tab">
-					${title}
-				</span>
-			</div>
-			${body}
-		</div>`;
-}
 
 //解析返回的查询结果
 const translateXML = (xmlnode) =>{
@@ -174,7 +145,7 @@ const translateXML = (xmlnode) =>{
 		}
 
 	}
-	return genTable( title, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
+	return Render.table( title, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
 }
 
 const translateTransXML = (xmlnode) =>{
@@ -217,57 +188,6 @@ const translateTransXML = (xmlnode) =>{
       </div>
     </div>`;
 	return res;
-}
-
-const fetchWordOnline = (word, callback) =>{
-	ajax({
-		url: 'http://dict.youdao.com/fsearch',
-		data: {
-			client: 'deskdict',
-			keyfrom: 'chrome.extension',
-			xmlVersion: '3.2',
-			dogVersion: '1.0',
-			ue: 'utf8',
-			q: word,
-			doctype: 'xml',
-			pos: '-1',
-			vendor: 'unknown',
-			appVer: '3.1.17.4208',
-			le: isContainKoera(word) ? 'ko' : 'eng'
-		},
-		dataType: 'xml',
-		success: (ret) =>{
-			let dataText = translateXML(ret);
-			if (dataText != null){
-				callback(dataText);
-			}
-		}
-	});
-}
-
-// 查询英文之外的语言
-const fetchTranslate = (words, callback) =>{
-	ajax({
-		url: 'http://fanyi.youdao.com/translate',
-		data:{
-			client: 'deskdict',
-			keyfrom: 'chrome.extension',
-			xmlVersion: '1.1',
-			dogVersion: '1.0',
-			ue: 'utf8',
-			i: words,
-			doctype: 'xml'
-		},
-		dataType: 'xml',
-		success: (ret) => {
-			let dataText = translateTransXML(ret);
-			if (dataText != null){
-				callback({
-					data: dataText
-				});
-			}
-		}
-	});
 }
 
 /**
@@ -321,28 +241,6 @@ const loginYoudao = () => {
 	});
 }
 
-let YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax';
-
-const addWord = (word, success, fail) => {
-	ajax({
-		url: YouDaoAddWordUrl,
-		data:{
-			action: 'addword',
-			le: 'eng',
-			q: word,
-		},
-		dataType: 'json',
-		success: (ret) => {
-			let msg = ret.message;
-			if (msg === "adddone") {
-				success && success();
-			}
-			else if (msg === 'nouser') {
-				fail && fail();
-			}
-		},
-	});
-}
 
 const setBadge = (text , color) => {
 	chrome.browserAction.setBadgeText({text: text});
