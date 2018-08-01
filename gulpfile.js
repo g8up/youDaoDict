@@ -100,7 +100,6 @@ const getRollupOption = ({ input, dist }) => {
 	return {
 		read: {
 			input: input,
-			// sourceMap: 'inline',
 			output:{
 				globals: {
 					// chrome: 'chrome'
@@ -127,6 +126,7 @@ const getRollupOption = ({ input, dist }) => {
 			file: dist,
 			format: 'cjs',
 			banner,
+			// sourcemap: true,
 		}
 	}
 };
