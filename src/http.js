@@ -47,11 +47,10 @@ export const fetchWordOnline = (word) =>{
 	return ajax({
 		url: 'http://dict.youdao.com/fsearch',
 		dataType: 'xml',
-		data: {
+		data: Object.assign({
 			q: word,
       le: isContainKoera(word) ? 'ko' : 'eng',
-      ...CommonParams,
-		},
+		}, CommonParams),
 	});
 };
 
@@ -62,10 +61,9 @@ export const fetchWordOnline = (word) =>{
 export const fetchTranslate = (words) =>{
 	return ajax({
 		url: 'http://fanyi.youdao.com/translate',
-		data:{
+		data: Object.assign({
 			i: words,
-      ...CommonParams,
-		},
+		}, CommonParams),
 		dataType: 'xml',
 	});
 };

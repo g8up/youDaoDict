@@ -92,31 +92,6 @@ const mainQuery = (word, callback) => {
 			callback(dataText);
     }
   });
-	if (word !== '') {
-		_word = word.trim();
-		ajax({
-			url: 'http://dict.youdao.com/fsearch',
-			dataType: 'xml',
-			data:{
-				client: 'deskdict',
-				keyfrom: 'chrome.extension.g8up',
-				q: _word,
-				pos: -1,
-				doctype: 'xml',
-				xmlVersion: '3.2',
-				dogVersion: '1.0',
-				vendor: 'g8up',
-				appVer: '3.1.17.4208',
-				le: 'eng'
-			},
-			success(ret) {
-				let dataText = translateXML(ret);
-				if (dataText != null) {
-					callback(dataText);
-				}
-			}
-		});
-	}
 }
 
 const buildSearchResult = ({ basetrans, webtrans }) => {

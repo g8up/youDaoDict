@@ -20,6 +20,7 @@ var banner = [
 	' * <%= pkg.name %> - <%= pkg.description %>',
 	' * @version v<%= VERSION %>',
 	' * @author <%= pkg.author %>',
+	' * @date <%= new Date() %>',
 	' */',
 	''
 ].join('\n');
@@ -96,6 +97,7 @@ const getRollupOption = ({ input, dist }) => {
  * ${ manifest.name } - ${ pkg.description }
  * @version v${ VERSION }
  * @author ${ pkg.author }
+ * @date ${ new Date() }
  */`.trim();
 	return {
 		read: {
@@ -137,7 +139,7 @@ const compile = (opt) => {
 	rollup.rollup(config.read).then(bundle => {
 		bundle.write(config.write);
 	}, (err) => {
-		console.log(err.SyntaxError);
+		console.log(err);
 	}).catch(err => console.log(err));
 };
 
@@ -171,6 +173,6 @@ var rollupW = gulp.series(rollupIt, function () {
 	});
 });
 gulp.task('js', gulp.series(rollupIt));
-gulp.task('dev', gulp.parallel(watch, rollupW));
+gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupW) ) );
 gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy)));
 gulp.task('release', gulp.series('default', zip));// 生成发布到 Chrome Web Store 的 zip 文件
