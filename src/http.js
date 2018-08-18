@@ -1,6 +1,6 @@
 import {
-	isContainKoera,
-	ajax,
+  isContainKoera,
+  ajax,
 } from './util';
 
 const CommonParams = {
@@ -22,14 +22,14 @@ const YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax';
  */
 export const addWord = (word) => {
   return ajax({
-		url: YouDaoAddWordUrl,
-		data:{
-			q: word,
-			action: 'addword',
-			le: 'eng',
-		},
-		dataType: 'json',
-	}).then((ret) => {
+    url: YouDaoAddWordUrl,
+    data:{
+      q: word,
+      action: 'addword',
+      le: 'eng',
+    },
+    dataType: 'json',
+  }).then((ret) => {
     let msg = ret.message;
     if (msg === "adddone") {
       Promise.resolve();
@@ -44,14 +44,14 @@ export const fetchWordOnline = (word) =>{
   if( word === ''){
     return Promise.reject();
   }
-	return ajax({
-		url: 'http://dict.youdao.com/fsearch',
-		dataType: 'xml',
-		data: Object.assign({
-			q: word,
+  return ajax({
+    url: 'http://dict.youdao.com/fsearch',
+    dataType: 'xml',
+    data: Object.assign({
+      q: word,
       le: isContainKoera(word) ? 'ko' : 'eng',
-		}, CommonParams),
-	});
+    }, CommonParams),
+  });
 };
 
 /**
@@ -59,11 +59,11 @@ export const fetchWordOnline = (word) =>{
  * @param {String} words
  */
 export const fetchTranslate = (words) =>{
-	return ajax({
-		url: 'http://fanyi.youdao.com/translate',
-		data: Object.assign({
-			i: words,
-		}, CommonParams),
-		dataType: 'xml',
-	});
+  return ajax({
+    url: 'http://fanyi.youdao.com/translate',
+    data: Object.assign({
+      i: words,
+    }, CommonParams),
+    dataType: 'xml',
+  });
 };
