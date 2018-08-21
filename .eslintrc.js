@@ -1,4 +1,4 @@
-{
+module.exports = {
   // http://eslint.org/docs/rules/
 
   "env": {
@@ -41,7 +41,7 @@
     "no-extend-native": 2,      // disallow adding to native types
     "no-new-wrappers": 2,       // disallows creating new instances of String, Number, and Boolean
     "no-with": 2,               // disallow use of the with statement
-
+    'indent': 'warn',
 
     // Strict Mode
 
@@ -64,7 +64,6 @@
 
 
     // ECMAScript 6
-
 
     // Legacy
     "max-len": [1, 80, 2] // specify the maximum length of a line in your program (off by default)
