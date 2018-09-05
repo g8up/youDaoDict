@@ -296,7 +296,7 @@ const addContentEvent = (content )=>{
 
 const getYoudaoDict = (word, next) => {
   chrome.runtime.sendMessage({
-    'action': 'dict',
+    'action': 'select-to-search',
     'word': word
   }, (data) => {
     next && next(data);

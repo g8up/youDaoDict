@@ -1,71 +1,89 @@
+// http://eslint.org/docs/user-guide/configuring
+
 module.exports = {
-  // http://eslint.org/docs/rules/
-
-  "env": {
-    "browser": true,      // browser global variables.
-    "node": false,        // Node.js global variables and Node.js-specific rules.
-    "worker": false,      // web workers global variables.
-    "amd": false,         // defines require() and define() as global variables as per the amd spec.
-    "mocha": false,       // adds all of the Mocha testing global variables.
-    "jasmine": false,     // adds all of the Jasmine testing global variables for version 1.3 and 2.0.
-    "phantomjs": false,   // phantomjs global variables.
-    "jquery": false,      // jquery global variables.
-    "prototypejs": false, // prototypejs global variables.
-    "shelljs": false,     // shelljs global variables.
-    "meteor": false,      // meteor global variables.
-    "mongo": false,       // mongo global variables.
-    "applescript": false, // applescript global variables.
-    "es6": true,         // enable all ECMAScript 6 features except for modules.
+  root: true,
+  parser: 'babel-eslint',
+  parserOptions: {
+    sourceType: 'module'
   },
-
-  "globals": {
-    "chrome": true
+  env: {
+    browser: true,
   },
-  "parserOptions": {
-    "sourceType": "module",
-  },
-  "plugins": [
-    // e.g. "react" (must run `npm install eslint-plugin-react` first)
+  extends: ['airbnb-base'],
+  plugins: [
+    'vue', 'html'
   ],
+  // check if imports actually resolve
+  'settings': {
+    'import/resolver': {
+      'webpack': {
+        'config': 'build/webpack.base.conf.js'
+      }
+    },
+    'import/extensions': ['.js', '.es', '.jsx'],
+  },
+  'rules': {
+    /* Waimai-BP-javascript-style-guide Custom Rules */
+    // don't require .vue extension when importing
+    'import/extensions': ['error', 'always', {
+      'js': 'never',
+      'es': 'never',
+      'jsx': 'never'
+    }],
 
-  "rules": {
+    // class-methods-use-this, https://eslint.org/docs/rules/class-methods-use-this
+    'class-methods-use-this': 'off',
 
-    // Possible Errors
-    "no-extra-semi": 1,            // disallow unnecessary semicolons
-    "no-inner-declarations": 2,    // disallow function or variable declarations in nested blocks
+    // allow debugger during development
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+
+    // suggest using template literals instead of string concatenation
+    // http://eslint.org/docs/rules/prefer-template
+    'prefer-template': 'warn',
+
+    // disallow unnecessary string escaping
+    // http://eslint.org/docs/rules/no-useless-escape
+    'no-useless-escape': 'off',
 
 
-    // Best Practices
-    "curly": 2,                 // specify curly brace conventions for all control statements
-    "no-eval": 2,               // disallow use of eval()
-    "no-extend-native": 2,      // disallow adding to native types
-    "no-new-wrappers": 2,       // disallows creating new instances of String, Number, and Boolean
-    "no-with": 2,               // disallow use of the with statement
+    // use rest parameters instead of arguments
+    // http://eslint.org/docs/rules/prefer-rest-params
+    'prefer-rest-params': 'off',
+
+    // suggest using the spread operator instead of .apply()
+    // http://eslint.org/docs/rules/prefer-spread
+    'prefer-spread': 'warn',
+
+    // disallow arrow functions where they could be confused with comparisons
+    // http://eslint.org/docs/rules/no-confusing-arrow
+    'no-confusing-arrow': 'off',
+
+    // disallow use of unary operators, ++ and --
+    // http://eslint.org/docs/rules/no-plusplus
+    'no-plusplus': 'off',
+
+    // disallow dangling underscores in identifiers
+    'no-underscore-dangle': ['warn', {
+      allowAfterThis: false
+    }],
+
+    // enforce one true brace style
+    'brace-style': ['error', 'stroustrup', {
+      allowSingleLine: false
+    }],
+
+    // encourages use of dot notation whenever possible
+    'dot-notation': ['warn', {
+      allowKeywords: true
+    }],
+    // 推荐解构赋值
+    // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
+    'prefer-destructuring': 'warn',
+    'no-console': 'off',
     'indent': 'warn',
-
-    // Strict Mode
-
-
-    // Variables
-    "no-undef": 2,                   // disallow use of undeclared variables unless mentioned in a /*global */ block
-
-
-    // Node.js
-
-
-    // Stylistic Issues
-    "array-bracket-spacing": [2, "never"], // enforce spacing inside array brackets (off by default)
-    "indent": [2, 2],                      // this option sets a specific tab width for your code (off by default)
-    "no-array-constructor": 2,             // disallow use of the Array constructor
-    "no-mixed-spaces-and-tabs": 2,         // disallow mixed spaces and tabs for indentation
-    "no-new-object": 2,                    // disallow use of the Object constructor
-    "object-curly-spacing": [2, "never"],  // require or disallow padding inside curly braces (off by default)
-    "semi": 2,                             // require or disallow use of semicolons instead of ASI
-
-
-    // ECMAScript 6
-
-    // Legacy
-    "max-len": [1, 80, 2] // specify the maximum length of a line in your program (off by default)
+    'function-paren-newline': 'warn',
+    'object-curly-newline': 'off',
+    'camelcase': 'off',
+    'no-new': 'off',
   }
 }

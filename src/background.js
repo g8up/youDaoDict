@@ -1,11 +1,13 @@
 import Setting from './util/setting';
-import {OPTION_STORAGE_ITEM} from './config';
+import {
+  OPTION_STORAGE_ITEM,
+} from './config';
 import {
   isContainKoera,
   isContainJapanese,
   isContainChinese,
 } from './util';
-import{
+import {
   addWord,
   fetchWordOnline,
   fetchTranslate,
@@ -14,97 +16,100 @@ import Render from './render';
 
 const setting = new Setting();
 let Options = null;
-setting.get().then( data =>{
+setting.get().then(data => {
   Options = data;
 });
 
-chrome.storage.onChanged.addListener((changes, areaName) =>{
-  if (areaName !== 'sync'){
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName !== 'sync') {
     return;
   }
   for (let key in changes) {
-    if( key === OPTION_STORAGE_ITEM ){
+    if (key === OPTION_STORAGE_ITEM) {
       let storageChange = changes[key];
       Object.assign(Options, storageChange.newValue);
       console.log(Options);
-      publishOptionChangeToTabs( Options );
+      publishOptionChangeToTabs(Options);
       break;
     }
   }
 });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  const {action} = request;
-  switch ( action) {
-  case 'getOption':
-    setting.get().then( data =>{
-      sendResponse({
-        option: data
-      });
-    });
-    return true;
-    break;
-  case 'dict':
-    fetchWordOnline(request.word).then(ret=>{
-      const dataText = translateXML(ret);
-      if (dataText != null){
-        sendResponse(dataText);
-      }
-    });
-    return true;
-    break;
-  case 'translate':
-    fetchTranslate(request.word).then(ret=>{
-      let dataText = translateTransXML(ret);
-      if (dataText != null){
+  const {
+    action
+  } = request;
+  switch (action) {
+    case 'getOption':
+      setting.get().then(data => {
         sendResponse({
-          data: dataText
+          option: data
         });
-      }
-    });
-    return true;
-    break;
-  case 'speech':
-    playAudio( request.word );
-    break;
-  case 'login-youdao':
-    loginYoudao();
-    break;
-  case 'youdao-add-word':
-    const word = request.word;
-    addWord( word ).then( () =>{
-      popBadgeTips('OK', 'green');
-      sendResponse();
-    }, () => {
+      });
+      return true;
+      break;
+    case 'select-to-search':
+      fetchWordOnline(request.word).then(ret => {
+        const dataText = translateXML(ret);
+        if (dataText != null) {
+          sendResponse(dataText);
+        }
+      });
+      return true;
+      break;
+    case 'translate':
+      fetchTranslate(request.word).then(ret => {
+        let dataText = translateTransXML(ret);
+        if (dataText != null) {
+          sendResponse({
+            data: dataText
+          });
+        }
+      });
+      return true;
+      break;
+    case 'speech':
+      playAudio(request.word);
+      break;
+    case 'login-youdao':
       loginYoudao();
-    });
-    return true;
-    break;
-  default: sendResponse();
-    break;
+      break;
+    case 'youdao-add-word':
+      const word = request.word;
+      addWord(word).then(() => {
+        popBadgeTips('OK', 'green');
+        sendResponse();
+      }, () => {
+        loginYoudao();
+      });
+      return true;
+      break;
+    default:
+      sendResponse();
+      break;
   }
 });
 
 //解析返回的查询结果
-const translateXML = (xmlnode) =>{
+const translateXML = (xmlnode) => {
   let noBaseTrans = false;
   let noWebTrans = false;
   let translate = "<strong>查询:</strong><br/>";
   let root = xmlnode.getElementsByTagName("yodaodict")[0];
 
   let retrieveDataMap = {
-    'phrase': 'return-phrase',// 查询的单词、短语
-    'speach': 'dictcn-speach',// 发音
+    'phrase': 'return-phrase', // 查询的单词、短语
+    'speach': 'dictcn-speach', // 发音
     'lang': 'lang',
     'phonetic': 'phonetic-symbol'
   };
   let params = {};
-  for(let key in retrieveDataMap){
+  for (let key in retrieveDataMap) {
     let node = retrieveDataMap[key];
     node = root.getElementsByTagName(node);
-    if( node.length ){
+    if (node.length) {
       let el = node[0].childNodes[0];
-      if ( el != "undefined") {
+      if (el != "undefined") {
         params[key] = el.nodeValue;
         continue;
       }
@@ -114,13 +119,13 @@ const translateXML = (xmlnode) =>{
 
   let title = params.phrase;
 
-  if( params.phonetic ){
+  if (params.phonetic) {
     params.phonetic = "[" + params.phonetic + "]";
   }
 
   let basetrans = "";
   let $translations = root.getElementsByTagName("translation");
-  if ( !$translations.length ) {
+  if (!$translations.length) {
     noBaseTrans = true;
   } else if (typeof $translations[0].childNodes[0] == "undefined") {
     noBaseTrans = true;
@@ -133,11 +138,11 @@ const translateXML = (xmlnode) =>{
 
   let webtrans = "";
   let $webtranslations = root.getElementsByTagName("web-translation");
-  if ( !$webtranslations.length ) {
+  if (!$webtranslations.length) {
     noWebTrans = true;
-  }else if (typeof $webtranslations[0].childNodes[0] == "undefined") {
+  } else if (typeof $webtranslations[0].childNodes[0] == "undefined") {
     noWebTrans = true;
-  }else{
+  } else {
     for (let i = 0; i < $webtranslations.length; i++) {
       let key = $webtranslations[i].getElementsByTagName("key")[0].childNodes[0].nodeValue;
       let val = $webtranslations[i].getElementsByTagName("trans")[0].getElementsByTagName("value")[0].childNodes[0].nodeValue;
@@ -146,12 +151,12 @@ const translateXML = (xmlnode) =>{
     }
 
   }
-  return Render.table( title, params.speach, params.phonetic,  noBaseTrans, noWebTrans, basetrans, webtrans);
+  return Render.table(title, params.speach, params.phonetic, noBaseTrans, noWebTrans, basetrans, webtrans);
 };
 
 let trans_str_tmp;
 let input_str_tmp;
-const translateTransXML = (xmlnode) =>{
+const translateTransXML = (xmlnode) => {
   let s = xmlnode.indexOf("CDATA[");
   let e = xmlnode.indexOf("]]");
   let input_str = xmlnode.substring(s + 6, e);
@@ -196,10 +201,10 @@ const translateTransXML = (xmlnode) =>{
 /**
  * 将配置更新通知已经打开的 Tab
  */
-const publishOptionChangeToTabs = (Options) =>{
+const publishOptionChangeToTabs = (Options) => {
   chrome.tabs.query({
     status: "complete"
-  }, (tabs) =>{
+  }, (tabs) => {
     if (tabs.length) {
       tabs.forEach((tab) => {
         chrome.tabs.sendMessage(tab.id, {
@@ -226,20 +231,24 @@ const YouDaoLoginUrl = "http://dict.youdao.com/wordbook/wordlist";
 const loginYoudao = () => {
   chrome.tabs.create({
     url: YouDaoLoginUrl,
-  }, ( win ) =>{});
+  }, (win) => {});
 };
 
 
-const setBadge = (text , color) => {
-  chrome.browserAction.setBadgeText({text: text});
-  color && chrome.browserAction.setBadgeBackgroundColor({color: color});
+const setBadge = (text, color) => {
+  chrome.browserAction.setBadgeText({
+    text: text
+  });
+  color && chrome.browserAction.setBadgeBackgroundColor({
+    color: color
+  });
 };
 
-const hideBadge = () =>{
+const hideBadge = () => {
   setBadge('', '');
 };
 
 const popBadgeTips = (text, color) => {
-  setBadge( text + '', color);
-  setTimeout( hideBadge, 3e3);
+  setBadge(text + '', color);
+  setTimeout(hideBadge, 3e3);
 };
