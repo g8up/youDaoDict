@@ -3,7 +3,7 @@
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/d/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg?maxAge=2592000)
 
-![image](http://ww1.sinaimg.cn/mw1024/3eea7a48jw1et5qn33gzaj208x0cs75k.jpg)
+<img src="https://user-images.githubusercontent.com/8005686/45733856-d133c980-bc14-11e8-8d80-187278297ffa.png" width="400"/>
 
 [在线安装](https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil "Chrome Web Store")
 
