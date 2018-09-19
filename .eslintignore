@@ -1,4 +1,4 @@
-node_modules
-dist
-src/lib
-.vscode
+node_modules/
+dist/
+src/lib/
+.vscode/

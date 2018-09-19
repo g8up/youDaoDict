@@ -80,12 +80,6 @@ exports.copy = copy;
 exports.clean = clean;
 exports.cleanZip = cleanZip;
 
-var zip = gulp.series(cleanZip, function () {
-	return gulp.src(Dist + '**/*')
-		.pipe(zip(zipFile))
-		.pipe(gulp.dest(Release));
-});
-
 var watch = gulp.series(lessIt, copy, function () {
 	gulp.watch(Asset.less, lessIt);
 	gulp.watch(Asset.static, copy);
@@ -172,7 +166,13 @@ var rollupW = gulp.series(rollupIt, function () {
 		}
 	});
 });
+
 gulp.task('js', gulp.series(rollupIt));
 gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupW) ) );
 gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy)));
-gulp.task('release', gulp.series('default', zip));// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('zip', gulp.series(cleanZip, function () {
+	return gulp.src(Dist + '**/*')
+		.pipe(zip(zipFile))
+		.pipe(gulp.dest(Release));
+}));
+gulp.task('release', gulp.series('default', 'zip'));// 生成发布到 Chrome Web Store 的 zip 文件

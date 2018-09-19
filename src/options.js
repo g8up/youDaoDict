@@ -3,13 +3,13 @@ import {
 	queryString,
 	isContainKoera,
 	isContainJapanese,
-	ajax,
 	addToNote,
 	playAudio,
 } from './util';
 import{
 	fetchWordOnline,
 } from './http';
+
 let Options = null;
 let retphrase = '';
 let noBaseTrans = false;
