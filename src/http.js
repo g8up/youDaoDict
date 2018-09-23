@@ -20,28 +20,25 @@ const YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax';
  * 添加到单词本
  * @param {String} word
  */
-export const addWord = (word) => {
-  return ajax({
-    url: YouDaoAddWordUrl,
-    data:{
-      q: word,
-      action: 'addword',
-      le: 'eng',
-    },
-    dataType: 'json',
-  }).then((ret) => {
-    let msg = ret.message;
-    if (msg === "adddone") {
-      Promise.resolve();
-    }
-    else if (msg === 'nouser') {
-      Promise.reject();
-    }
-  });
-};
+export const addWord = word => ajax({
+  url: YouDaoAddWordUrl,
+  data: {
+    q: word,
+    action: 'addword',
+    le: 'eng',
+  },
+  dataType: 'json',
+}).then((ret) => {
+  const msg = ret.message;
+  if (msg === 'adddone') {
+    Promise.resolve();
+  } else if (msg === 'nouser') {
+    Promise.reject();
+  }
+});
 
-export const fetchWordOnline = (word) =>{
-  if( word === ''){
+export const fetchWordOnline = (word) => {
+  if (word === '') {
     return Promise.reject();
   }
   return ajax({
@@ -58,12 +55,10 @@ export const fetchWordOnline = (word) =>{
  * 查询英文之外的语言
  * @param {String} words
  */
-export const fetchTranslate = (words) =>{
-  return ajax({
-    url: 'http://fanyi.youdao.com/translate',
-    data: Object.assign({
-      i: words,
-    }, CommonParams),
-    dataType: 'xml',
-  });
-};
+export const fetchTranslate = words => ajax({
+  url: 'http://fanyi.youdao.com/translate',
+  data: Object.assign({
+    i: words,
+  }, CommonParams),
+  dataType: 'xml',
+});

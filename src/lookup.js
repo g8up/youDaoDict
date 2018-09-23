@@ -63,7 +63,8 @@ const onSelectToTrans = debounce((e) => {
         createPopUpEx(data, xx, yy, sx, sy);
       });
     }
-  } else if ((!hasChinese && spaceCount(word) >= 3)
+  }
+  else if ((!hasChinese && spaceCount(word) >= 3)
   || (hasChinese && word.length > 4)
   || hasJapanese && word.length > 4) {
     getYoudaoTrans(word, function (data) {
