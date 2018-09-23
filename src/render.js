@@ -30,7 +30,7 @@ export const table = (word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, 
           <div class="yddTop" class="ydd-sp">
           <div class="yddTopBorderlr">
             <a class="yddKeyTitle" href="${searchUrl}" target=_blank title="查看完整释义">${word}</a>
-            <span class="ydd-phonetic" style="font-size:10px;">${strpho}</span>
+            <span class="ydd-phonetic">${strpho}</span>
             <span class="ydd-voice">${speach}</span>
             <a class="ydd-detail" href="${searchUrl}" target=_blank>详细</a>
             <a class="ydd-detail" href="#" id="addToNote" title="添加到单词本">+</a>
@@ -38,12 +38,13 @@ export const table = (word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, 
           </div>
         </div>
         <div class="yddMiddle">`;
-
-  if (noBaseTrans && noWebTrans) {
+  if (!noBaseTrans) {
+    fmt += renderTransDetail('基本翻译', baseTrans);
+  }
+  if (!noWebTrans) {
+    renderTransDetail('网络释义', webTrans);
+  } else if (noBaseTrans && noWebTrans) {
     fmt += `&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="${searchUrl}" target=_blank>请尝试网页搜索</a>`;
-  } else {
-    fmt += (noBaseTrans === false ? renderTransDetail('基本翻译', baseTrans) : '');
-    fmt += (noWebTrans === false ? renderTransDetail('网络释义', webTrans) : '');
   }
   fmt += '</div></div>';
   return fmt;

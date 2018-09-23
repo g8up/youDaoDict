@@ -76,9 +76,10 @@ const translateXML = (xmlnode) => {
       const el = node[0].childNodes[0];
       if (el !== 'undefined') {
         params[key] = el.nodeValue;
+      } else {
+        params[key] = '';
       }
     }
-    params[key] = '';
   });
   const title = params.phrase;
 
@@ -109,8 +110,10 @@ const translateXML = (xmlnode) => {
     for (let i = 0; i < $webtranslations.length; i += 1) {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
       const val = $webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue;
-      webtrans += `<div class="ydd-trans-container"><a href="http://dict.youdao.com/search?q=${encodeURIComponent(key)}&keyfrom=chrome.extension&le=${params.lang}" target=_blank>${key}:</a>`;
-      webtrans += `${val}<br /></div>`;
+      webtrans += `<div class="ydd-trans-container">
+          <a href="http://dict.youdao.com/search?q=${encodeURIComponent(key)}&le=${params.lang}&keyfrom=chrome.extension" target=_blank>${key}:</a>
+            ${val}<br />
+          </div>`;
     }
   }
   return table(title, params.speach, params.phonetic, noBaseTrans,
@@ -141,7 +144,7 @@ const translateTransXML = (xmlnode) => {
   const res = `<div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
-          <a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(inputStr)}&keyfrom=chrome" target=_blank">有道词典</a>
+          <a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(inputStr)}&keyfrom=chrome.extension" target=_blank">有道词典</a>
           <span>${inputStrTmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')}</span>
           <a href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(inputStr)}&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>
@@ -163,11 +166,19 @@ const translateTransXML = (xmlnode) => {
   return res;
 };
 
+const AUDIO = document.createElement('audio');
+const getAudio = (word) => {
+  if (AUDIO.title !== word) {
+    const audioUrl = `http://dict.youdao.com/speech?audio=${word}`;
+    AUDIO.src = audioUrl;
+    AUDIO.title = word;
+  }
+  return AUDIO;
+};
+
 const playAudio = (word) => {
-  const audioUrl = `http://dict.youdao.com/speech?audio=${word}`;
-  const audio = document.createElement('audio');
-  audio.autoplay = true;
-  audio.src = audioUrl;
+  const audio = getAudio(word);
+  audio.play();
 };
 
 // let YouDaoLoginUrl = "http://account.youdao.com/login";
@@ -200,7 +211,6 @@ const popBadgeTips = (text, color) => {
   setBadge(`${text}`, color);
   setTimeout(hideBadge, 3e3);
 };
-
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const {
@@ -251,4 +261,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       sendResponse();
       break;
   }
+  return true;
 });
