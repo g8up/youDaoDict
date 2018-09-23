@@ -52,7 +52,7 @@ const getCachedWord = () => {
       html.push(`<a>${words[i]}</a>`);
     }
     if (html.length) {
-      let $cache = document.querySelector('#$cache');
+      let $cache = document.querySelector('#cache');
       html.unshift('<strong>查询历史：</strong>');
       $cache.innerHTML = html.join('<br/>');
       $cache.onclick = (event) => { // 查询
@@ -279,7 +279,7 @@ window.onload = () => {
   const optElem = document.querySelector('#options');
   if (optElem) {
     optElem.onmouseover = () => {
-      this.onmouseover = null;
+      optElem.onmouseover = null;
       document.getElementById('dict_enable').onclick = () => {
         saveOptions();
         changeIcon();
