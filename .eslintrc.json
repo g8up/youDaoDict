@@ -7,7 +7,7 @@
       "chrome": false,
       "console": false,
       "Blob": false,
-
+      "XMLHttpRequest": false,
       "saveAs": false
   }
 }

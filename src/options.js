@@ -1,6 +1,6 @@
 import Setting from './util/setting';
 import {
-  queryString,
+  qs as queryString,
   isContainKoera,
   isContainJapanese,
   addToNote,
@@ -44,19 +44,20 @@ const getCachedWord = () => {
   const html = [];
 
   let cache = localStorage.getItem('wordcache');
-  if (cache && (cache = cache.trim())) {
+  if (cache && cache.trim()) {
+    cache = cache.trim();
     const count = Options.history_count >= 0 ? Options.history_count : 0;
     const words = cache.split(SP, count);
-    for (let i = 0, len = words.length; i < len; i++) {
+    for (let i = 0, len = words.length; i < len; i += 1) {
       html.push(`<a>${words[i]}</a>`);
     }
     if (html.length) {
-      let cache = document.querySelector('#cache');
+      let $cache = document.querySelector('#$cache');
       html.unshift('<strong>查询历史：</strong>');
-      cache.innerHTML = html.join('<br/>');
-      cache.onclick = (event) => { // 查询
+      $cache.innerHTML = html.join('<br/>');
+      $cache.onclick = (event) => { // 查询
         const a = event.target;
-        if (a.tagName.toLowerCase() == 'a') {
+        if (a.tagName.toLowerCase() === 'a') {
           const w = a.innerText;
           if (w) {
             document.querySelector('#word').value = w;
@@ -64,11 +65,10 @@ const getCachedWord = () => {
           }
         }
       };
-      cache = null;
+      $cache = null;
     }
   }
 };
-
 const getLink = (urlPrefix, params) => {
   const url = `${urlPrefix}?${queryString(params)}`;
   return url;
@@ -87,12 +87,12 @@ const buildSearchResult = ({ basetrans, webtrans }) => {
   if (isContainJapanese(WORD)) {
     params.le = 'jap';
   }
-  if (langType == 'fr') {
+  if (langType === 'fr') {
     params.le = 'fr';
   }
   const res = document.getElementById('result');
   res.innerHTML = '';
-  if (noBaseTrans == false) {
+  if (noBaseTrans === false) {
     const langTypeMap = {
       ko: '韩汉',
       jap: '日汉',
@@ -100,10 +100,10 @@ const buildSearchResult = ({ basetrans, webtrans }) => {
     };
     res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>${basetrans}`;
   }
-  if (noWebTrans == false) {
+  if (noWebTrans === false) {
     res.innerHTML += `<strong>网络释义:</strong><br/>${webtrans}`;
   }
-  if (noBaseTrans == false || noWebTrans == false) {
+  if (noBaseTrans === false || noWebTrans === false) {
     const link = getLink('http://dict.youdao.com/search', params);
     res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
   }
@@ -154,7 +154,7 @@ const translateXML = (xmlnode) => {
     translate += `${retphrase}<br/><br/><strong>基本释义:</strong><br/>`;
     if (`${translation.childNodes[0]}` !== 'undefined') {
       const translations = root.getElementsByTagName('translation');
-      for (let i = 0; i < translations.length; i++) {
+      for (let i = 0; i < translations.length; i += 1) {
         let line = `${translations[i].getElementsByTagName('content')[0].childNodes[0].nodeValue}<br/>`;
         if (line.length > 50) {
           const reg = /[;；]/;
@@ -175,7 +175,7 @@ const translateXML = (xmlnode) => {
     } else {
       webtrans += '未找到网络释义';
     }
-    for (let i = 0; i < webtranslations.length; i++) {
+    for (let i = 0; i < webtranslations.length; i += 1) {
       webtrans += `${webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue}:  `;
       webtrans += `${webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue}<br/>`;
     }
@@ -191,7 +191,6 @@ const mainQuery = (word, callback) => fetchWordOnline(word).then((ret) => {
   }
 });
 
-
 const changeIcon = () => {
   const engBox = document.getElementById('english_only');
   const dictBox = document.getElementById('dict_enable');
@@ -203,24 +202,25 @@ const changeIcon = () => {
  * 读取配置信息
  */
 const restoreOptions = (option) => {
-  for (const key in option) {
+  Object.keys(option).forEach((key) => {
     const elem = document.getElementById(key);
     if (elem) {
       const val = option[key];
-      if (!val) continue;
+      if (!val) return;
       const elemType = elem.getAttribute('type');
       switch (elemType) {
         case 'checkbox':
-          if (val[0] == 'checked') {
-            elem.checked = val[1];
+          if (val[0] === 'checked') {
+            [elem.checked] = val;
           }
           break;
         case 'number':
           elem.value = val || option.history_count;
           break;
+        default: break;
       }
     }
-  }
+  });
 };
 /*
  * 保存为系统文件
@@ -247,20 +247,20 @@ const exportHistory = () => {
       'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
       `${new Array(25).join('=')}`,
     ].join(BR).trim();
-    const content = `${banner}${BR}${cachedWords.replace(/\,/g, BR)}`;
+    const content = `${banner}${BR}${cachedWords.replace(/,/g, BR)}`;
     saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
   }
 };
 
 const saveOptions = () => {
-  for (const key in Options) {
+  Object.keys(Options).forEach((key) => {
     const elem = document.getElementById(key);
-    if (Options[key][0] == 'checked') {
+    if (Options[key][0] === 'checked') {
       Options[key][1] = elem.checked;
     } else {
       Options[key] = elem.value;
     }
-  }
+  });
   // https://developer.chrome.com/extensions/storage
   setting.set(Options);
 };
