@@ -22,9 +22,7 @@ export const table = (word, speach, strpho, noBaseTrans, noWebTrans, baseTrans, 
     lan = '&le=jap';
   }
   let fmt = '';
-  const searchUrlPrefix = (noBaseTrans && noWebTrans) ? 'http://www.youdao.com/search?keyfrom=chrome.extension&ue=utf8'
-    : 'http://dict.youdao.com/search?keyfrom=chrome.extension';
-  const searchUrl = `${searchUrlPrefix}&q=${encodeURIComponent(word)}${lan}`;
+  const searchUrl = `http://dict.youdao.com/search?keyfrom=chrome.extension&q=${encodeURIComponent(word)}${lan}`;
 
   fmt = `<div id="yddContainer">
           <div class="yddTop" class="ydd-sp">
