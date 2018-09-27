@@ -20,7 +20,7 @@ export const table = (word, speach, phonetic = '', hasBaseTrans, hasWebTrans, ba
   } else if (isContainJapanese(word)) {
     lan = '&le=jap';
   }
-  const searchUrl = `http://dict.youdao.com/search?keyfrom=chrome.extension&q=${encodeURIComponent(word)}${lan}`;
+  const searchUrl = `https://dict.youdao.com/search?keyfrom=chrome.extension&q=${encodeURIComponent(word)}${lan}`;
 
   let fmt = '';
   fmt = `<div id="yddContainer">

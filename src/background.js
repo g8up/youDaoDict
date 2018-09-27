@@ -107,7 +107,7 @@ const translateXML = (xmlnode) => {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
       const val = $webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue;
       webtrans += `<div class="ydd-trans-container">
-          <a href="http://dict.youdao.com/search?q=${encodeURIComponent(key)}&le=${params.lang}&keyfrom=chrome.extension" target=_blank>${key}:</a>
+          <a href="https://dict.youdao.com/search?q=${encodeURIComponent(key)}&le=${params.lang}&keyfrom=chrome.extension" target=_blank>${key}:</a>
             ${val}<br />
           </div>`;
     }
@@ -165,7 +165,7 @@ const translateTransXML = (xmlnode) => {
 const AUDIO = document.createElement('audio');
 const getAudio = (word) => {
   if (AUDIO.title !== word) {
-    const audioUrl = `http://dict.youdao.com/speech?audio=${word}`;
+    const audioUrl = `https://dict.youdao.com/speech?audio=${word}`;
     AUDIO.src = audioUrl;
     AUDIO.title = word;
   }
@@ -179,7 +179,7 @@ const playAudio = (word) => {
 
 // let YouDaoLoginUrl = "http://account.youdao.com/login";
 // let YouDaoLoginUrl = "http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist";
-const YouDaoLoginUrl = 'http://dict.youdao.com/wordbook/wordlist';
+const YouDaoLoginUrl = 'https://dict.youdao.com/wordbook/wordlist';
 // 打开登录框
 const loginYoudao = () => {
   chrome.tabs.create({
