@@ -13,7 +13,7 @@ const renderTransDetail = (title, body) => `<div class="ydd-trans-wrapper">
     </div>`;
 
 // 页面中弹出的的面板
-export const table = (word, speach, strpho = '', hasBaseTrans, hasWebTrans, baseTrans, webTrans) => {
+export const table = (word, speach, phonetic = '', hasBaseTrans, hasWebTrans, baseTrans, webTrans) => {
   let lan = '';
   if (isContainKoera(word)) {
     lan = '&le=ko';
@@ -27,7 +27,7 @@ export const table = (word, speach, strpho = '', hasBaseTrans, hasWebTrans, base
           <div class="yddTop" class="ydd-sp">
           <div class="yddTopBorderlr">
             <a class="yddKeyTitle" href="${searchUrl}" target="_blank" title="查看完整释义">${word}</a>
-            <span class="ydd-phonetic">${strpho}</span>
+            ${phonetic ? `<span class="ydd-phonetic">[${phonetic}]</span>` : ''}
             <span class="ydd-voice">${speach}</span>
             <a class="ydd-detail" href="${searchUrl}" target="_blank">详细</a>
             <a class="ydd-detail" href="javascript:void(0);" id="addToNote" title="添加到单词本">+</a>

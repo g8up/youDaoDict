@@ -66,7 +66,7 @@ const translateXML = (xmlnode) => {
     phrase: 'return-phrase', // 查询的单词、短语
     speach: 'dictcn-speach', // 发音
     lang: 'lang',
-    phonetic: 'phonetic-symbol',
+    phonetic: 'phonetic-symbol', // 音标
   };
   const params = {};
   Object.keys(retrieveDataMap).forEach((key) => {
@@ -82,10 +82,6 @@ const translateXML = (xmlnode) => {
     }
   });
   const title = params.phrase;
-
-  if (params.phonetic) {
-    params.phonetic = `[${params.phonetic}]`;
-  }
 
   let basetrans = '';
   const $translations = root.getElementsByTagName('translation');
@@ -243,7 +239,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       return true;
     case 'speech':
-      playAudio(request.word);
+      if (typeof word !== 'undefined' && word.length > 0) {
+        playAudio(word);
+      } else {
+        console.error(`语音朗读-传参不可为空:${word}`);
+      }
       break;
     case 'login-youdao':
       loginYoudao();
