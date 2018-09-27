@@ -57,8 +57,8 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
 // 解析返回的查询结果
 const translateXML = (xmlnode) => {
-  let noBaseTrans = false;
-  let noWebTrans = false;
+  let hasBaseTrans = true;
+  let hasWebTrans = true;
   const translate = '<strong>查询:</strong><br/>';
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
 
@@ -66,7 +66,7 @@ const translateXML = (xmlnode) => {
     phrase: 'return-phrase', // 查询的单词、短语
     speach: 'dictcn-speach', // 发音
     lang: 'lang',
-    phonetic: 'phonetic-symbol',
+    phonetic: 'phonetic-symbol', // 音标
   };
   const params = {};
   Object.keys(retrieveDataMap).forEach((key) => {
@@ -83,16 +83,12 @@ const translateXML = (xmlnode) => {
   });
   const title = params.phrase;
 
-  if (params.phonetic) {
-    params.phonetic = `[${params.phonetic}]`;
-  }
-
   let basetrans = '';
   const $translations = root.getElementsByTagName('translation');
   if (!$translations.length) {
-    noBaseTrans = true;
+    hasBaseTrans = false;
   } else if (typeof $translations[0].childNodes[0] === 'undefined') {
-    noBaseTrans = true;
+    hasBaseTrans = false;
   } else {
     for (let i = 0; i < $translations.length; i += 1) {
       const transContVal = $translations[i].getElementsByTagName('content')[0].textContent;
@@ -103,9 +99,9 @@ const translateXML = (xmlnode) => {
   let webtrans = '';
   const $webtranslations = root.getElementsByTagName('web-translation');
   if (!$webtranslations.length) {
-    noWebTrans = true;
+    hasWebTrans = false;
   } else if (typeof $webtranslations[0].childNodes[0] === 'undefined') {
-    noWebTrans = true;
+    hasWebTrans = false;
   } else {
     for (let i = 0; i < $webtranslations.length; i += 1) {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
@@ -116,8 +112,8 @@ const translateXML = (xmlnode) => {
           </div>`;
     }
   }
-  return table(title, params.speach, params.phonetic, noBaseTrans,
-    noWebTrans, basetrans, webtrans);
+  return table(title, params.speach, params.phonetic, hasBaseTrans,
+    hasWebTrans, basetrans, webtrans);
 };
 
 let transStrTmp;
@@ -191,7 +187,6 @@ const loginYoudao = () => {
   }, () => {});
 };
 
-
 const setBadge = (text, color) => {
   chrome.browserAction.setBadgeText({
     text,
@@ -244,7 +239,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       return true;
     case 'speech':
-      playAudio(request.word);
+      if (typeof word !== 'undefined' && word.length > 0) {
+        playAudio(word);
+      } else {
+        console.error(`语音朗读-传参不可为空:${word}`);
+      }
       break;
     case 'login-youdao':
       loginYoudao();
