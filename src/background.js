@@ -57,8 +57,8 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 
 // 解析返回的查询结果
 const translateXML = (xmlnode) => {
-  let noBaseTrans = false;
-  let noWebTrans = false;
+  let hasBaseTrans = true;
+  let hasWebTrans = true;
   const translate = '<strong>查询:</strong><br/>';
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
 
@@ -90,9 +90,9 @@ const translateXML = (xmlnode) => {
   let basetrans = '';
   const $translations = root.getElementsByTagName('translation');
   if (!$translations.length) {
-    noBaseTrans = true;
+    hasBaseTrans = false;
   } else if (typeof $translations[0].childNodes[0] === 'undefined') {
-    noBaseTrans = true;
+    hasBaseTrans = false;
   } else {
     for (let i = 0; i < $translations.length; i += 1) {
       const transContVal = $translations[i].getElementsByTagName('content')[0].textContent;
@@ -103,9 +103,9 @@ const translateXML = (xmlnode) => {
   let webtrans = '';
   const $webtranslations = root.getElementsByTagName('web-translation');
   if (!$webtranslations.length) {
-    noWebTrans = true;
+    hasWebTrans = false;
   } else if (typeof $webtranslations[0].childNodes[0] === 'undefined') {
-    noWebTrans = true;
+    hasWebTrans = false;
   } else {
     for (let i = 0; i < $webtranslations.length; i += 1) {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
@@ -116,8 +116,8 @@ const translateXML = (xmlnode) => {
           </div>`;
     }
   }
-  return table(title, params.speach, params.phonetic, noBaseTrans,
-    noWebTrans, basetrans, webtrans);
+  return table(title, params.speach, params.phonetic, hasBaseTrans,
+    hasWebTrans, basetrans, webtrans);
 };
 
 let transStrTmp;
@@ -190,7 +190,6 @@ const loginYoudao = () => {
     url: YouDaoLoginUrl,
   }, () => {});
 };
-
 
 const setBadge = (text, color) => {
   chrome.browserAction.setBadgeText({
