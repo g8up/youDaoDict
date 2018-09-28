@@ -210,7 +210,7 @@ const popBadgeTips = (text, color) => {
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const {
     action,
-    word,
+    word = '',
   } = request;
   switch (action) {
     case 'getOption':
@@ -239,7 +239,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       });
       return true;
     case 'speech':
-      if (typeof word !== 'undefined' && word.length > 0) {
+      if (word.length > 0) {
         playAudio(word);
       } else {
         console.error(`语音朗读-传参不可为空:${word}`);
