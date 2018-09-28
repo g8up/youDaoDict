@@ -11,7 +11,7 @@ const CommonParams = {
   ue: 'utf8',
   doctype: 'xml',
   pos: '-1',
-  vendor: 'g8up',
+  vendor: 'getcrx.cn',
   appVer: '3.1.17.4208',
 };
 
