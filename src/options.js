@@ -104,7 +104,7 @@ const buildSearchResult = ({ basetrans, webtrans }) => {
     res.innerHTML += `<strong>网络释义:</strong><br/>${webtrans}`;
   }
   if (noBaseTrans === false || noWebTrans === false) {
-    const link = getLink('http://dict.youdao.com/search', params);
+    const link = getLink('https://dict.youdao.com/search', params);
     res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
   }
   if (noBaseTrans && noWebTrans) {
@@ -211,7 +211,7 @@ const restoreOptions = (option) => {
       switch (elemType) {
         case 'checkbox':
           if (val[0] === 'checked') {
-            [elem.checked] = val;
+            [, elem.checked] = val;
           }
           break;
         case 'number':
