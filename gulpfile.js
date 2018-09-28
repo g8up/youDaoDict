@@ -54,6 +54,7 @@ const lessIt = () => gulp.src(Asset.less)
 const copy = () => gulp
   .src(Asset.static.concat(Asset.lib), { base: 'src/' })
   .pipe(gulp.dest(Dist));
+
 const clean = (cb) => {
   del([
     `${Dist}**/*`,

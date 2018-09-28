@@ -15,7 +15,7 @@ const CommonParams = {
   appVer: '3.1.17.4208',
 };
 
-const YouDaoAddWordUrl = 'http://dict.youdao.com/wordbook/ajax';
+const YouDaoAddWordUrl = 'https://dict.youdao.com/wordbook/ajax';
 /**
  * 添加到单词本
  * @param {String} word
@@ -42,7 +42,7 @@ export const fetchWordOnline = (word) => {
     return Promise.reject();
   }
   return ajax({
-    url: 'http://dict.youdao.com/fsearch',
+    url: 'https://dict.youdao.com/fsearch',
     dataType: 'xml',
     data: Object.assign({
       q: word,
