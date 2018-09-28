@@ -147,4 +147,6 @@ export const ajax = option => new Promise((resolve, reject) => {
 
   xhr.open(type, url, true);
   xhr.send(type === 'GET' ? null : queryString);
+}).catch((err) => {
+  console.warn(err);
 });
