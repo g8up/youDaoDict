@@ -47,7 +47,6 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (key === OPTION_STORAGE_ITEM) {
       const storageChange = changes[key];
       Object.assign(Options, storageChange.newValue);
-      console.log(Options);
       publishOptionChangeToTabs(Options);
       return true;
     }
@@ -59,14 +58,17 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 const translateXML = (xmlnode) => {
   let hasBaseTrans = true;
   let hasWebTrans = true;
-  const translate = '<strong>查询:</strong><br/>';
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
 
   const retrieveDataMap = {
     phrase: 'return-phrase', // 查询的单词、短语
     speach: 'dictcn-speach', // 发音
-    lang: 'lang',
+    ukSpeech: 'uk-speech',
+    usSpeech: 'us-speech',
     phonetic: 'phonetic-symbol', // 音标
+    ukPhonetic: 'uk-phonetic-symbol',
+    usPhonetic: 'us-phonetic-symbol',
+    lang: 'lang',
   };
   const params = {};
   Object.keys(retrieveDataMap).forEach((key) => {
@@ -81,9 +83,8 @@ const translateXML = (xmlnode) => {
       }
     }
   });
-  const title = params.phrase;
 
-  let basetrans = '';
+  let baseTrans = '';
   const $translations = root.getElementsByTagName('translation');
   if (!$translations.length) {
     hasBaseTrans = false;
@@ -92,11 +93,11 @@ const translateXML = (xmlnode) => {
   } else {
     for (let i = 0; i < $translations.length; i += 1) {
       const transContVal = $translations[i].getElementsByTagName('content')[0].textContent;
-      basetrans += `<div class="ydd-trans-container">${transContVal}</div>`;
+      baseTrans += `<div class="ydd-trans-container">${transContVal}</div>`;
     }
   }
 
-  let webtrans = '';
+  let webTrans = '';
   const $webtranslations = root.getElementsByTagName('web-translation');
   if (!$webtranslations.length) {
     hasWebTrans = false;
@@ -106,14 +107,24 @@ const translateXML = (xmlnode) => {
     for (let i = 0; i < $webtranslations.length; i += 1) {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
       const val = $webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue;
-      webtrans += `<div class="ydd-trans-container">
+      webTrans += `<div class="ydd-trans-container">
           <a href="https://dict.youdao.com/search?q=${encodeURIComponent(key)}&le=${params.lang}&keyfrom=chrome.extension" target=_blank>${key}:</a>
             ${val}<br />
           </div>`;
     }
   }
-  return table(title, params.speach, params.phonetic, hasBaseTrans,
-    hasWebTrans, basetrans, webtrans);
+  return table({
+    phrase: params.phrase,
+    ukSpeech: params.ukSpeech,
+    usSpeech: params.usSpeech,
+    phonetic: params.phonetic,
+    ukPhonetic: params.ukPhonetic,
+    usPhonetic: params.usPhonetic,
+    hasBaseTrans,
+    hasWebTrans,
+    baseTrans,
+    webTrans,
+  });
 };
 
 let transStrTmp;

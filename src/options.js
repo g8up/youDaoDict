@@ -12,8 +12,6 @@ import {
 
 let Options = null;
 let retphrase = '';
-let noBaseTrans = false;
-let noWebTrans = false;
 let langType = '';
 
 const setting = new Setting();
@@ -74,7 +72,12 @@ const getLink = (urlPrefix, params) => {
   return url;
 };
 
-const buildSearchResult = ({ basetrans, webtrans }) => {
+const buildSearchResult = ({
+  hasBaseTrans,
+  hasWebTrans,
+  baseTrans,
+  webTrans,
+}) => {
   document.querySelector('#options').style.display = 'none'; // hide option pannel
   const params = {
     q: WORD,
@@ -83,48 +86,48 @@ const buildSearchResult = ({ basetrans, webtrans }) => {
   };
   if (isContainKoera(WORD)) {
     params.le = 'ko';
-  }
-  if (isContainJapanese(WORD)) {
+  } else if (isContainJapanese(WORD)) {
     params.le = 'jap';
-  }
-  if (langType === 'fr') {
+  } else if (langType === 'fr') {
     params.le = 'fr';
   }
   const res = document.getElementById('result');
-  res.innerHTML = '';
-  if (noBaseTrans === false) {
+  res.innerHTML = '<strong>查询:</strong><br/>';
+  if (hasBaseTrans) {
     const langTypeMap = {
       ko: '韩汉',
       jap: '日汉',
       fr: '法汉',
     };
-    res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong><span class='word-speech' data-toggle='play'></span> <a href='#' class='add-to-note' data-toggle='addToNote'>+</a><br/>${basetrans}`;
+    res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong>
+      <span class='word-speech' data-toggle='play'></span>
+      <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
+      <br/>${baseTrans}`;
   }
-  if (noWebTrans === false) {
-    res.innerHTML += `<strong>网络释义:</strong><br/>${webtrans}`;
+  if (hasWebTrans) {
+    res.innerHTML += `<strong>网络释义:</strong><br/>${webTrans}`;
   }
-  if (noBaseTrans === false || noWebTrans === false) {
+  if (hasBaseTrans || hasWebTrans) {
     const link = getLink('https://dict.youdao.com/search', params);
     res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
   }
-  if (noBaseTrans && noWebTrans) {
-    res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="http://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
+  if (!hasBaseTrans && !hasWebTrans) {
+    res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
   } else {
     saveSearchedWord();
   }
   getCachedWord();
   retphrase = '';
   langType = '';
-  noBaseTrans = false;
-  noWebTrans = false;
 };
 
 // 布局结果页
 const translateXML = (xmlnode) => {
-  let basetrans = '';
-  let webtrans = '';
+  let hasBaseTrans = true;
+  let hasWebTrans = true;
+  let baseTrans = '';
+  let webTrans = '';
 
-  let translate = '<strong>查询:</strong><br/>';
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
   const phrase = root.getElementsByTagName('return-phrase');
   if (`${phrase[0].childNodes[0]}` !== 'undefined') {
@@ -145,13 +148,13 @@ const translateXML = (xmlnode) => {
   }
   const translation = root.getElementsByTagName('translation')[0];
   if (`${translation}` === 'undefined') {
-    noBaseTrans = true;
+    hasBaseTrans = false;
   }
   if (`${root.getElementsByTagName('web-translation')[0]}` === 'undefined') {
-    noWebTrans = true;
+    hasWebTrans = false;
   }
-  if (noBaseTrans === false) {
-    translate += `${retphrase}<br/><br/><strong>基本释义:</strong><br/>`;
+  if (hasBaseTrans) {
+    baseTrans += `${retphrase}<br/><strong>基本释义:</strong><br/>`;
     if (`${translation.childNodes[0]}` !== 'undefined') {
       const translations = root.getElementsByTagName('translation');
       for (let i = 0; i < translations.length; i += 1) {
@@ -161,26 +164,31 @@ const translateXML = (xmlnode) => {
           const childs = line.split(reg);
           line = childs.join('<br/>');
         }
-        basetrans += line;
+        baseTrans += line;
       }
     } else {
-      basetrans += '未找到基本释义';
+      baseTrans += '未找到基本释义';
     }
   }
-  if (noWebTrans === false) {
+  if (hasWebTrans) {
     let webtranslations;
     // 网络释义
     if (`${root.getElementsByTagName('web-translation')[0].childNodes[0]}` !== 'undefined') {
       webtranslations = root.getElementsByTagName('web-translation');
+      for (let i = 0; i < webtranslations.length; i += 1) {
+        webTrans += `${webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue}:  `;
+        webTrans += `${webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue}<br/>`;
+      }
     } else {
-      webtrans += '未找到网络释义';
-    }
-    for (let i = 0; i < webtranslations.length; i += 1) {
-      webtrans += `${webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue}:  `;
-      webtrans += `${webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue}<br/>`;
+      webTrans += '未找到网络释义';
     }
   }
-  buildSearchResult({ basetrans, webtrans });
+  buildSearchResult({
+    hasBaseTrans,
+    hasWebTrans,
+    baseTrans,
+    webTrans,
+  });
 };
 
 const mainQuery = (word, callback) => fetchWordOnline(word).then((ret) => {
@@ -189,6 +197,8 @@ const mainQuery = (word, callback) => fetchWordOnline(word).then((ret) => {
   if (dataText != null) {
     callback(dataText);
   }
+}).catch((err) => {
+  console.error(err);
 });
 
 const changeIcon = () => {

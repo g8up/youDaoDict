@@ -45,7 +45,6 @@ const getYoudaoTrans = (word, next) => {
   });
 };
 
-
 let content = null;
 const closePanel = () => {
   if (content) {
@@ -108,7 +107,17 @@ const addContentEvent = (cont) => {
   closeBtn = null;
   // 语音播放
   (function renderAudio() {
-    const speech = cont.querySelector('.ydd-voice');
+    cont.addEventListener('click', (e) => {
+      const { target } = e;
+      if (target.classList.contains('ydd-voice')) {
+        const { wordAndType } = target.dataset;
+        playAudio(wordAndType);
+        if (getOptVal('auto_speech')) {
+          playAudio(wordAndType);
+        }
+      }
+    });
+    /* const speech = cont.querySelector();
     if (speech) {
       if (speech.innerHTML !== '') {
         speech.classList.add('ydd-voice-icon');
@@ -121,7 +130,7 @@ const addContentEvent = (cont) => {
         });
       }
       speech.innerHTML = '';
-    }
+    } */
   }());
   // 添加到单词本
   const addBtn = cont.querySelector('#addToNote');
@@ -232,8 +241,7 @@ const onSelectToTrans = debounce((e) => {
       });
     }
   } else if ((!hasChinese && spaceCount(word) >= 3)
-    || (hasChinese && word.length > 4)
-    || hasJapanese && word.length > 4) {
+    || ((hasChinese || hasJapanese) && word.length > 4)) {
     getYoudaoTrans(word, (data) => {
       createPopUpEx(data, xx, yy, sx, sy);
     });

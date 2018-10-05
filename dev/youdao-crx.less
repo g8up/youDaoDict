@@ -66,21 +66,6 @@ a,a:hover,a:visited{
 			line-height: @titleHeight;
 			font-size: 10px;
 		}
-
-		.ydd-voice.ydd-voice-icon {
-			display: inline-block;
-			width: 14px;
-			height: inherit;
-			margin-left: @marginLeft;
-			background:url("image/voice-btn.png") no-repeat;
-			background-size: 27px 15px;
-			background-position-x: -13px;
-			background-position-y: 8px;
-			cursor: pointer;
-			&:hover{
-				background-position-x: 1px;
-			}
-		}
 		.ydd-detail{
 			display: inline-block;
 			margin-left: @marginLeft;
@@ -114,6 +99,23 @@ a,a:hover,a:visited{
 		}
 	}
 }
+
+.ydd-voice.ydd-voice-icon {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-left: @marginLeft;
+	background:url("image/voice-btn.png") no-repeat;
+	background-size: 27px 15px;
+	background-position-x: -13px;
+	background-position-y: 0;
+	vertical-align: sub;
+	cursor: pointer;
+	&:hover{
+		background-position-x: 1px;
+	}
+}
+
 .yddMiddle {
 	display: block;
 	margin-bottom: 10px;
@@ -139,10 +141,12 @@ a,a:hover,a:visited{
 				border-color: #d5e7f3;
 			}
 		}
-		.ydd-trans-container{
-			display: block;
-			line-height: 160%;
+		.tab-content{
 			padding: 0 10px;
+			.ydd-trans-container{
+				display: block;
+				line-height: 160%;
+			}
 		}
 	}
 }
