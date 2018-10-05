@@ -147,7 +147,7 @@ const rollupIt = (cb) => {
   cb();
 };
 
-const rollupW = gulp.series(rollupIt, () => {
+const rollupWatch = gulp.series(rollupIt, () => {
   gulp.watch('./src/**/*.js', (event) => {
     const dir = event.path;
     const entry = opts.filter(item => path.resolve(item.input) === dir);
@@ -159,7 +159,7 @@ const rollupW = gulp.series(rollupIt, () => {
 });
 
 gulp.task('js', gulp.series(rollupIt));
-gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupW)));
+gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));
 gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy)));
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))
