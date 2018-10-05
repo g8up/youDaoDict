@@ -3,6 +3,7 @@
   "version": "3.2.0",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "scripts": {
+    "test": "http-server ./test -o",
     "dev": "gulp dev",
     "build": "gulp",
     "js": "gulp js",
