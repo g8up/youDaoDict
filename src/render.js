@@ -18,7 +18,7 @@ const renderSpeech = ({
   title,
   wordAndType,
   phonetic,
-}) => `<div >
+}) => `<div>
     ${title}:
     <span class="ydd-voice ydd-voice-icon" data-word-and-type="${wordAndType}"></span>
     ${phonetic ? `<span> [${phonetic}] </span>` : ''}
@@ -51,7 +51,6 @@ export const table = ({
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
           <a class="yddKeyTitle" href="${searchUrl}" target="_blank" title="查看完整释义">${word}</a>
-          ${phonetic ? `<span class="ydd-phonetic">[${phonetic}]</span>` : ''}
           <a class="ydd-detail" href="${searchUrl}" target="_blank">详细</a>
           <a class="ydd-detail" href="javascript:void(0);" id="addToNote" title="添加到单词本">+</a>
           <a class="ydd-close" href="javascript:void(0);">&times;</a>
