@@ -73,6 +73,7 @@ const getLink = (urlPrefix, params) => {
 };
 
 const buildSearchResult = ({
+  phoneticSymbol,
   hasBaseTrans,
   hasWebTrans,
   baseTrans,
@@ -100,6 +101,7 @@ const buildSearchResult = ({
       fr: '法汉',
     };
     res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong>
+      ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
       <span class='word-speech' data-toggle='play'></span>
       <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
       <br/>${baseTrans}`;
@@ -136,13 +138,13 @@ const translateXML = (xmlnode) => {
   if (`${root.getElementsByTagName('lang')[0]}` !== 'undefined') {
     langType = root.getElementsByTagName('lang')[0].childNodes[0].nodeValue;
   }
-  let strpho = '';
+  let phoneticSymbol = '';
   const symbol = root.getElementsByTagName('phonetic-symbol')[0];
   if (`${symbol}` !== 'undefined') {
     if (`${symbol.childNodes[0]}` !== 'undefined') {
       const pho = symbol.childNodes[0].nodeValue;
       if (pho !== null) {
-        strpho = `&nbsp;[${pho}]`;
+        phoneticSymbol = `${pho}`;
       }
     }
   }
@@ -184,6 +186,7 @@ const translateXML = (xmlnode) => {
     }
   }
   buildSearchResult({
+    phoneticSymbol,
     hasBaseTrans,
     hasWebTrans,
     baseTrans,
