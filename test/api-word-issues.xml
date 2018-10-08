@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yodaodict>
+  <return-phrase>
+    <![CDATA[issues]]>
+  </return-phrase>
+  <lang>eng</lang>
+
+  <dictcn-speach>
+    <![CDATA[issues&type=1]]>
+  </dictcn-speach>
+  <speech>
+    <![CDATA[issues&type=1]]>
+  </speech>
+  <uk-speech>
+    <![CDATA[issues&type=1]]>
+  </uk-speech>
+  <us-speech>
+    <![CDATA[issues&type=2]]>
+  </us-speech>
+  <phonetic-symbol>英 ['ɪʃju:z] 美 ['ɪʃjʊz]</phonetic-symbol>
+  <uk-phonetic-symbol>英 ['ɪʃju:z] 美 ['ɪʃjʊz]</uk-phonetic-symbol>
+  <us-phonetic-symbol>'ɪʃjʊ</us-phonetic-symbol>
+  <custom-translation>
+    <type>ec</type>
+    <translation>
+      <content>
+        <![CDATA[n. 议题，问题；债券（issue的复数）；争点]]>
+      </content>
+    </translation>
+    <translation>
+      <content>
+        <![CDATA[v. 发行（issue的第三人称单数）；分发；流出]]>
+      </content>
+    </translation>
+  </custom-translation>
+  <yodao-web-dict>
+    <web-translation same="true">
+      <key>
+        <![CDATA[issues]]>
+      </key>
+      <trans>
+        <value>
+          <![CDATA[问题]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[争点]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[发行]]>
+        </value>
+      </trans>
+    </web-translation>
+    <web-translation>
+      <key>
+        <![CDATA[environmental issues]]>
+      </key>
+      <trans>
+        <value>
+          <![CDATA[环境问题]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[环保问题]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[环境方面注意的问题]]>
+        </value>
+      </trans>
+    </web-translation>
+    <web-translation>
+      <key>
+        <![CDATA[current issues]]>
+      </key>
+      <trans>
+        <value>
+          <![CDATA[本期刊物]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[时事篇]]>
+        </value>
+      </trans>
+      <trans>
+        <value>
+          <![CDATA[现期刊物]]>
+        </value>
+      </trans>
+    </web-translation>
+  </yodao-web-dict>
+
+  <sexp>0</sexp>
+
+</yodaodict>
