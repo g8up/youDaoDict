@@ -1,13 +1,16 @@
 {
   "extends": "airbnb-base",
   "globals": {
-      "window": false,
-      "document": false,
-      "localStorage": false,
-      "chrome": false,
-      "console": false,
-      "Blob": false,
-      "XMLHttpRequest": false,
-      "saveAs": false
+    "window": false,
+    "document": false,
+    "localStorage": false,
+    "chrome": false,
+    "console": false,
+    "Blob": false,
+    "XMLHttpRequest": false,
+    "saveAs": false
+  },
+  "rules": {
+    "no-console": 0
   }
 }
