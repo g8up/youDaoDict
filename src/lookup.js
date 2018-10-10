@@ -23,13 +23,13 @@ const getOptVal = (strKey) => {
   return '';
 };
 
-const getYoudaoDict = (word, next) => {
+const getYoudaoDictTemplateHtml = (word, next) => {
   chrome.runtime.sendMessage({
     action: 'select-to-search',
     word,
-  }, (data) => {
+  }, (html) => {
     if (next) {
-      next(data);
+      next(html);
     }
   });
 };
@@ -107,6 +107,16 @@ const addContentEvent = (cont) => {
   closeBtn = null;
   // 语音播放
   (function renderAudio() {
+    // 自动朗读
+    if (getOptVal('auto_speech')) {
+      const usPhonetic = cont.querySelector('.ydd-voice');
+      if (usPhonetic) {
+        const { wordAndType } = usPhonetic.dataset;
+        playAudio(wordAndType);
+      }
+      console.log('usPhonetic', usPhonetic);
+    }
+    // 朗读按钮事件
     cont.addEventListener('click', (e) => {
       const { target } = e;
       if (target.classList.contains('ydd-voice')) {
@@ -145,7 +155,7 @@ const addContentEvent = (cont) => {
   });
 };
 
-const getYoudaoDictPanelCont = (html) => {
+const getPanelCont = (html) => {
   const PANEL_ID = 'yddWrapper';
   let panel = document.querySelector(`div#${PANEL_ID}`);
   if (!panel) {
@@ -173,7 +183,7 @@ const createPopUp = (html, senctence, x, y, screenX, screenY) => {
   const padding = 10;
   let frameLeft = 0;
   let frameTop = 0;
-  const frame = getYoudaoDictPanelCont(html);
+  const frame = getPanelCont(html);
 
   body.style.position = 'static';
   // 确定位置
@@ -236,8 +246,8 @@ const onSelectToTrans = debounce((e) => {
     word = ExtractEnglish(word);
     // TODO: add isEnglish function
     if (word !== '') {
-      getYoudaoDict(word, (data) => {
-        createPopUpEx(data, xx, yy, sx, sy);
+      getYoudaoDictTemplateHtml(word, (html) => {
+        createPopUpEx(html, xx, yy, sx, sy);
       });
     }
   } else if ((!hasChinese && spaceCount(word) >= 3)
@@ -295,8 +305,8 @@ const onPointToTrans = debounce((e) => {
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(tr);
-    getYoudaoDict(word, (data) => {
-      createPopUpEx(data, xx, yy, sx, sy);
+    getYoudaoDictTemplateHtml(word, (html) => {
+      createPopUpEx(html, xx, yy, sx, sy);
     });
   }
 });
