@@ -31,9 +31,10 @@ export const addWord = word => ajax({
 }).then((ret) => {
   const msg = ret.message;
   if (msg === 'adddone') {
-    Promise.resolve();
-  } else if (msg === 'nouser') {
-    Promise.reject();
+    return Promise.resolve();
+  }
+  if (msg === 'nouser') {
+    return Promise.reject();
   }
 });
 
