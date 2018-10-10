@@ -55,22 +55,14 @@ const copy = () => gulp
   .src(Asset.static.concat(Asset.lib), { base: 'src/' })
   .pipe(gulp.dest(Dist));
 
-const clean = (cb) => {
-  del([
-    `${Dist}**/*`,
-  ]);
-  cb();
-};
-
 const zipFile = `${pkg.name}-v${VERSION}.zip`;
 
 const cleanZip = () => del([
   Release + zipFile,
-]);
+], { dryRun: true });
 
 exports.lessIt = lessIt;
 exports.copy = copy;
-exports.clean = clean;
 exports.cleanZip = cleanZip;
 
 const watch = gulp.series(lessIt, copy, () => {
@@ -158,10 +150,14 @@ const rollupWatch = gulp.series(rollupIt, () => {
   });
 });
 
-gulp.task('js', gulp.series(rollupIt));
-gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));
-gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy)));
+gulp.task('js', gulp.series(rollupIt));// build only js
+
+gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));// build with watcher
+
+gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy))); // build once
+
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))
   .pipe(gulp.dest(Release))));
+
 gulp.task('release', gulp.series('default', 'zip'));// 生成发布到 Chrome Web Store 的 zip 文件
