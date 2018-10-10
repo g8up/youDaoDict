@@ -233,18 +233,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'select-to-search':
       fetchWordOnline(word).then((ret) => {
-        const dataText = translateXML(ret);
-        if (dataText != null) {
-          sendResponse(dataText);
+        const templateHtml = translateXML(ret);
+        if (templateHtml !== '') {
+          sendResponse(templateHtml);
         }
       });
       return true;
     case 'translate':
       fetchTranslate(word).then((ret) => {
-        const dataText = translateTransXML(ret);
-        if (dataText != null) {
+        const templateHtml = translateTransXML(ret);
+        if (templateHtml !== '') {
           sendResponse({
-            data: dataText,
+            data: templateHtml,
           });
         }
       });
