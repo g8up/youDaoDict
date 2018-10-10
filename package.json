@@ -43,5 +43,6 @@
   "bugs": {
     "url": "https://github.com/g8up/youDaoDict/issues"
   },
-  "homepage": "https://github.com/g8up/youDaoDict"
+  "homepage": "https://github.com/g8up/youDaoDict",
+  "private": true
 }
