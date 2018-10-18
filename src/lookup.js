@@ -167,7 +167,7 @@ const getPanelCont = (html) => {
     addPanelEvent(panel);
 
     const tmpl = genTmpl();
-    const root = panel.createShadowRoot();
+    const root = panel.attachShadow({ mode: 'closed' });
     root.appendChild(document.importNode(tmpl.content, true));
     content = root.querySelector('#ydd-content');
   }
