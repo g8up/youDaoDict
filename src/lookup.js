@@ -8,7 +8,7 @@ import {
   debounce,
 } from './common/util';
 import {
-  playAudio,
+  playAudioByWordAndType,
   addToNote,
 } from './common/chrome';
 
@@ -114,7 +114,7 @@ const addContentEvent = (cont) => {
       const usPhonetic = cont.querySelector('.ydd-voice');
       if (usPhonetic) {
         const { wordAndType } = usPhonetic.dataset;
-        playAudio(wordAndType);
+        playAudioByWordAndType(wordAndType);
       }
       console.log('usPhonetic', usPhonetic);
     }
@@ -123,26 +123,12 @@ const addContentEvent = (cont) => {
       const { target } = e;
       if (target.classList.contains('ydd-voice')) {
         const { wordAndType } = target.dataset;
-        playAudio(wordAndType);
+        playAudioByWordAndType(wordAndType);
         if (getOptVal('auto_speech')) {
-          playAudio(wordAndType);
+          playAudioByWordAndType(wordAndType);
         }
       }
     });
-    /* const speech = cont.querySelector();
-    if (speech) {
-      if (speech.innerHTML !== '') {
-        speech.classList.add('ydd-voice-icon');
-        const wordAndType = speech.textContent;
-        if (getOptVal('auto_speech')) {
-          playAudio(wordAndType);
-        }
-        speech.addEventListener('click', () => {
-          playAudio(wordAndType);
-        });
-      }
-      speech.innerHTML = '';
-    } */
   }());
   // 添加到单词本
   const addBtn = cont.querySelector('#addToNote');

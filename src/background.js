@@ -13,6 +13,9 @@ import {
   fetchTranslate,
 } from './common/http';
 import { table } from './common/render';
+import {
+  getAudioByWordAndType,
+} from './common/audio-cache';
 
 const setting = new Setting();
 let Options = null;
@@ -173,18 +176,8 @@ const translateTransXML = (xmlnode) => {
   return res;
 };
 
-const AUDIO = document.createElement('audio');
-const getAudio = (word) => {
-  if (AUDIO.title !== word) {
-    const audioUrl = `https://dict.youdao.com/speech?audio=${word}`;
-    AUDIO.src = audioUrl;
-    AUDIO.title = word;
-  }
-  return AUDIO;
-};
-
-const playAudio = (word) => {
-  const audio = getAudio(word);
+const playAudio = (word, type) => {
+  const audio = getAudioByWordAndType(word, type);
   audio.play();
 };
 
@@ -222,6 +215,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   const {
     action,
     word = '',
+    type, // 发音类型:英音、美音
   } = request;
   switch (action) {
     case 'getOption':
@@ -251,7 +245,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
     case 'speech':
       if (word.length > 0) {
-        playAudio(word);
+        playAudio(word, type);
       } else {
         console.error(`语音朗读-传参不可为空:${word}`);
       }

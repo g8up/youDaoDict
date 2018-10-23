@@ -346,7 +346,7 @@ window.onload = () => {
     const { target } = e;
     const { toggle } = target.dataset;
     if (toggle === 'play') {
-      playAudio(WORD);
+      playAudio({ word: WORD });
     } else if (toggle === 'addToNote') {
       addToNote(WORD, () => {
         target.classList.add('green');

@@ -1,11 +1,20 @@
 /**
  * 与 chrome 对接的方法
  */
-export const playAudio = (word) => {
+import {
+  parseQuerystring,
+} from './util';
+
+export const playAudio = ({ word, type }) => {
   chrome.runtime.sendMessage({
     action: 'speech',
     word,
+    type,
   }, () => {});
+};
+
+export const playAudioByWordAndType = (wordAndType) => {
+  playAudio(parseQuerystring(`word=${wordAndType}`));
 };
 
 export const addToNote = (word, callback) => {

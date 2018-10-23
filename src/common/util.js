@@ -95,6 +95,20 @@ export const qs = (json) => {
   return '';
 };
 
+export const parseQuerystring = (querystring) => {
+  const obj = {};
+  if (querystring && querystring.length) {
+    const kvs = querystring.split('&');
+    if (kvs.length) {
+      kvs.forEach((kv) => {
+        const [key, val] = kv.split('=');
+        obj[key] = val;
+      });
+    }
+  }
+  return obj;
+};
+
 export const ajax = option => new Promise((resolve, reject) => {
   let { url } = option;
   const type = option.type || 'GET';
