@@ -5,10 +5,12 @@ import {
   isAlpha,
   spaceCount,
   ExtractEnglish,
+  debounce,
+} from './common/util';
+import {
   playAudio,
   addToNote,
-  debounce,
-} from './util';
+} from './common/chrome';
 
 const Options = {};
 const { body } = document;

@@ -1,18 +1,18 @@
-import Setting from './util/setting';
+import Setting from './common/setting';
 import {
   OPTION_STORAGE_ITEM,
-} from './config';
+} from './common/config';
 import {
   isContainKoera,
   isContainJapanese,
   isContainChinese,
-} from './util';
+} from './common/util';
 import {
   addWord,
   fetchWordOnline,
   fetchTranslate,
-} from './http';
-import { table } from './render';
+} from './common/http';
+import { table } from './common/render';
 
 const setting = new Setting();
 let Options = null;

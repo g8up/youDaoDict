@@ -1,14 +1,16 @@
-import Setting from './util/setting';
+import Setting from './common/setting';
 import {
   qs as queryString,
   isContainKoera,
   isContainJapanese,
-  addToNote,
+} from './common/util';
+import {
   playAudio,
-} from './util';
+  addToNote,
+} from './common/chrome';
 import {
   fetchWordOnline,
-} from './http';
+} from './common/http';
 
 let Options = null;
 let retphrase = '';
