@@ -3,6 +3,7 @@ import {
   qs as queryString,
   isContainKoera,
   isContainJapanese,
+  copyText,
 } from './common/util';
 import {
   playAudio,
@@ -280,6 +281,17 @@ const saveOptions = () => {
   setting.set(Options);
 };
 
+// 复制分享链接
+const shareDownloadLink = () => {
+  const {
+    name,
+    description,
+  } = chrome.app.getDetails();
+  const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
+  const text = `${name}\r\n${description}\r\n${downloadLink}`;
+  copyText(text);
+};
+
 window.onload = () => {
   setting.get().then((data) => {
     Options = data;
@@ -333,6 +345,11 @@ window.onload = () => {
     }, (rep) => {
       console.log(rep);
     });
+  });
+  // share
+  document.querySelector('#share').addEventListener('click', (e) => {
+    e.preventDefault();
+    shareDownloadLink();
   });
   // 检测当前页面打开入口：option / popup
   (function checkEntry() {

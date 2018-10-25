@@ -146,3 +146,20 @@ export const ajax = option => new Promise((resolve, reject) => {
 }).catch((err) => {
   console.warn(err);
 });
+
+
+export const copyText = (text) => {
+  if (text !== undefined) {
+    const cont = document.createElement('div');
+    cont.textContent = text;
+    document.body.appendChild(cont);
+
+    const range = document.createRange();
+    range.selectNode(cont);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+    cont.remove();
+  }
+};
