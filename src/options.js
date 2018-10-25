@@ -335,6 +335,7 @@ window.onload = () => {
   document.querySelector('#querybutton').onclick = () => {
     mainQuery(document.querySelector('#word').value, translateXML);
   };
+  // 导出查询记录
   document.querySelector('#backup').onclick = () => {
     exportHistory();
   };
