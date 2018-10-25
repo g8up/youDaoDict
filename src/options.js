@@ -336,11 +336,13 @@ window.onload = () => {
     mainQuery(document.querySelector('#word').value, translateXML);
   };
   // 导出查询记录
-  document.querySelector('#backup').onclick = () => {
+  document.querySelector('#backup').onclick = (e) => {
+    e.preventDefault();
     exportHistory();
   };
   // 登录按钮
-  document.querySelector('#login-youdao').addEventListener('click', () => {
+  document.querySelector('#login-youdao').addEventListener('click', (e) => {
+    e.preventDefault();
     chrome.runtime.sendMessage({
       action: 'login-youdao',
     }, (rep) => {
