@@ -151,10 +151,12 @@ const rollupWatch = gulp.series(rollupIt, () => {
 });
 
 gulp.task('js', gulp.series(rollupIt));// build only js
+gulp.task('less', gulp.series(lessIt));// build only less
+
 
 gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));// build with watcher
 
-gulp.task('default', gulp.parallel('js', gulp.series(lessIt, copy))); // build once
+gulp.task('default', gulp.parallel('js', gulp.series('less', copy))); // build once
 
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))
