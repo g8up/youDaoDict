@@ -152,14 +152,13 @@ const rollupWatch = gulp.series(rollupIt, () => {
 
 gulp.task('js', gulp.series(rollupIt));// build only js
 gulp.task('less', gulp.series(lessIt));// build only less
-
-
-gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));// build with watcher
-
-gulp.task('default', gulp.parallel('js', gulp.series('less', copy))); // build once
-
+// watcher: js/less/static
+gulp.task('dev', gulp.parallel('js', gulp.parallel(watch, rollupWatch)));
+// build once
+gulp.task('default', gulp.parallel('js', gulp.series('less', copy)));
+// only zip files
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))
   .pipe(gulp.dest(Release))));
-
+// build + zip
 gulp.task('release', gulp.series('default', 'zip'));// 生成发布到 Chrome Web Store 的 zip 文件

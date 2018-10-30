@@ -3,9 +3,9 @@
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/d/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg?maxAge=2592000)
 
-<img src="https://user-images.githubusercontent.com/8005686/45733856-d133c980-bc14-11e8-8d80-187278297ffa.png" width="400"/>
-
 [在线安装](https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil "Chrome Web Store")
+
+<img src="https://user-images.githubusercontent.com/8005686/45733856-d133c980-bc14-11e8-8d80-187278297ffa.png" width="400"/>
 
 # 增强功能
 1. 记录、导出查询历史
@@ -22,6 +22,8 @@
 
 # 开发
 > npm run dev
+## 打包发布
+> npm run release
 
 # Dependencies
-- [FileSaver.js](https://github.com/eligrey/FileSaver.js/)
+- [FileSaver.js](https://github.com/g8up/qrcodejs)
