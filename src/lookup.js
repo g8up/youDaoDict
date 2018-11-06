@@ -12,6 +12,7 @@ import {
   addToNote,
 } from './common/chrome';
 
+const STYLE_CONTENT = 'content.css';
 const Options = {};
 const { body } = document;
 const list = [];
@@ -67,7 +68,7 @@ const markTagOrigin = (tag) => {
 const genTmpl = () => {
   const tmpl = document.createElement('template');
   markTagOrigin(tmpl);
-  const cssUrl = chrome.extension.getURL('youdao-crx.css');
+  const cssUrl = chrome.extension.getURL(STYLE_CONTENT);
   tmpl.innerHTML = `<style>@import "${cssUrl}"; </style>
       <div id="ydd-content">
     </div>`; // for panel content

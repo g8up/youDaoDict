@@ -12,6 +12,9 @@ import {
 import {
   fetchWordOnline,
 } from './common/http';
+import {
+  history,
+} from './common/render';
 
 let Options = null;
 let retphrase = '';
@@ -42,20 +45,15 @@ const saveSearchedWord = (word) => {
 
 // 取缓存查询词
 const getCachedWord = () => {
-  const html = [];
-
   let cache = localStorage.getItem('wordcache');
   if (cache && cache.trim()) {
     cache = cache.trim();
     const count = Options.history_count >= 0 ? Options.history_count : 0;
     const words = cache.split(SP, count);
-    for (let i = 0, len = words.length; i < len; i += 1) {
-      html.push(`<a>${words[i]}</a>`);
-    }
-    if (html.length) {
+
+    if (words.length) {
       let $cache = document.querySelector('#cache');
-      html.unshift('<strong>查询历史：</strong>');
-      $cache.innerHTML = html.join('<br/>');
+      $cache.innerHTML = history(words);
       $cache.onclick = (event) => { // 查询
         const a = event.target;
         if (a.tagName.toLowerCase() === 'a') {
