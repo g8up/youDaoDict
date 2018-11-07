@@ -267,3 +267,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
   return true;
 });
+
+/**
+ * https://developer.chrome.com/extensions/runtime#event-onInstalled
+ * Fired when the extension is first installed,
+ * when the extension is updated to a new version,
+ * and when Chrome is updated to a new version.
+ */
+chrome.runtime.onInstalled.addListener((details) => {
+  // details: {previousVersion: "1.0.2.3", reason: "update"}
+  console.log('onInstall', details);
+  chrome.tabs.create({ url: 'options.html' });
+});
