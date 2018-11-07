@@ -95,7 +95,7 @@ const buildSearchResult = ({
   } else if (langType === 'fr') {
     params.le = 'fr';
   }
-  const res = document.getElementById('result');
+  const res = $('#result');
   res.innerHTML = '<strong>查询:</strong><br/>';
   if (hasBaseTrans) {
     const langTypeMap = {
@@ -103,11 +103,11 @@ const buildSearchResult = ({
       jap: '日汉',
       fr: '法汉',
     };
-    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译
+    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>${baseTrans}
       ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
       <span class='word-speech' data-toggle='play'></span>
       <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
-      </div>${baseTrans}`;
+      `;
   }
   if (hasWebTrans) {
     res.innerHTML += `<div class="section-title">网络释义</div>${webTrans}`;
@@ -208,8 +208,8 @@ const mainQuery = (word, callback) => fetchWordOnline(word).then((ret) => {
 });
 
 const changeIcon = () => {
-  const engBox = document.getElementById('english_only');
-  const dictBox = document.getElementById('dict_enable');
+  const engBox = $('#english_only');
+  const dictBox = $('#dict_enable');
   const isEnabled = dictBox.checked;
   engBox.disabled = !isEnabled;
 };
@@ -219,7 +219,7 @@ const changeIcon = () => {
  */
 const restoreOptions = (option) => {
   Object.keys(option).forEach((key) => {
-    const elem = document.getElementById(key);
+    const elem = $(`#${key}`);
     if (elem) {
       const val = option[key];
       if (!val) return;
@@ -270,7 +270,7 @@ const exportHistory = () => {
 
 const saveOptions = () => {
   Object.keys(Options).forEach((key) => {
-    const elem = document.getElementById(key);
+    const elem = $(`#${key}`);
     if (Options[key][0] === 'checked') {
       Options[key][1] = elem.checked;
     } else {
@@ -307,20 +307,20 @@ window.onload = () => {
   if (optElem) {
     optElem.onmouseover = () => {
       optElem.onmouseover = null;
-      document.getElementById('dict_enable').onclick = () => {
+      $('#dict_enable').onclick = () => {
         saveOptions();
         changeIcon();
       };
-      document.getElementById('ctrl_only').onclick = () => {
+      $('#ctrl_only').onclick = () => {
         saveOptions();
       };
-      document.getElementById('english_only').onclick = () => {
+      $('#english_only').onclick = () => {
         saveOptions();
       };
-      document.getElementById('auto_speech').onclick = () => {
+      $('#auto_speech').onclick = () => {
         saveOptions();
       };
-      document.getElementById('history_count').onclick = document.getElementById('history_count').onkeyup = () => {
+      $('#history_count').onclick = $('#history_count').onkeyup = () => {
         saveOptions();
         getCachedWord();
       };
