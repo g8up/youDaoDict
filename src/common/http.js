@@ -28,7 +28,7 @@ export const addWord = word => ajax({
     le: 'eng',
   },
   dataType: 'json',
-}).then((ret) => {
+}).then((ret) => { // eslint-disable-line
   const msg = ret.message;
   if (msg === 'adddone') {
     return Promise.resolve();
