@@ -32,5 +32,5 @@
 	"options_page": "options.html",
 	"permissions": ["*://*/*", "storage"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "youdao-crx.css"]
+	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "content.css"]
 }
