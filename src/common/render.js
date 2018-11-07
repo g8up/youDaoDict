@@ -78,7 +78,7 @@ export const table = ({
 };
 
 // popup 查下历史
-export const history = words => `<div class="section-title">查询历史：</div>
+export const history = words => `<div class="section-title">查询历史</div>
   ${words.map(word => `<a>${word}</a>`).join('<br/>')}`;
 
 export default {

@@ -147,7 +147,6 @@ export const ajax = option => new Promise((resolve, reject) => {
   console.warn(err);
 });
 
-
 export const copyText = (text) => {
   if (text !== undefined) {
     const cont = document.createElement('div');
@@ -163,3 +162,5 @@ export const copyText = (text) => {
     cont.remove();
   }
 };
+
+export const $ = (selector, cont = document) => cont.querySelector(selector);

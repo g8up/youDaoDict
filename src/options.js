@@ -4,6 +4,7 @@ import {
   isContainKoera,
   isContainJapanese,
   copyText,
+  $,
 } from './common/util';
 import {
   playAudio,
@@ -26,7 +27,7 @@ let WORD;
 
 // 缓存查询词
 const saveSearchedWord = (word) => {
-  let w = word || (document.querySelector('#word') ? document.querySelector('#word').value : '');
+  let w = word || ($('#word') ? $('#word').value : '');
   if (w && w.trim()) {
     w = w.trim();
     let cache = localStorage.getItem('wordcache');
@@ -52,14 +53,14 @@ const getCachedWord = () => {
     const words = cache.split(SP, count);
 
     if (words.length) {
-      let $cache = document.querySelector('#cache');
+      let $cache = $('#cache');
       $cache.innerHTML = history(words);
       $cache.onclick = (event) => { // 查询
         const a = event.target;
         if (a.tagName.toLowerCase() === 'a') {
           const w = a.innerText;
           if (w) {
-            document.querySelector('#word').value = w;
+            $('#word').value = w;
             mainQuery(w, translateXML);
           }
         }
@@ -68,6 +69,7 @@ const getCachedWord = () => {
     }
   }
 };
+
 const getLink = (urlPrefix, params) => {
   const url = `${urlPrefix}?${queryString(params)}`;
   return url;
@@ -80,7 +82,7 @@ const buildSearchResult = ({
   baseTrans,
   webTrans,
 }) => {
-  document.querySelector('#options').style.display = 'none'; // hide option pannel
+  $('#options').style.display = 'none'; // hide option pannel
   const params = {
     q: WORD,
     ue: 'utf8',
@@ -101,18 +103,18 @@ const buildSearchResult = ({
       jap: '日汉',
       fr: '法汉',
     };
-    res.innerHTML = `<strong>${langTypeMap[langType] || '英汉'}翻译:</strong>
+    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译
       ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
       <span class='word-speech' data-toggle='play'></span>
       <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
-      <br/>${baseTrans}`;
+      </div>${baseTrans}`;
   }
   if (hasWebTrans) {
-    res.innerHTML += `<strong>网络释义:</strong><br/>${webTrans}`;
+    res.innerHTML += `<div class="section-title">网络释义</div>${webTrans}`;
   }
   if (hasBaseTrans || hasWebTrans) {
     const link = getLink('https://dict.youdao.com/search', params);
-    res.innerHTML += `<a class="weblink" href="${link}" target="_blank">点击 查看详细释义</a>`;
+    res.innerHTML += `<a class="weblink" href="${link}" target="_blank">查看详细释义&gt;&gt;</a>`;
   }
   if (!hasBaseTrans && !hasWebTrans) {
     res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
@@ -157,7 +159,7 @@ const translateXML = (xmlnode) => {
     hasWebTrans = false;
   }
   if (hasBaseTrans) {
-    baseTrans += `${retphrase}<br/><strong>基本释义:</strong><br/>`;
+    baseTrans += `${retphrase}<div class="section-title">基本释义</div>`;
     if (`${translation.childNodes[0]}` !== 'undefined') {
       const translations = root.getElementsByTagName('translation');
       for (let i = 0; i < translations.length; i += 1) {
@@ -301,7 +303,7 @@ window.onload = () => {
   /**
    * 配置项设置
    */
-  const optElem = document.querySelector('#options');
+  const optElem = $('#options');
   if (optElem) {
     optElem.onmouseover = () => {
       optElem.onmouseover = null;
@@ -325,21 +327,21 @@ window.onload = () => {
     };
   }
 
-  document.querySelector('#word').onkeydown = (event) => {
+  $('#word').onkeydown = (event) => {
     if (event.keyCode === 13) {
-      mainQuery(document.querySelector('#word').value, translateXML);
+      mainQuery($('#word').value, translateXML);
     }
   };
-  document.querySelector('#querybutton').onclick = () => {
-    mainQuery(document.querySelector('#word').value, translateXML);
+  $('#querybutton').onclick = () => {
+    mainQuery($('#word').value, translateXML);
   };
   // 导出查询记录
-  document.querySelector('#backup').onclick = (e) => {
+  $('#backup').onclick = (e) => {
     e.preventDefault();
     exportHistory();
   };
   // 登录按钮
-  document.querySelector('#login-youdao').addEventListener('click', (e) => {
+  $('#login-youdao').addEventListener('click', (e) => {
     e.preventDefault();
     chrome.runtime.sendMessage({
       action: 'login-youdao',
@@ -348,7 +350,7 @@ window.onload = () => {
     });
   });
   // share
-  document.querySelector('#share').addEventListener('click', (e) => {
+  $('#share').addEventListener('click', (e) => {
     e.preventDefault();
     shareDownloadLink();
   });
