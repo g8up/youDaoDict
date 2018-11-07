@@ -55,7 +55,7 @@ const copy = () => gulp
   .src(Asset.static.concat(Asset.lib), { base: 'src/' })
   .pipe(gulp.dest(Dist));
 
-const zipFile = `${pkg.name}-v${VERSION}.zip`;
+const zipFile = `${manifest.name}-v${VERSION}.zip`;
 
 const cleanZip = () => del([
   Release + zipFile,
