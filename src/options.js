@@ -18,7 +18,6 @@ import {
 } from './common/render';
 
 let Options = null;
-let retphrase = '';
 let langType = '';
 
 const setting = new Setting();
@@ -81,6 +80,7 @@ const buildSearchResult = ({
   hasWebTrans,
   baseTrans,
   webTrans,
+  retphrase,
 }) => {
   $('#options').style.display = 'none'; // hide option pannel
   const params = {
@@ -103,11 +103,12 @@ const buildSearchResult = ({
       jap: '日汉',
       fr: '法汉',
     };
-    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>${baseTrans}
+    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>
+      ${retphrase}
       ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
       <span class='word-speech' data-toggle='play'></span>
       <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
-      `;
+      ${baseTrans}`;
   }
   if (hasWebTrans) {
     res.innerHTML += `<div class="section-title">网络释义</div>${webTrans}`;
@@ -122,7 +123,6 @@ const buildSearchResult = ({
     saveSearchedWord();
   }
   getCachedWord();
-  retphrase = '';
   langType = '';
 };
 
@@ -132,7 +132,7 @@ const translateXML = (xmlnode) => {
   let hasWebTrans = true;
   let baseTrans = '';
   let webTrans = '';
-
+  let retphrase = '';
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
   const phrase = root.getElementsByTagName('return-phrase');
   if (`${phrase[0].childNodes[0]}` !== 'undefined') {
@@ -159,7 +159,7 @@ const translateXML = (xmlnode) => {
     hasWebTrans = false;
   }
   if (hasBaseTrans) {
-    baseTrans += `${retphrase}<div class="section-title">基本释义</div>`;
+    baseTrans += '<div class="section-title">基本释义</div>';
     if (`${translation.childNodes[0]}` !== 'undefined') {
       const translations = root.getElementsByTagName('translation');
       for (let i = 0; i < translations.length; i += 1) {
@@ -194,6 +194,7 @@ const translateXML = (xmlnode) => {
     hasWebTrans,
     baseTrans,
     webTrans,
+    retphrase,
   });
 };
 
