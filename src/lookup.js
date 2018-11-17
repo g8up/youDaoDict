@@ -332,26 +332,30 @@ const getOption = (next) => {
   });
 };
 
-getOption();
 
-// 获取配置修改的消息
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.optionChanged) {
-    Object.assign(Options, request.optionChanged);
+// some page has no body, eg. <frameset />
+if (body) {
+  getOption();
 
-    dealSelectEvent();
-    dealPointEvent();
-  }
-});
+  // 获取配置修改的消息
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.optionChanged) {
+      Object.assign(Options, request.optionChanged);
 
-// close window
-document.addEventListener('click', () => {
-  if (lastFrame) {
-    const cur = new Date().getTime();
-    if (cur - lastTime < 500) {
-      return;
+      dealSelectEvent();
+      dealPointEvent();
     }
-    closePanel();
-    lastFrame = null;
-  }
-});
+  });
+
+  // close window
+  document.addEventListener('click', () => {
+    if (lastFrame) {
+      const cur = new Date().getTime();
+      if (cur - lastTime < 500) {
+        return;
+      }
+      closePanel();
+      lastFrame = null;
+    }
+  });
+}
