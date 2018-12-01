@@ -146,11 +146,13 @@ const addContentEvent = (cont) => {
   });
 };
 
+const ROOT_TAG = 'chrome-extension-youdao-dict';
+
 const getPanelCont = (html) => {
   const PANEL_ID = 'yddWrapper';
-  let panel = document.querySelector(`div#${PANEL_ID}`);
+  let panel = document.querySelector(`${ROOT_TAG}#${PANEL_ID}`);
   if (!panel) {
-    panel = document.createElement('div');
+    panel = document.createElement(ROOT_TAG);
     panel.id = PANEL_ID;
     panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
     markTagOrigin(panel);
