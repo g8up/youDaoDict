@@ -258,7 +258,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         popBadgeTips('OK', 'green');
         sendResponse();
       }, () => {
-        loginYoudao();
+        // eslint-disable-next-line no-alert
+        if (window.confirm('需要登录，是否打开登录页？')) {
+          loginYoudao();
+        }
       });
       return true;
     default:
