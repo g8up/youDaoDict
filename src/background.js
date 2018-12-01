@@ -253,7 +253,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     case 'login-youdao':
       loginYoudao();
       break;
-    case 'youdao-add-word':
+    case 'youdao-add-word': // 添加到单词本
       addWord(word).then(() => {
         popBadgeTips('OK', 'green');
         sendResponse();

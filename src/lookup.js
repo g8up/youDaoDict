@@ -75,6 +75,7 @@ const genTmpl = () => {
   return tmpl;
 };
 
+/* eslint-disable no-param-reassign */
 const addPanelEvent = (panel) => {
   panel.setAttribute('draggable', true);
   // panel.innerHTML += html;
@@ -93,6 +94,7 @@ const addPanelEvent = (panel) => {
     distanceY = 0;
   };
 };
+/* eslint-enable no-param-reassign */
 
 const addContentEvent = (cont) => {
   // 关闭按钮
@@ -338,6 +340,7 @@ if (body) {
   getOption();
 
   // 获取配置修改的消息
+  // eslint-disable-next-line no-unused-vars
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.optionChanged) {
       Object.assign(Options, request.optionChanged);
