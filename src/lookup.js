@@ -61,7 +61,8 @@ const closePanel = () => {
  */
 const markTagOrigin = (tag) => {
   if (tag) {
-    tag.setAttribute('data-comment', '这是有道词典 “Chrome 划词扩展 V3” 插入的节点');
+    const { name: appName } = chrome.app.getDetails();
+    tag.setAttribute('data-comment', `这是 “${appName}” 插入的节点`);
   }
 };
 
