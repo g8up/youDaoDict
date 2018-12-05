@@ -11,8 +11,10 @@ import {
   playAudioByWordAndType,
   addToNote,
 } from './common/chrome';
+import {
+  wrapShadowDom,
+} from './common/shadow-dom';
 
-const STYLE_CONTENT = 'content.css';
 const Options = {};
 const { body } = document;
 const list = [];
@@ -54,25 +56,6 @@ const closePanel = () => {
     content.classList.remove('fadeIn');
     content.innerHTML = '';
   }
-};
-
-/**
- * 给插入的节点做标识，以免 web page 的开发者迷惑。
- */
-const markTagOrigin = (tag) => {
-  if (tag) {
-    tag.setAttribute('data-comment', '这是 “有道词典划词扩展2018” 插入的节点');
-  }
-};
-
-const genTmpl = () => {
-  const tmpl = document.createElement('template');
-  markTagOrigin(tmpl);
-  const cssUrl = chrome.extension.getURL(STYLE_CONTENT);
-  tmpl.innerHTML = `<style>@import "${cssUrl}"; </style>
-      <div id="ydd-content">
-    </div>`; // for panel content
-  return tmpl;
 };
 
 /* eslint-disable no-param-reassign */
@@ -119,7 +102,6 @@ const addContentEvent = (cont) => {
         const { wordAndType } = usPhonetic.dataset;
         playAudioByWordAndType(wordAndType);
       }
-      console.log('usPhonetic', usPhonetic);
     }
     // 朗读按钮事件
     cont.addEventListener('click', (e) => {
@@ -155,14 +137,10 @@ const getPanelCont = (html) => {
     panel = document.createElement(ROOT_TAG);
     panel.id = PANEL_ID;
     panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
-    markTagOrigin(panel);
+    wrapShadowDom(panel);
+    content = panel.shadowRoot.querySelector('#ydd-content');
     body.appendChild(panel);
     addPanelEvent(panel);
-
-    const tmpl = genTmpl();
-    const root = panel.attachShadow({ mode: 'closed' });
-    root.appendChild(document.importNode(tmpl.content, true));
-    content = root.querySelector('#ydd-content');
   }
   content.innerHTML = html;
   content.classList.add('fadeIn');
