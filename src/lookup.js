@@ -20,6 +20,7 @@ const { body } = document;
 const list = [];
 let lastTime = 0;
 let lastFrame;
+let PANEL = null;
 
 const getOptVal = (strKey) => {
   if (Options !== null) {
@@ -50,8 +51,10 @@ const getYoudaoTrans = (word, next) => {
   });
 };
 
-let content = null;
+const getPanelContent = panel => panel.shadowRoot.querySelector('#ydd-content');
+
 const closePanel = () => {
+  const content = getPanelContent(PANEL);
   if (content) {
     content.classList.remove('fadeIn');
     content.innerHTML = '';
@@ -130,18 +133,17 @@ const addContentEvent = (cont) => {
 
 const ROOT_TAG = 'chrome-extension-youdao-dict';
 
-const getPanelCont = (html) => {
-  const PANEL_ID = 'yddWrapper';
-  let panel = document.querySelector(`${ROOT_TAG}#${PANEL_ID}`);
-  if (!panel) {
-    panel = document.createElement(ROOT_TAG);
-    panel.id = PANEL_ID;
-    panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
-    wrapShadowDom(panel);
-    content = panel.shadowRoot.querySelector('#ydd-content');
-    body.appendChild(panel);
-    addPanelEvent(panel);
-  }
+const getPanel = () => {
+  const panel = document.createElement(ROOT_TAG);
+  panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
+  wrapShadowDom(panel);
+  body.appendChild(panel);
+  addPanelEvent(panel);
+  return panel;
+};
+
+const updatePanelContent = (panel, html) => {
+  const content = getPanelContent(PANEL);
   content.innerHTML = html;
   content.classList.add('fadeIn');
   addContentEvent(content);
@@ -154,8 +156,8 @@ const createPopUp = (html, senctence, x, y, screenX, screenY) => {
   const padding = 10;
   let frameLeft = 0;
   let frameTop = 0;
-  const frame = getPanelCont(html);
-
+  const frame = PANEL || (PANEL = getPanel());
+  updatePanelContent(frame, html);
   body.style.position = 'static';
   // 确定位置
   const screenWidth = window.screen.availWidth;
