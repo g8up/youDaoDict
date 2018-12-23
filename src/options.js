@@ -60,7 +60,7 @@ const getCachedWord = () => {
           const w = a.innerText;
           if (w) {
             $('#word').value = w;
-            mainQuery(w, translateXML);
+            mainQuery(w, translateXML); // eslint-disable-line
           }
         }
       };
@@ -106,8 +106,8 @@ const buildSearchResult = ({
     res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>
       ${retphrase}
       ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
-      <span class='word-speech' data-toggle='play'></span>
-      <a href='#' class='add-to-note' data-toggle='addToNote'>+</a>
+      <span class="word-speech" data-toggle="play" title="朗读"></span>
+      <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>
       ${baseTrans}`;
   }
   if (hasWebTrans) {
@@ -321,6 +321,7 @@ window.onload = () => {
       $('#auto_speech').onclick = () => {
         saveOptions();
       };
+      // eslint-disable-next-line
       $('#history_count').onclick = $('#history_count').onkeyup = () => {
         saveOptions();
         getCachedWord();
