@@ -18,9 +18,9 @@ const renderSpeech = ({
   title,
   wordAndType,
   phonetic,
-}) => `<div>
+}) => `<div class="ydd-voice" data-word-and-type="${wordAndType}">
     ${title}:
-    <span class="ydd-voice ydd-voice-icon" data-word-and-type="${wordAndType}"></span>
+    <span class="ydd-voice-icon"></span>
     ${phonetic ? `<span> [${phonetic}] </span>` : ''}
   </div>`;
 
