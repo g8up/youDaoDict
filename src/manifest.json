@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
-	"version": "3.2.6.6",
-	"name": "有道词典划词扩展2018",
+	"version": "3.2.7",
+	"name": "有道词典划词扩展2019",
 	"short_name": "有道划词",
 	"description": "可自动发音，添加单词本，记录、导出查询历史！",
 	"icons": {

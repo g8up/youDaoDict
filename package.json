@@ -7,6 +7,7 @@
     "dev": "gulp dev",
     "build": "gulp",
     "js": "gulp js",
+    "css": "gulp less",
     "release": "gulp release"
   },
   "devDependencies": {

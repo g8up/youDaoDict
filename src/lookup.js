@@ -109,8 +109,9 @@ const addContentEvent = (cont) => {
     // 朗读按钮事件
     cont.addEventListener('click', (e) => {
       const { target } = e;
-      if (target.classList.contains('ydd-voice')) {
-        const { wordAndType } = target.dataset;
+      const voiceNode = target.closest('.ydd-voice');
+      if (voiceNode) {
+        const { wordAndType } = voiceNode.dataset;
         playAudioByWordAndType(wordAndType);
         if (getOptVal('auto_speech')) {
           playAudioByWordAndType(wordAndType);
