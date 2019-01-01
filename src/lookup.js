@@ -22,9 +22,9 @@ let lastTime = 0;
 let lastFrame;
 let PANEL = null;
 
-const getOptVal = (strKey) => {
-  if (Options !== null) {
-    return Options[strKey][1];
+const getOptVal = (key) => {
+  if (Options) {
+    return Options[key][1];
   }
   return '';
 };
@@ -81,7 +81,6 @@ const addPanelEvent = (panel) => {
   };
 };
 
-/* eslint-enable no-param-reassign */
 const addContentEvent = (cont) => {
   // 关闭按钮
   cont.addEventListener('click', (e) => {
@@ -143,57 +142,55 @@ const getPanel = () => {
   return panel;
 };
 
-const updatePanelContent = (panel, html) => {
-  const content = getPanelContent(PANEL);
-  content.innerHTML = html;
-  content.classList.add('fadeIn');
-  addContentEvent(content);
-  return panel;
-};
-
-const createPopUp = (html, senctence, x, y, screenX, screenY) => {
+/* eslint-disable no-param-reassign */
+const setPosition = (panel, x, y, screenX, screenY) => {
   const frameHeight = 150;
   const frameWidth = 300;
   const padding = 10;
   let frameLeft = 0;
   let frameTop = 0;
-  const frame = PANEL || (PANEL = getPanel());
-  updatePanelContent(frame, html);
   body.style.position = 'static';
   // 确定位置
-  const screenWidth = window.screen.availWidth;
-  const screenHeight = window.screen.availHeight;
+  const {
+    availWidth: screenWidth,
+    availHeight: screenHeight,
+  } = window.screen;
   if (screenX + frameWidth < screenWidth) {
     frameLeft = x;
   } else {
     frameLeft = (x - frameWidth - 2 * padding);
   }
-  frame.style.left = `${frameLeft}px`;
+  panel.style.left = `${frameLeft}px`;
   if (screenY + frameHeight + 20 < screenHeight) {
     frameTop = y;
   } else {
     frameTop = (y - frameHeight - 2 * padding);
   }
-  frame.style.top = `${frameTop + 10}px`;
-  if (frame.style.left + frameWidth > screenWidth) {
-    frame.style.left -= frame.style.left + frameWidth - screenWidth;
+  panel.style.top = `${frameTop + 10}px`;
+  if (panel.style.left + frameWidth > screenWidth) {
+    panel.style.left -= panel.style.left + frameWidth - screenWidth;
   }
-  const leftbottom = frameTop + 10 + frame.clientHeight;
+  const leftbottom = frameTop + 10 + panel.clientHeight;
   if (leftbottom < y) {
-    const newtop = y - frame.clientHeight;
-    frame.style.top = `${newtop}px`;
+    const newtop = y - panel.clientHeight;
+    panel.style.top = `${newtop}px`;
   }
-  frame.style.display = '';// 设定了新节点位置，清除隐藏属性
-  list.push(frame);
+  list.push(panel);
   lastTime = new Date().getTime();
-  lastFrame = frame;
+  lastFrame = panel;
 };
 
-const createPopUpEx = (html, x, y, screenx, screeny) => {
+const createPopup = (html, pageX, pageY, screenX, screenY) => {
   if (html !== undefined) {
     const sel = window.getSelection();
     if (sel && sel.rangeCount) {
-      createPopUp(html, sel.getRangeAt(0).startContainer.nodeValue, x, y, screenx, screeny);
+      const panel = PANEL || (PANEL = getPanel());
+      const content = getPanelContent(panel);
+      content.innerHTML = html;
+      content.classList.add('fadeIn');
+      addContentEvent(content);
+      setPosition(panel, pageX, pageY, screenX, screenY);
+      panel.style.display = '';// 设定了新节点位置，清除隐藏属性
     }
   }
 };
@@ -205,10 +202,10 @@ const onSelectToTrans = debounce((e) => {
     return;
   }
   const {
-    pageX: xx,
-    pageY: yy,
-    screenX: sx,
-    screenY: sy,
+    pageX,
+    pageY,
+    screenX,
+    screenY,
   } = e;
   const hasJapanese = isContainJapanese(word);
   const hasChinese = isContainChinese(word);
@@ -221,13 +218,13 @@ const onSelectToTrans = debounce((e) => {
     // TODO: add isEnglish function
     if (word !== '') {
       getYoudaoDictTemplateHtml(word, (html) => {
-        createPopUpEx(html, xx, yy, sx, sy);
+        createPopup(html, pageX, pageY, screenX, screenY);
       });
     }
   } else if ((!hasChinese && spaceCount(word) >= 3)
     || ((hasChinese || hasJapanese) && word.length > 4)) {
-    getYoudaoTrans(word, (data) => {
-      createPopUpEx(data, xx, yy, sx, sy);
+    getYoudaoTrans(word, (html) => {
+      createPopup(html, pageX, pageY, screenX, screenY);
     });
   }
 });
@@ -270,17 +267,17 @@ const onPointToTrans = debounce((e) => {
   }
   const word = tr.toString();
   if (word.length >= 1) {
-    const {
-      pageX: xx,
-      pageY: yy,
-      screenX: sx,
-      screenY: sy,
-    } = e;
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(tr);
     getYoudaoDictTemplateHtml(word, (html) => {
-      createPopUpEx(html, xx, yy, sx, sy);
+      const {
+        pageX,
+        pageY,
+        screenX,
+        screenY,
+      } = e;
+      createPopup(html, pageX, pageY, screenX, screenY);
     });
   }
 });
