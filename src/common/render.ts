@@ -27,7 +27,6 @@ const renderSpeech = ({
 // 页面中弹出的的面板
 export const table = ({
   phrase: word,
-  speach,
   ukSpeech,
   usSpeech,
   phonetic = '',
