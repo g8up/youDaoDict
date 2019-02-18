@@ -1,3 +1,4 @@
+///<reference path="../node_modules/@types/chrome/index.d.ts" />
 import Setting from './common/setting';
 import {
   OPTION_STORAGE_ITEM,
@@ -73,7 +74,7 @@ const translateXML = (xmlnode) => {
     usPhonetic: 'us-phonetic-symbol',
     lang: 'lang',
   };
-  const params = {};
+  const params = <any>{};
   Object.keys(retrieveDataMap).forEach((key) => {
     let node = retrieveDataMap[key];
     node = root.getElementsByTagName(node);

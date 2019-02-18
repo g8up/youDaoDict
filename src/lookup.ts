@@ -1,3 +1,4 @@
+///<reference path="../node_modules/@types/chrome/index.d.ts" />
 import {
   isContainChinese,
   isContainJapanese,
@@ -300,7 +301,7 @@ const dealPointEvent = () => {
   }
 };
 
-const getOption = (next) => {
+const getOption = (next?) => {
   chrome.runtime.sendMessage({
     action: 'getOption',
   }, (resp) => {
