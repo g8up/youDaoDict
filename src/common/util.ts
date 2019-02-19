@@ -1,3 +1,7 @@
+import {
+  AddToNoteState
+} from 'index';
+
 export const isEnglish = (s) => {
   for (let i = 0; i < s.length; i += 1) {
     if (s.charCodeAt(i) > 126) {
@@ -109,7 +113,10 @@ export const parseQuerystring = (querystring) => {
   return obj;
 };
 
-export const ajax = option => new Promise((resolve, reject) => {
+
+type Resp = string | Document | AddToNoteState;
+
+export const ajax = option => new Promise<Resp>((resolve: ( value: Resp)=>any, reject) => {
   let { url } = option;
   const type = option.type || 'GET';
   const dataType = (option.dataType || '').toLowerCase();
@@ -120,16 +127,16 @@ export const ajax = option => new Promise((resolve, reject) => {
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4) {
       if (xhr.status === 200) {
-        let ret = xhr.responseText;
+        let ret: Resp = xhr.responseText as string;
         if (dataType === 'json') {
           try {
-            ret = JSON.parse(ret); // 添加单词本接口返回内容需要 parse
+            ret = JSON.parse(ret) as AddToNoteState; // 添加单词本接口返回内容需要 parse
           } catch (err) {
             reject(err);
             return;
           }
         } else if (dataType === 'xml') {
-          ret = xhr.responseXML;
+          ret = xhr.responseXML as Document;
         }
         resolve(ret);
       }

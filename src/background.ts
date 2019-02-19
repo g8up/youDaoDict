@@ -1,4 +1,3 @@
-///<reference path="../node_modules/@types/chrome/index.d.ts" />
 import Setting from './common/setting';
 import {
   OPTION_STORAGE_ITEM,
