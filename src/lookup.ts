@@ -1,4 +1,3 @@
-///<reference path="../node_modules/@types/chrome/index.d.ts" />
 import {
   isContainChinese,
   isContainJapanese,

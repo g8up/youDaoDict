@@ -1,4 +1,8 @@
 import {
+  AddState,
+  AddToNoteState,
+} from 'index';
+import {
   isContainKoera,
   ajax,
 } from './util';
@@ -28,12 +32,12 @@ export const addWord = word => ajax({
     le: 'eng',
   },
   dataType: 'json',
-}).then((ret) => { // eslint-disable-line
+}).then((ret: AddToNoteState) => { // eslint-disable-line
   const msg = ret.message;
-  if (msg === 'adddone') {
+  if (msg === AddState.adddone) {
     return Promise.resolve();
   }
-  if (msg === 'nouser') {
+  if (msg === AddState.nouser) {
     return Promise.reject();
   }
 });

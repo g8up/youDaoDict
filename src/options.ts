@@ -22,10 +22,10 @@ let langType = '';
 
 const setting = new Setting();
 const SP = ',';
-let WORD;
+let WORD: string;
 
 // 缓存查询词
-const saveSearchedWord = (word) => {
+const saveSearchedWord = (word?: string) => {
   let w = word || ($('#word') ? $('#word').value : '');
   if (w && w.trim()) {
     w = w.trim();
@@ -87,6 +87,7 @@ const buildSearchResult = ({
     q: WORD,
     ue: 'utf8',
     keyfrom: 'chrome.extension',
+    le: '',
   };
   if (isContainKoera(WORD)) {
     params.le = 'ko';
@@ -366,7 +367,7 @@ window.onload = () => {
 
   document.body.addEventListener('click', (e) => {
     const { target } = e;
-    const { toggle } = target.dataset;
+    const { toggle } = target.dataset as string;
     if (toggle === 'play') {
       playAudio({ word: WORD });
     } else if (toggle === 'addToNote') {
