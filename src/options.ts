@@ -17,6 +17,10 @@ import {
   history,
 } from './common/render';
 
+interface Window {
+  saveAs(blob: Blob, filename: string): void;
+}
+
 let Options = null;
 let langType = '';
 
@@ -247,7 +251,7 @@ const saveContent2File = (content, filename) => {
   const blob = new Blob([content], {
     type: 'text/plain;charset=utf-8',
   });
-  saveAs(blob, filename);
+  (window as unknown as Window).saveAs(blob, filename);
 };
 /*
  * 导出单词查询历史
@@ -255,12 +259,13 @@ const saveContent2File = (content, filename) => {
 const exportHistory = () => {
   const cachedWords = localStorage.getItem('wordcache');
   if (cachedWords) {
-    const extDetail = chrome.app.getDetails();
-    const extName = extDetail.name;
-    const { version } = extDetail;
+    const {
+      name,
+      version,
+    } = chrome.runtime.getManifest();
     const BR = '\r\n';
     const banner = [
-      `【${extName}】V${version} 查询历史备份文件`,
+      `【${name}】V${version} 查询历史备份文件`,
       `${new Date().toString().slice(0, 24)}`,
       'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
       `${new Array(25).join('=')}`,
@@ -288,7 +293,7 @@ const shareDownloadLink = () => {
   const {
     name,
     description,
-  } = chrome.app.getDetails();
+  } = chrome.runtime.getManifest();
   const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
   const text = `${name}\r\n${description}\r\n${downloadLink}`;
   copyText(text);
