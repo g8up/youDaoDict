@@ -229,6 +229,16 @@ const onSelectToTrans = debounce((e) => {
   }
 });
 
+interface Node {
+  data: string;
+}
+
+interface Range {
+  startContainer: Node;
+  endContainer: Node;
+  startOffset: Number;
+  endOffset: Number;
+}
 let prevC;
 let prevO;
 // 指词即译
@@ -238,33 +248,37 @@ const onPointToTrans = debounce((e) => {
   }
   const caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
   if (!caretRange) { return; }
-  let so = caretRange.startOffset;
-  let eo = caretRange.endOffset;
-  if (prevC === caretRange.startContainer && prevO === so) { return; }
-  prevC = caretRange.startContainer;
+  let {
+    startOffset: so,
+    endOffset: eo,
+    startContainer,
+    endContainer,
+  } = caretRange;
+  if (prevC === startContainer && prevO === so) { return; }
+  prevC = startContainer;
   prevO = so;
   const tr = caretRange.cloneRange();
   let tempText = '';
-  if (caretRange.startContainer.data) {
-    while (so >= 1) {
-      tr.setStart(caretRange.startContainer, so -= 1);
-      tempText = tr.toString();
-      if (!isAlpha(tempText.charAt(0))) {
-        tr.setStart(caretRange.startContainer, so + 1);
-        break;
-      }
-    }
-  }
-  if (caretRange.endContainer.data) {
-    while (eo < caretRange.endContainer.data.length) {
-      tr.setEnd(caretRange.endContainer, eo += 1);
-      tempText = tr.toString();
-      if (!isAlpha(tempText.charAt(tempText.length - 1))) {
-        tr.setEnd(caretRange.endContainer, eo - 1);
-        break;
-      }
-    }
-  }
+  // if (startContainer.data) {
+  //   while (so >= 1) {
+  //     tr.setStart(startContainer, so -= 1);
+  //     tempText = tr.toString();
+  //     if (!isAlpha(tempText.charAt(0))) {
+  //       tr.setStart(startContainer, so + 1);
+  //       break;
+  //     }
+  //   }
+  // }
+  // if (endContainer.data) {
+  //   while (eo < endContainer.data.length) {
+  //     tr.setEnd(endContainer, eo += 1);
+  //     tempText = tr.toString();
+  //     if (!isAlpha(tempText.charAt(tempText.length - 1))) {
+  //       tr.setEnd(endContainer, eo - 1);
+  //       break;
+  //     }
+  //   }
+  // }
   const word = tr.toString();
   if (word.length >= 1) {
     const selection = window.getSelection();
@@ -313,7 +327,6 @@ const getOption = (next?) => {
     if (next) { next(); }
   });
 };
-
 
 // some page has no body, eg. <frameset />
 if (body) {
