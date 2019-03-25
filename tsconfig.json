@@ -6,7 +6,7 @@
     "noImplicitAny": false,
     "sourceMap": false,
     "rootDir": "src",
-    "outDir": "built/js",
+    "outDir": "dist/js",
     "noEmitOnError": true,
     // "typeRoots": [ "src/typings", "node_modules/@types" ],
     // "types": [
@@ -14,6 +14,6 @@
     // ],
     "lib": [ "dom", "es5", "es2015", "es2016" ]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/*.ts"],
+  "exclude": ["node_modules", "built/**"]
 }

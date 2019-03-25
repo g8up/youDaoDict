@@ -1,7 +1,7 @@
 import {
   AddState,
   AddToNoteState,
-} from 'index';
+} from './index';
 import {
   isContainKoera,
   ajax,

@@ -370,14 +370,19 @@ window.onload = () => {
     }
   }());
 
+  interface Target extends EventTarget {
+    dataset: DOMStringMap;
+    classList: DOMTokenList;
+  }
+
   document.body.addEventListener('click', (e) => {
-    const { target } = e;
-    const { toggle } = target.dataset as string;
+    const { target } = e ;
+    const { toggle  } = (target as Target).dataset;
     if (toggle === 'play') {
       playAudio({ word: WORD });
     } else if (toggle === 'addToNote') {
       addToNote(WORD, () => {
-        target.classList.add('green');
+        (target as Target).classList.add('green');
       });
     }
   });
