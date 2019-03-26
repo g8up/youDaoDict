@@ -109,7 +109,7 @@ const translateXML = (xmlnode) => {
   } else {
     for (let i = 0; i < $webtranslations.length; i += 1) {
       const key = $webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue;
-      const vals = [...$webtranslations[i].getElementsByTagName('trans')].map(trans => trans.textContent.trim());
+      const vals = Array.from($webtranslations[i].getElementsByTagName('trans')).map(trans => (trans as Node).textContent.trim());
       webTrans += `<div class="ydd-trans-container">
           <a href="https://dict.youdao.com/search?q=${encodeURIComponent(key)}&le=${params.lang}&keyfrom=chrome.extension" target=_blank>${key}:</a>
             ${vals.join('；')}<br />

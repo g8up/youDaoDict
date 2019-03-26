@@ -233,12 +233,6 @@ interface Node {
   data: string;
 }
 
-interface Range {
-  startContainer: Node;
-  endContainer: Node;
-  startOffset: Number;
-  endOffset: Number;
-}
 let prevC;
 let prevO;
 // 指词即译
@@ -251,34 +245,35 @@ const onPointToTrans = debounce((e) => {
   let {
     startOffset: so,
     endOffset: eo,
-    startContainer,
-    endContainer,
   } = caretRange;
+
+  const startContainer = caretRange.startContainer;
+  const endContainer  = caretRange.endContainer;
   if (prevC === startContainer && prevO === so) { return; }
   prevC = startContainer;
   prevO = so;
   const tr = caretRange.cloneRange();
   let tempText = '';
-  // if (startContainer.data) {
-  //   while (so >= 1) {
-  //     tr.setStart(startContainer, so -= 1);
-  //     tempText = tr.toString();
-  //     if (!isAlpha(tempText.charAt(0))) {
-  //       tr.setStart(startContainer, so + 1);
-  //       break;
-  //     }
-  //   }
-  // }
-  // if (endContainer.data) {
-  //   while (eo < endContainer.data.length) {
-  //     tr.setEnd(endContainer, eo += 1);
-  //     tempText = tr.toString();
-  //     if (!isAlpha(tempText.charAt(tempText.length - 1))) {
-  //       tr.setEnd(endContainer, eo - 1);
-  //       break;
-  //     }
-  //   }
-  // }
+  if ((startContainer as unknown as Node).data) {
+    while (so >= 1) {
+      tr.setStart(startContainer, so -= 1);
+      tempText = tr.toString();
+      if (!isAlpha(tempText.charAt(0))) {
+        tr.setStart(startContainer, so + 1);
+        break;
+      }
+    }
+  }
+  if ((endContainer as unknown as Node).data) {
+    while (eo < (endContainer as unknown as Node).data.length) {
+      tr.setEnd(endContainer, eo += 1);
+      tempText = tr.toString();
+      if (!isAlpha(tempText.charAt(tempText.length - 1))) {
+        tr.setEnd(endContainer, eo - 1);
+        break;
+      }
+    }
+  }
   const word = tr.toString();
   if (word.length >= 1) {
     const selection = window.getSelection();
