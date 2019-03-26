@@ -5,7 +5,7 @@ const cssmin = require('gulp-cssmin');
 const zip = require('gulp-zip');
 const del = require('del');
 
-const manifest = require('./src/manifest.json');
+const manifest = require('./dist/manifest.json');
 const pkg = require('./package.json');
 
 const VERSION = manifest.version;
@@ -20,16 +20,9 @@ const banner = [
 ].join('\n');
 
 const Asset = {
-  js: 'src/{background,options,lookup}.js',
-  less: 'dev/*.less',
+  less: 'src/style/*.less',
   static: [
-    'src/image/*',
-    'src/*.html',
     'src/*.css',
-    'src/*.json',
-  ],
-  lib: [
-    'src/lib/**',
   ],
 };
 const Dist = 'dist/';
@@ -46,7 +39,7 @@ const lessIt = () => gulp.src(Asset.less)
 
 // copy static assets
 const copy = () => gulp
-  .src(Asset.static.concat(Asset.lib), { base: 'src/' })
+  .src(Asset.static, { base: 'src/' })
   .pipe(gulp.dest(Dist));
 
 const zipFile = `${manifest.name}-v${VERSION}.zip`;
