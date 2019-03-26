@@ -3,11 +3,11 @@ const webpack = require('webpack');
 
 const pkg = require('../package.json');
 const app = require('../dist/manifest.json');
-const util = require('.//util.js');
+const util = require('./util.js');
 
 const resolve = dir => path.resolve(__dirname, dir);
 
-const banner = `${pkg.name} - v${app.version}
+const banner = `${app.name} - v${app.version}
 @desc ${app.description}
 @author ${pkg.author}
 @date ${`${util.getDate()} ${util.getTime()}`}`;
