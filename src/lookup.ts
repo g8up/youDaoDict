@@ -245,16 +245,16 @@ const onPointToTrans = debounce((e) => {
   let {
     startOffset: so,
     endOffset: eo,
+    startContainer,
+    endContainer,
   } = caretRange;
 
-  const startContainer = caretRange.startContainer;
-  const endContainer  = caretRange.endContainer;
   if (prevC === startContainer && prevO === so) { return; }
   prevC = startContainer;
   prevO = so;
   const tr = caretRange.cloneRange();
   let tempText = '';
-  if ((startContainer as unknown as Node).data) {
+  if (startContainer.nodeValue) {
     while (so >= 1) {
       tr.setStart(startContainer, so -= 1);
       tempText = tr.toString();
@@ -264,8 +264,8 @@ const onPointToTrans = debounce((e) => {
       }
     }
   }
-  if ((endContainer as unknown as Node).data) {
-    while (eo < (endContainer as unknown as Node).data.length) {
+  if (endContainer.nodeValue) {
+    while (eo < endContainer.nodeValue.length) {
       tr.setEnd(endContainer, eo += 1);
       tempText = tr.toString();
       if (!isAlpha(tempText.charAt(tempText.length - 1))) {
