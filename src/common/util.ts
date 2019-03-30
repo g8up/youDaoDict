@@ -62,7 +62,7 @@ export const isContainKoera = (temp) => {
 
 export const isAlpha = str => /[a-zA-Z']+/.test(str);
 
-export const spaceCount = (temp) => {
+export const spaceCount = (temp: string) => {
   let cnt = 0;
   for (let i = 0; i < temp.length; i += 1) {
     if (temp.charAt(i) === ' ') {
