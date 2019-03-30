@@ -1,13 +1,10 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "modules": false
+    ["@babel/preset-env", {
+      "targets": {
+        "node": "current"
       }
-    ]
-  ],
-  "plugins": [
-    "external-helpers"
+    }],
+    "@babel/preset-typescript"
   ]
 }
