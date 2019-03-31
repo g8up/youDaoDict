@@ -1,7 +1,7 @@
 const gulp = require('gulp');
 const header = require('gulp-header');
 const less = require('gulp-less');
-const cssmin = require('gulp-cssmin');
+const cleanCss = require('gulp-clean-css');
 const zip = require('gulp-zip');
 const del = require('del');
 
@@ -30,7 +30,7 @@ const Release = 'release/';
 
 const lessIt = () => gulp.src(Asset.less)
   .pipe(less())
-  .pipe(cssmin())
+  .pipe(cleanCss())
   .pipe(header(banner, {
     VERSION,
     pkg,
@@ -48,9 +48,6 @@ const cleanZip = () => del([
   Release + zipFile,
 ], { dryRun: true });
 
-exports.lessIt = lessIt;
-exports.copy = copy;
-exports.cleanZip = cleanZip;
 
 const watch = gulp.series(lessIt, copy, () => {
   gulp.watch(Asset.less, lessIt);
