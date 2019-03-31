@@ -2,28 +2,28 @@ import {
   AddToNoteState
 } from 'index';
 
-export const isEnglish = (s) => {
-  for (let i = 0; i < s.length; i += 1) {
-    if (s.charCodeAt(i) > 126) {
+export const isEnglish = (str: string) => {
+  for (let i = 0; i < str.length; i += 1) {
+    if (str.charCodeAt(i) > 126) {
       return false;
     }
   }
   return true;
 };
 
-export const isChinese = (temp) => {
+export const isChinese = (str: string) => {
   const re = /[^\u4e00-\u9fa5]/;
-  if (re.test(temp)) { return false; }
+  if (re.test(str)) { return false; }
   return true;
 };
 
-export const isJapanese = (temp) => {
+export const isJapanese = (str: string) => {
   const re = /[^\u0800-\u4e00]/;
-  if (re.test(temp)) { return false; }
+  if (re.test(str)) { return false; }
   return true;
 };
 
-export const isKoera = (str) => {
+export const isKoera = (str: string) => {
   for (let i = 0, len = str.length; i < len; i += 1) {
     if (((str.charCodeAt(i) > 0x3130 && str.charCodeAt(i) < 0x318F)
       || (str.charCodeAt(i) >= 0xAC00 && str.charCodeAt(i) <= 0xD7A3))) {
@@ -33,28 +33,27 @@ export const isKoera = (str) => {
   return false;
 };
 
-export const isContainChinese = (temp) => {
+export const isContainChinese = (str: string) => {
   let cnt = 0;
-  for (let i = 0, len = temp.length; i < len; i += 1) {
-    if (isChinese(temp.charAt(i))) { cnt += 1; }
+  for (let i = 0, len = str.length; i < len; i += 1) {
+    if (isChinese(str.charAt(i))) { cnt += 1; }
   }
-  if (cnt > 5) { return true; }
-  return false;
+  return cnt > 5;
 };
 
-export const isContainJapanese = (temp) => {
+export const isContainJapanese = (str: string) => {
   let cnt = 0;
-  for (let i = 0, len = temp.length; i < len; i += 1) {
-    if (isJapanese(temp.charAt(i))) { cnt += 1; }
+  for (let i = 0, len = str.length; i < len; i += 1) {
+    if (isJapanese(str.charAt(i))) { cnt += 1; }
   }
   if (cnt > 2) { return true; }
   return false;
 };
 
-export const isContainKoera = (temp) => {
+export const isContainKoera = (str: string) => {
   let cnt = 0;
-  for (let i = 0, len = temp.length; i < len; i += 1) {
-    if (isKoera(temp.charAt(i))) { cnt += 1; }
+  for (let i = 0, len = str.length; i < len; i += 1) {
+    if (isKoera(str.charAt(i))) { cnt += 1; }
   }
   if (cnt > 0) { return true; }
   return false;
@@ -62,17 +61,17 @@ export const isContainKoera = (temp) => {
 
 export const isAlpha = str => /[a-zA-Z']+/.test(str);
 
-export const spaceCount = (temp: string) => {
+export const spaceCount = (str: string): number => {
   let cnt = 0;
-  for (let i = 0; i < temp.length; i += 1) {
-    if (temp.charAt(i) === ' ') {
+  for (let i = 0; i < str.length; i += 1) {
+    if (str.charAt(i) === ' ') {
       cnt += 1;
     }
   }
   return cnt;
 };
 
-export const ExtractEnglish = (word) => {
+export const ExtractEnglish = (word): string => {
   const patt = new RegExp(/([a-zA-Z ]+)/);
   const results = patt.exec(word);
   if (results && results.length) {
@@ -92,14 +91,14 @@ export const debounce = (fn, delay = 200) => {
   };
 };
 
-export const qs = (json) => {
+export const qs = (json): string => {
   if (json) {
     return Object.keys(json).map(key => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`).join('&');
   }
   return '';
 };
 
-export const parseQuerystring = (querystring) => {
+export const parseQuerystring = (querystring: string) => {
   const obj = {};
   if (querystring && querystring.length) {
     const kvs = querystring.split('&');
@@ -154,7 +153,7 @@ export const ajax = option => new Promise<Resp>((resolve: ( value: Resp)=>any, r
   console.warn(err);
 });
 
-export const copyText = (text) => {
+export const copyText = (text: string) => {
   if (text !== undefined) {
     const cont = document.createElement('div');
     cont.textContent = text;
