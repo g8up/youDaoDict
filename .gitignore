@@ -2,6 +2,7 @@
 node_modules/
 release/
 dist/js
+dist/style
 *.zip
 *.log
 *.pem
