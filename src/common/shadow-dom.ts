@@ -1,7 +1,7 @@
 /**
  * doc: https://gist.github.com/praveenpuglia/0832da687ed5a5d7a0907046c9ef1813
  */
-const STYLE_CONTENT = 'content.css';
+const STYLE_CONTENT = 'style/content.css';
 
 /**
  * 给插入的节点做标识，以免 web page 的开发者迷惑。
