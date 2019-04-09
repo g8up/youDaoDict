@@ -6,8 +6,8 @@
     "test": "jest",
     "dev": "webpack --mode production --config build/webpack.base.js --watch",
     "build": "webpack --mode production --config build/webpack.base.js",
-    "static": "gulp static",
-    "release": "gulp release"
+    "css": "gulp css",
+    "release": "npm run build && gulp release"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

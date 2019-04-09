@@ -21,26 +21,19 @@ const banner = [
 
 const Asset = {
   less: 'src/style/*.less',
-  static: [
-    'src/*.css',
-  ],
 };
+
 const Dist = 'dist/';
 const Release = 'release/';
 
-const lessIt = () => gulp.src(Asset.less)
+const less2css = () => gulp.src(Asset.less)
   .pipe(less())
   .pipe(cleanCss())
   .pipe(header(banner, {
     VERSION,
     pkg,
   }))
-  .pipe(gulp.dest(Dist));
-
-// copy static assets
-const copy = () => gulp
-  .src(Asset.static, { base: 'src/' })
-  .pipe(gulp.dest(Dist));
+  .pipe(gulp.dest(`${Dist}/style`));
 
 const zipFile = `${manifest.name}-v${VERSION}.zip`;
 
@@ -49,19 +42,16 @@ const cleanZip = () => del([
 ], { dryRun: true });
 
 
-const watch = gulp.series(lessIt, copy, () => {
-  gulp.watch(Asset.less, lessIt);
-  gulp.watch(Asset.static, copy);
+const watch = gulp.series(less2css, () => {
+  gulp.watch(Asset.less, less2css);
 });
 
-gulp.task('less', gulp.series(lessIt));// build only less
+gulp.task('css', less2css);// build only less
 // watcher: less/static
 gulp.task('watch', gulp.series(watch));
-// build once
-gulp.task('static', gulp.series('less', copy));
 // only zip files
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))
   .pipe(gulp.dest(Release))));
 // build + zip
-gulp.task('release', gulp.series('static', 'zip'));// 生成发布到 Chrome Web Store 的 zip 文件
+gulp.task('release', gulp.series('css', 'zip'));// 生成发布到 Chrome Web Store 的 zip 文件
