@@ -105,7 +105,7 @@ export const parseQuerystring = (querystring: string) => {
     if (kvs.length) {
       kvs.forEach((kv) => {
         const [key, val] = kv.split('=');
-        obj[key] = val;
+        obj[key] = decodeURIComponent(val);
       });
     }
   }
@@ -116,10 +116,12 @@ export const parseQuerystring = (querystring: string) => {
 type Resp = string | Document | AddToNoteState;
 
 export const ajax = option => new Promise<Resp>((resolve: ( value: Resp)=>any, reject) => {
-  let { url } = option;
-  const type = option.type || 'GET';
-  const dataType = (option.dataType || '').toLowerCase();
-  const { data } = option;
+  const {
+    url,
+    type = 'GET',
+    dataType = '',
+    data,
+  } = option;
 
   const xhr = new XMLHttpRequest();
 
@@ -143,11 +145,8 @@ export const ajax = option => new Promise<Resp>((resolve: ( value: Resp)=>any, r
   };
 
   const queryString = qs(data);
-  if (type === 'GET') {
-    url += `?${queryString}`;
-  }
 
-  xhr.open(type, url, true);
+  xhr.open(type, type === 'GET' ? url + `?${queryString}` : url , true);
   xhr.send(type === 'GET' ? null : queryString);
 }).catch((err) => {
   console.warn(err);
