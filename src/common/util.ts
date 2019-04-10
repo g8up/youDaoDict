@@ -41,6 +41,9 @@ export const isContainChinese = (str: string) => {
   return cnt > 5;
 };
 
+// 包含字母
+export const isAlpha = str => /[a-zA-Z']+/.test(str);
+
 export const isContainJapanese = (str: string) => {
   let cnt = 0;
   for (let i = 0, len = str.length; i < len; i += 1) {
@@ -59,7 +62,6 @@ export const isContainKoera = (str: string) => {
   return false;
 };
 
-export const isAlpha = str => /[a-zA-Z']+/.test(str);
 
 export const spaceCount = (str: string): number => {
   let cnt = 0;
