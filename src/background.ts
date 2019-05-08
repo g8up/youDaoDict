@@ -183,7 +183,7 @@ const playAudio = (word, type) => {
 
 // let YouDaoLoginUrl = "http://account.youdao.com/login";
 // let YouDaoLoginUrl = "http://account.youdao.com/login?service=dict&back_url=http://dict.youdao.com/wordbook/wordlist";
-const YouDaoLoginUrl = 'https://dict.youdao.com/wordbook/wordlist';
+const YouDaoLoginUrl = 'http://dict.youdao.com/wordbook/wordlist';
 // 打开登录框
 const loginYoudao = () => {
   chrome.tabs.create({
