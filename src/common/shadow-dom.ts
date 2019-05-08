@@ -8,7 +8,7 @@ const STYLE_CONTENT = 'style/content.css';
  */
 const markTagOrigin = (tag) => {
   if (tag) {
-    tag.setAttribute('data-comment', '这是 “有道词典划词扩展2018” 插入的节点');
+    tag.setAttribute('data-comment', '这是【有道词典划词扩展】插入的节点');
   }
 };
 
