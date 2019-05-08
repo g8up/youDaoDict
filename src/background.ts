@@ -6,6 +6,7 @@ import {
   isContainKoera,
   isContainJapanese,
   isContainChinese,
+  isMinorVersionIncrease,
 } from './common/util';
 import {
   addWord,
@@ -280,5 +281,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onInstalled.addListener((details) => {
   // details: {previousVersion: "1.0.2.3", reason: "update"}
   console.log('onInstall', details);
-  chrome.tabs.create({ url: 'options.html' });
+  const {
+    previousVersion,
+  } = details;
+  const {
+    version,
+  } =  chrome.runtime.getManifest();
+
+  if( isMinorVersionIncrease(previousVersion, version) ) { // 2位版本更新时才自动弹出选项页
+    chrome.tabs.create({ url: 'options.html' });
+  }
 });

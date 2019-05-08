@@ -55,3 +55,9 @@ test('对象 和 queryString 互转', ()=>{
   expect(util.qs(json)).toBe(querySting);
   expect(util.parseQuerystring(querySting)).toEqual(json);
 });
+
+test('检查前2位版本号是否增长', ()=>{
+  expect(util.isMinorVersionIncrease('3.2.7', '3.3.0')).toBeTruthy();
+  expect(util.isMinorVersionIncrease('3.2.7', '3.2.7.1')).toBeFalsy();
+  expect(util.isMinorVersionIncrease('3.2.7', '3.2.8')).toBeFalsy();
+});

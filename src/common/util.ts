@@ -170,4 +170,20 @@ export const copyText = (text: string) => {
   }
 };
 
+/**
+ * 截取版本前两位
+ */
+export const cutVersion = (ver)=>{
+  return ver.split('.').slice(0, 2);
+};
+
+/**
+ * 版本对比
+ * 版本号格式：[major, minor, patch]
+ * 检查前2位版本号是否增长
+ */
+export const isMinorVersionIncrease = (previousVer, ver)=>{
+  return cutVersion( previousVer ) < cutVersion(ver);
+};
+
 export const $ = (selector, cont = document) => cont.querySelector(selector);
