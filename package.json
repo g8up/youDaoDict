@@ -4,8 +4,8 @@
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "scripts": {
     "test": "jest",
-    "dev": "webpack --mode production --config build/webpack.base.js --watch",
-    "build": "webpack --mode production --config build/webpack.base.js",
+    "dev": "webpack --mode=production --config=build/webpack.base.js --watch",
+    "build": "webpack --mode=production --config=build/webpack.base.js",
     "css": "gulp css",
     "release": "npm run build && gulp release"
   },
@@ -28,7 +28,6 @@
     "jest": "^24.5.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.4000",
-    "uglify-es": "github:mishoo/UglifyJS2#harmony",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.3.0"
   },
