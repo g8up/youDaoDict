@@ -1,8 +1,8 @@
-import chromeSync from './chrome-sync';
-import Storage from './storage';
+import chromeSync from '../common/chrome-sync';
+import Storage from '../common/storage';
 import {
   OPTION_STORAGE_ITEM,
-} from './config';
+} from '../common/config';
 
 const DEFAULT = {
   dict_enable: ['checked', false],

@@ -1,18 +1,22 @@
+/**
+ * 界面渲染
+ */
 import {
   isContainKoera,
   isContainJapanese,
-} from './util';
+} from '../common/util';
 
-const renderTransDetail = (title, content) => `<div class="ydd-trans-wrapper">
-      <div class="ydd-tabs">
-        <span class="ydd-tab">
-          ${title}
-        </span>
-      </div>
-      <div class="tab-content">
-        ${content}
-      </div>
-    </div>`;
+const renderTransDetail = (title, content) =>
+  `<div class="ydd-trans-wrapper">
+    <div class="ydd-tabs">
+      <span class="ydd-tab">
+        ${title}
+      </span>
+    </div>
+    <div class="tab-content">
+      ${content}
+    </div>
+  </div>`;
 
 const renderSpeech = ({
   title,
@@ -25,7 +29,7 @@ const renderSpeech = ({
   </div>`;
 
 // 页面中弹出的的面板
-export const table = ({
+const table = ({
   phrase: word,
   ukSpeech,
   usSpeech,
@@ -77,7 +81,7 @@ export const table = ({
 };
 
 // popup 查下历史
-export const history = words => `<div class="section-title">查询历史</div>
+const history = (words: string[]) => `<div class="section-title">查询历史</div>
   ${words.map(word => `<a>${word}</a>`).join('<br/>')}`;
 
 export default {

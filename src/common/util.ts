@@ -114,10 +114,17 @@ export const parseQuerystring = (querystring: string) => {
   return obj;
 };
 
-
 type Resp = string | Document | AddToNoteState;
 
-export const ajax = option => new Promise<Resp>((resolve: ( value: Resp)=>any, reject) => {
+const ajax = (option)=>{
+  const {
+    url,
+    data
+  } = option;
+  return fetch(url).then(resp=>resp.json());
+};
+
+export const ajax1 = option => new Promise<Resp>((resolve: ( value: Resp)=>any, reject) => {
   const {
     url,
     type = 'GET',
@@ -187,3 +194,9 @@ export const isMinorVersionIncrease = (previousVer, ver)=>{
 };
 
 export const $ = (selector, cont = document) => cont.querySelector(selector);
+
+export default {
+  ajax,
+  qs,
+  isContainKoera,
+}
