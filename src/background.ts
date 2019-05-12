@@ -4,7 +4,6 @@ import api from './model/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
 import MsgType from './common/msg-type';
-import ChromeApi from './common/chrome-api';
 import {
   OPTION_STORAGE_ITEM,
 } from './common/config';
@@ -15,12 +14,11 @@ import {
   getAudioByWordAndType,
 } from './common/audio-cache';
 
+const Options = {};
 const setting = new Setting();
-let Options = {};
 setting.get().then((data) => {
-  Options = data;
+  Object.assign(Options, data);
 });
-
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== 'sync') {
@@ -139,7 +137,8 @@ chrome.runtime.onInstalled.addListener((details) => {
     version,
   } =  chrome.runtime.getManifest();
 
-  if( isMinorVersionIncrease(previousVersion, version) ) { // 2位版本更新时才自动弹出选项页
+  // 2位版本更新时才自动弹出选项页
+  if( isMinorVersionIncrease(previousVersion, version) ) {
     chrome.tabs.create({ url: 'options.html' });
   }
 });
