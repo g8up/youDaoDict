@@ -1,4 +1,4 @@
-import Setting from './common/setting';
+import Setting from './model/Setting';
 import {
   qs as queryString,
   isContainKoera,
@@ -10,12 +10,9 @@ import {
   playAudio,
   addToNote,
 } from './common/chrome';
-import {
-  fetchWordOnline,
-} from './common/http';
-import {
-  history,
-} from './common/render';
+import API from './model/API';
+import parser from './model/Parser';
+import render from './model/Render';
 
 interface Window {
   saveAs(blob: Blob, filename: string): void;
@@ -57,7 +54,7 @@ const getCachedWord = () => {
 
     if (words.length) {
       let $cache = $('#cache');
-      $cache.innerHTML = history(words);
+      $cache.innerHTML = render.history(words);
       $cache.onclick = (event) => { // 查询
         const a = event.target;
         if (a.tagName.toLowerCase() === 'a') {
@@ -203,7 +200,7 @@ const translateXML = (xmlnode) => {
   });
 };
 
-const mainQuery = (word, callback) => fetchWordOnline(word).then((ret) => {
+const mainQuery = (word, callback) => API.fetchWordOnline(word).then((ret) => {
   WORD = word;
   const dataText = translateXML(ret);
   if (dataText != null) {

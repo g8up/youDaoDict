@@ -12,6 +12,14 @@ const banner = `${app.name} - v${app.version}
 @author ${pkg.author}
 @date ${`${util.getDate()} ${util.getTime()}`}`;
 
+const {
+  DEBUG
+} = process.env;
+
+if( DEBUG ) {
+  console.log( '调试模式' );
+}
+
 module.exports = {
   entry: {
     background: resolve('../src/background.ts'),
@@ -22,10 +30,12 @@ module.exports = {
     path: resolve('../dist/js'),
     filename: '[name].js',
   },
-  // devtool: 'source-map',
-  // optimization: {
-  //   minimize: false
-  // },
+  ...(DEBUG ? {
+    devtool: 'source-map',
+    optimization: {
+      minimize: false
+    },
+  }: null),
   module: {
     rules: [
       {
