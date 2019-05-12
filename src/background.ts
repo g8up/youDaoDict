@@ -4,6 +4,7 @@ import api from './model/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
 import MsgType from './common/msg-type';
+import ChromeApi from './common/chrome-api';
 import {
   OPTION_STORAGE_ITEM,
 } from './common/config';
@@ -15,29 +16,11 @@ import {
 } from './common/audio-cache';
 
 const setting = new Setting();
-let Options = null;
+let Options = {};
 setting.get().then((data) => {
   Options = data;
 });
 
-/**
- * 将配置更新通知已经打开的 Tab
- */
-const publishSettingToTabs = (options) => {
-  chrome.tabs.query({
-    status: 'complete',
-  }, (tabs) => {
-    if (tabs.length) {
-      tabs.forEach((tab) => {
-        chrome.tabs.sendMessage(tab.id, {
-          optionChanged: options,
-        }, () => {
-          // console.log('option changed event has been published');
-        });
-      });
-    }
-  });
-};
 
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (areaName !== 'sync') {
@@ -47,7 +30,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
     if (key === OPTION_STORAGE_ITEM) {
       const storageChange = changes[key];
       Object.assign(Options, storageChange.newValue);
-      publishSettingToTabs(Options);
+      tab.publishSettingToTabs(Options);
       return true;
     }
     return false;
