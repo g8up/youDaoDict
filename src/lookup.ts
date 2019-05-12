@@ -14,6 +14,7 @@ import {
 import {
   wrapShadowDom,
 } from './common/shadow-dom';
+import MsgType from './common/msg-type';
 
 const Options = {};
 const { body } = document;
@@ -31,7 +32,7 @@ const getOptVal = (key) => {
 
 const getYoudaoDictTemplateHtml = (word, next) => {
   chrome.runtime.sendMessage({
-    action: 'select-to-search',
+    action: MsgType.SELECT_TO_SEARCH,
     word,
   }, (html) => {
     if (next) {
@@ -42,7 +43,7 @@ const getYoudaoDictTemplateHtml = (word, next) => {
 
 const getYoudaoTrans = (word, next) => {
   chrome.runtime.sendMessage({
-    action: 'translate',
+    action: MsgType.TRANSLATE,
     word,
   }, (data) => {
     if (next) {
@@ -311,7 +312,7 @@ const dealPointEvent = () => {
 
 const getOption = (next?) => {
   chrome.runtime.sendMessage({
-    action: 'getOption',
+    action: MsgType.GET_SETTING,
   }, (resp) => {
     if (resp && resp.option) {
       Object.assign(Options, resp.option);
