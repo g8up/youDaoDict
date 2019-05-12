@@ -1,4 +1,9 @@
 import Setting from './model/Setting';
+import API from './model/API';
+import parser from './model/Parser';
+import render from './model/Render';
+
+import MsgType from './common/msg-type';
 import {
   qs as queryString,
   isContainKoera,
@@ -10,9 +15,6 @@ import {
   playAudio,
   addToNote,
 } from './common/chrome';
-import API from './model/API';
-import parser from './model/Parser';
-import render from './model/Render';
 
 interface Window {
   saveAs(blob: Blob, filename: string): void;
@@ -349,7 +351,7 @@ window.onload = () => {
   $('#login-youdao').addEventListener('click', (e) => {
     e.preventDefault();
     chrome.runtime.sendMessage({
-      action: 'login-youdao',
+      action: MsgType.LOGIN,
     }, (rep) => {
       console.log(rep);
     });

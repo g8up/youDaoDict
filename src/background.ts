@@ -3,6 +3,7 @@ import Dict from './model/Dict';
 import api from './model/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
+import MsgType from './common/msg-type';
 import {
   OPTION_STORAGE_ITEM,
 } from './common/config';
@@ -85,14 +86,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     type, // 发音类型:英音、美音
   } = request;
   switch (action) {
-    case 'getOption':
+    case MsgType.GET_SETTING:
       setting.get().then((data) => {
         sendResponse({
           option: data,
         });
       });
       return true;
-    case 'select-to-search':
+    case MsgType.SELECT_TO_SEARCH:
       api.fetchWordOnline(word).then((ret) => {
         const templateHtml = parser.translateXML(ret);
         if (templateHtml !== '') {
@@ -100,7 +101,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
       return true;
-    case 'translate':
+    case MsgType.TRANSLATE:
       api.fetchTranslate(word).then((ret) => {
         const templateHtml = parser.translateTransXML(ret);
         if (templateHtml !== '') {
@@ -110,7 +111,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
       return true;
-    case 'speech':
+    case MsgType.SPEECH:
       if (word.length > 0) {
         playAudio(word, type);
       }
@@ -118,10 +119,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.error(`语音朗读-传参不可为空:${word}`);
       }
       break;
-    case 'login-youdao':
+    case MsgType.LOGIN:
       tab.openWordList();
       break;
-    case 'youdao-add-word': // 添加到单词本
+    case MsgType.ADD_WORD: // 添加到单词本
       (new Dict(api)).add(word).then(() => {
         popBadgeTips('OK', 'green');
         sendResponse();

@@ -4,6 +4,7 @@
 import {
   parseQuerystring,
 } from './util';
+import MsgType from './msg-type';
 
 interface SpeachInfo {
   word: string;
@@ -12,7 +13,7 @@ interface SpeachInfo {
 
 export const playAudio = ({ word, type }: SpeachInfo) => {
   chrome.runtime.sendMessage({
-    action: 'speech',
+    action: MsgType.SPEECH,
     word,
     type,
   }, () => {});
@@ -24,7 +25,7 @@ export const playAudioByWordAndType = (wordAndType: SpeachInfo) => {
 
 export const addToNote = (word, callback) => {
   chrome.runtime.sendMessage({
-    action: 'youdao-add-word',
+    action: MsgType.ADD_WORD,
     word,
   }, (resp) => {
     if (callback) {
