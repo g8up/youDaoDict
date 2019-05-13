@@ -8,7 +8,7 @@ enum ContentType {
   FORM = 'application/x-www-form-urlencoded',
 };
 
-const req = (url, option = {}) => {
+const req = (url: string, option = {}) => {
   return fetch(url, {
     headers: {
       'Content-Type': ContentType.JSON,
@@ -17,18 +17,18 @@ const req = (url, option = {}) => {
   }).then(data => data.json());
 };
 
-const get = (url, data) => {
+const get = (url: string, data) => {
   return req(url + '?' + util.qs(data));
 };
 
-const post = (url, data) => {
+const post = (url: string, data) => {
   return req(url, {
     method: 'POST',
     body: JSON.stringify(data),
   });
 };
 
-const fetchXML = (url, data) => {
+const fetchXML = (url: string, data) => {
   return fetch(url + '?' + util.qs(data), {
     headers: {
       'Content-Type': ContentType.FORM,
