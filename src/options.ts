@@ -243,6 +243,7 @@ const restoreOptions = (option) => {
     }
   });
 };
+
 /*
  * 保存为系统文件
  */
@@ -252,6 +253,7 @@ const saveContent2File = (content, filename) => {
   });
   (window as unknown as Window).saveAs(blob, filename);
 };
+
 /*
  * 导出单词查询历史
  */
