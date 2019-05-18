@@ -48,7 +48,7 @@ const watch = gulp.series(less2css, () => {
 
 gulp.task('css', less2css);// build only less
 // watcher: less/static
-gulp.task('watch', gulp.series(watch));
+gulp.task('watch', watch);
 // only zip files
 gulp.task('zip', gulp.series(cleanZip, () => gulp.src(`${Dist}**/*`)
   .pipe(zip(zipFile))

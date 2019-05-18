@@ -1,3 +1,5 @@
+@import './common.less';
+
 :host{
 	display: block;
 	position: absolute;
@@ -102,25 +104,16 @@ a,a:hover,a:visited{
 }
 
 .ydd-voice{
-	cursor: pointer;
 	display: inline;
 	& + &{
 		margin-left: 5px;
 	}
-	.ydd-voice-icon {
-		display: inline-block;
-		width: 15px;
-		height: 15px;
+	.voice-icon-wrap;
+	.voice-icon {
 		margin-left: @marginLeft;
-		background:url("../image/voice-btn.png") no-repeat;
-		background-size: 27px 15px;
-		background-position-x: -13px;
-		background-position-y: 0;
-		vertical-align: sub;
-		cursor: pointer;
 	}
 	&:hover{
-		.ydd-voice-icon{
+		.voice-icon{
 			background-position-x: 1px;
 		}
 	}

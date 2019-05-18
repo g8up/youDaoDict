@@ -6,6 +6,7 @@ import {
   isContainJapanese,
 } from '../common/util';
 
+// content
 const renderTransDetail = (title, content) =>
   `<div class="ydd-trans-wrapper">
     <div class="ydd-tabs">
@@ -22,9 +23,9 @@ const renderSpeech = ({
   title,
   wordAndType,
   phonetic,
-}) => `<div class="ydd-voice" data-word-and-type="${wordAndType}">
+}) => `<div class="ydd-voice voice-wrap" data-word-and-type="${wordAndType}">
     ${title}:
-    <span class="ydd-voice-icon"></span>
+    <span class="voice-icon"></span>
     ${phonetic ? `<span> [${phonetic}] </span>` : ''}
   </div>`;
 
