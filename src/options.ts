@@ -108,9 +108,11 @@ const buildSearchResult = ({
       fr: '法汉',
     };
     res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>
-      ${retphrase}
-      ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
-      <span class="word-speech" data-toggle="play" title="朗读"></span>
+      <span class="phrase" data-toggle="play">
+        ${retphrase}
+        ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
+        <span class="voice-icon" title="朗读"></span>
+      </span>
       <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>
       ${baseTrans}`;
   }
@@ -371,20 +373,22 @@ window.onload = () => {
     }
   }());
 
-  interface Target extends EventTarget {
-    dataset: DOMStringMap;
-    classList: DOMTokenList;
-  }
-
+  // 绑定朗读事件
   document.body.addEventListener('click', (e) => {
     const { target } = e ;
-    const { toggle  } = (target as Target).dataset;
-    if (toggle === 'play') {
-      playAudio({ word: WORD });
-    } else if (toggle === 'addToNote') {
+    if ((target as HTMLElement).dataset.toggle === 'addToNote') {
       addToNote(WORD, () => {
-        (target as Target).classList.add('green');
+        (target as HTMLElement).classList.add('green');
       });
+    }
+    else {
+      const voiceNode = (target as Element).closest('.phrase');
+      if( voiceNode ){
+        const { toggle  } = (voiceNode as HTMLElement).dataset;
+        if (toggle === 'play') {
+          playAudio({ word: WORD });
+        }
+      }
     }
   });
 };
