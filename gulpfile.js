@@ -20,7 +20,10 @@ const banner = [
 ].join('\n');
 
 const Asset = {
-  less: 'src/style/*.less',
+  less: [
+    'src/style/*.less',
+    '!src/style/common.less',
+  ],
 };
 
 const Dist = 'dist/';
