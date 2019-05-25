@@ -4,20 +4,12 @@ const less = require('gulp-less');
 const cleanCss = require('gulp-clean-css');
 const zip = require('gulp-zip');
 const del = require('del');
+const banner = require('./build/banner');
 
-const manifest = require('./dist/manifest.json');
-const pkg = require('./package.json');
-
-const VERSION = manifest.version;
-const banner = [
-  '/**',
-  ' * <%= pkg.name %> - <%= pkg.description %>',
-  ' * @version v<%= VERSION %>',
-  ' * @author <%= pkg.author %>',
-  ' * @date <%= new Date() %>',
-  ' */',
-  '',
-].join('\n');
+const {
+  name,
+  version,
+} = require('./dist/manifest');
 
 const Asset = {
   less: [
@@ -32,13 +24,10 @@ const Release = 'release/';
 const less2css = () => gulp.src(Asset.less)
   .pipe(less())
   .pipe(cleanCss())
-  .pipe(header(banner, {
-    VERSION,
-    pkg,
-  }))
+  .pipe(header(banner))
   .pipe(gulp.dest(`${Dist}/style`));
 
-const zipFile = `${manifest.name}-v${VERSION}.zip`;
+const zipFile = `${name}-v${version}.zip`;
 
 const cleanZip = () => del([
   Release + zipFile,
