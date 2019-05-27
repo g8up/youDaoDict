@@ -83,7 +83,7 @@ export const ExtractEnglish = (word): string => {
 };
 
 // 去抖动
-export const debounce = (fn, delay = 200) => {
+export const debounce = (fn, delay = 300) => {
   let timer = null;
   return (...args) => {
     clearTimeout(timer);
