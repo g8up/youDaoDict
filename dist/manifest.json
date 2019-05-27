@@ -16,7 +16,7 @@
 	"content_scripts": [{
 		"js": ["js/lookup.js"],
 		"all_frames": true,
-		"matches": ["*://*/*", "file:///*"]
+		"matches": ["<all_urls>"]
 	}],
 	"browser_action": {
 		"default_icon": "image/icon-128.png",
@@ -31,7 +31,7 @@
 		}
 	},
 	"options_page": "options.html",
-	"permissions": ["*://*/*", "storage"],
+	"permissions": ["<all_urls>", "storage"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
 	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "style/content.css"]
 }
