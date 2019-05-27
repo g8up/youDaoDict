@@ -54,8 +54,7 @@ const table = ({
     <div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
-          <a class="yddKeyTitle" href="${searchUrl}" target="_blank" title="查看完整释义">${word}</a>
-          <a class="ydd-detail" href="${searchUrl}" target="_blank">详细</a>
+          <a class="yddKeyTitle" href="${searchUrl}" target="_blank" title="查看网页完整释义">${word}</a>
           <a class="ydd-detail" href="javascript:void(0);" id="addToNote" title="添加到单词本">+</a>
           <a class="ydd-close" href="javascript:void(0);">&times;</a>
         </div>
