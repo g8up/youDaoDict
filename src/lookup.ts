@@ -15,8 +15,12 @@ import {
   wrapShadowDom,
 } from './common/shadow-dom';
 import MsgType from './common/msg-type';
+import { iSetting } from './index';
+import {
+  DEFAULT,
+} from './model/Setting';
 
-const Options = {};
+const Options: iSetting = DEFAULT;
 const { body } = document;
 const list = [];
 let lastTime = 0;
@@ -236,10 +240,12 @@ interface Node {
 
 let prevC;
 let prevO;
+let triggerKey = Options.triggerKey || 'shift';
 // 指词即译
 const onPointToTrans = debounce((e) => {
-  if (!e.ctrlKey || e.shiftKey || e.altKey) {
-    return;
+  if (!e[`${triggerKey}Key`] ||
+    ['alt', 'shift', 'ctrl'].filter(key => key !== triggerKey).some(key => e[`${key}Key`]) ) {
+      return;
   }
   const caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
   if (!caretRange) { return; }
@@ -316,6 +322,7 @@ const getOption = (next?) => {
   }, (resp) => {
     if (resp && resp.option) {
       Object.assign(Options, resp.option);
+      ({ triggerKey } = resp.option);
 
       dealSelectEvent();
       dealPointEvent();
@@ -333,7 +340,7 @@ if (body) {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.optionChanged) {
       Object.assign(Options, request.optionChanged);
-
+      ({ triggerKey } = request.optionChanged);
       dealSelectEvent();
       dealPointEvent();
     }
