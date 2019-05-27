@@ -3,13 +3,18 @@ import Storage from '../common/storage';
 import {
   OPTION_STORAGE_ITEM,
 } from '../common/config';
+import {
+  iSetting,
+  TiggerKeyVal,
+} from '../index'
 
-const DEFAULT = {
+export const DEFAULT: iSetting = {
   dict_enable: ['checked', false],
   ctrl_only: ['checked', true],
   english_only: ['checked', true],
   auto_speech: ['checked', true],
   history_count: 5,
+  triggerKey: TiggerKeyVal.shift,
 };
 
 export default class Setting extends Storage {
@@ -23,7 +28,7 @@ export default class Setting extends Storage {
       if (rs && Object.keys(rs).length > 0) {
         setting = rs[this.name];
       }
-      return setting;
+      return Object.assign(DEFAULT, setting);
     });
   }
 

@@ -8,7 +8,12 @@
   </head>
   <body>
     <p>
-       Hello, world!
+      Hello, world!
     </p>
+    <script>
+      window.document.body.addEventListener('mousemove', (e)=>{
+        console.log(e.keyCode, e.ctrlKey, e.altKey, e.shiftKey);
+      })
+    </script>
   </body>
   </html>

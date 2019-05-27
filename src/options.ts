@@ -15,6 +15,11 @@ import {
   playAudio,
   addToNote,
 } from './common/chrome';
+import ChromeApi from './common/chrome-api';
+import {
+  iSetting,
+  TiggerKeyVal,
+} from './index'
 
 interface Window {
   saveAs(blob: Blob, filename: string): void;
@@ -283,7 +288,8 @@ const saveOptions = () => {
     const elem = $(`#${key}`);
     if (Options[key][0] === 'checked') {
       Options[key][1] = elem.checked;
-    } else {
+    }
+    else {
       Options[key] = elem.value;
     }
   });
@@ -302,13 +308,30 @@ const shareDownloadLink = () => {
   copyText(text);
 };
 
+const renderTriggerOption = (val)=>{
+  // https://developer.chrome.com/extensions/runtime#type-PlatformOs
+  chrome.runtime.getPlatformInfo(function ({os}) {
+    const alt = os === 'mac' ? 'option' : 'alt';
+
+    const triggerKey = $('#triggerKey');
+    triggerKey.innerHTML = ['shift', 'alt', 'ctrl',].map(key=>{
+      return `<option value="${key}">
+        ${key === 'alt' ? alt : key}
+      </option>`;
+    }).join('');
+
+    triggerKey.value = val;
+  });
+};
+
 window.onload = () => {
-  setting.get().then((data) => {
+  setting.get().then((data:iSetting) => {
     Options = data;
     console.log('option from sync storage', data);
     restoreOptions(data);
     changeIcon();
     getCachedWord();
+    renderTriggerOption(data.triggerKey);
   });
   /**
    * 配置项设置
@@ -335,6 +358,10 @@ window.onload = () => {
         saveOptions();
         getCachedWord();
       };
+
+      $('#triggerKey').addEventListener('change', (e) => {
+        saveOptions();
+      });
     };
   }
 
