@@ -6,6 +6,12 @@ const zip = require('gulp-zip');
 const del = require('del');
 const banner = require('./build/banner');
 
+// 取自 webpack/lib/BannerPlugins.js
+const wrapComment = str => `/*!\n * ${str
+  .replace(/\*\//g, '* /')
+  .split('\n')
+  .join('\n * ')}\n */`;
+
 const {
   name,
   version,
@@ -24,7 +30,7 @@ const Release = 'release/';
 const less2css = () => gulp.src(Asset.less)
   .pipe(less())
   .pipe(cleanCss())
-  .pipe(header(banner))
+  .pipe(header(wrapComment(banner)))
   .pipe(gulp.dest(`${Dist}/style`));
 
 const zipFile = `${name}-v${version}.zip`;
