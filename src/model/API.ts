@@ -36,10 +36,10 @@ const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
 ).then((ret: AddToNoteState) => {
   const msg = ret.message;
   if (msg === AddState.ADD_DONE) {
-    Promise.resolve();
+    return Promise.resolve();
   }
   else if (msg === AddState.NO_USER) {
-    Promise.reject();
+    return Promise.reject();
   }
 });
 

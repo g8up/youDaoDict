@@ -13,6 +13,7 @@ const req = (url: string, option = {}) => {
     headers: {
       'Content-Type': ContentType.JSON,
     },
+    credentials: 'include', // fix addWord for 360 safe browser v10.0
     ...option,
   }).then(data => data.json());
 };

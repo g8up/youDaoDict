@@ -3,13 +3,13 @@
  */
 
 export default class Dict {
-  http;
+  api;
 
-  constructor(http){
-    this.http = http;
+  constructor(api){
+    this.api = api;
   }
 
   add(word) {
-    return this.http.addWord(word);
+    return this.api.addWord(word);
   }
 }
