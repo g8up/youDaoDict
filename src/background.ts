@@ -130,15 +130,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 chrome.runtime.onInstalled.addListener((details) => {
   // details: {previousVersion: "1.0.2.3", reason: "update"}
   console.log('onInstall', details);
+
+  let openOptionPage = false;
   const {
+    reason,
     previousVersion,
   } = details;
-  const {
-    version,
-  } =  chrome.runtime.getManifest();
+  if( 'install' === reason ) {
+    openOptionPage = true;
+  }
+  else if ('update' === reason){
+    const {
+      version,
+    } =  chrome.runtime.getManifest();
+    // 2位版本更新时才自动弹出选项页
+    openOptionPage = isMinorVersionIncrease(previousVersion, version);
+  }
 
-  // 2位版本更新时才自动弹出选项页
-  if( isMinorVersionIncrease(previousVersion, version) ) {
+  if (openOptionPage ) {
     chrome.tabs.create({ url: 'options.html' });
   }
 });
