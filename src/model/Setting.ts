@@ -14,7 +14,7 @@ export const DEFAULT: iSetting = {
   english_only: ['checked', true],
   auto_speech: ['checked', true],
   history_count: 5,
-  triggerKey: TiggerKeyVal.shift,
+  triggerKey: TiggerKeyVal.ctrl,
 };
 
 export default class Setting extends Storage {

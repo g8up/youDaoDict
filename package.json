@@ -8,7 +8,8 @@
     "build": "rm -rf ./dist/js & webpack --mode=production --config=build/webpack.base.js",
     "css": "rm -rf ./dist/style && gulp css",
     "css:watch": "rm -rf ./dist/style && gulp watch",
-    "release": "npm run build && gulp release"
+    "release": "npm run build && gulp release",
+    "test-page": "http-server ./test -o"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
