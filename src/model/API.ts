@@ -1,7 +1,7 @@
 import util from '../common/util';
 import http from './Http';
 
-declare enum AddState {
+enum AddState {
   ADD_DONE = 'adddone',
   NO_USER = 'nouser'
 }
@@ -28,7 +28,7 @@ const YouDaoAddWordUrl = 'https://dict.youdao.com/wordbook/ajax';
 /**
  * 添加到单词本
  */
-const addWord = (word: string) => http.post(YouDaoAddWordUrl, {
+const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
     q: word,
     action: 'addword',
     le: 'eng',
