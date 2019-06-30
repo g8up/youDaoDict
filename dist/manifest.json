@@ -33,5 +33,6 @@
 	"options_page": "options.html",
 	"permissions": ["<all_urls>", "storage"],
 	"content_security_policy": "script-src 'self' https://www.google-analytics.com; object-src 'self'",
-	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "style/content.css"]
+	"web_accessible_resources": ["image/icon-128.png", "image/voice-btn.png", "style/content.css"],
+	"author": "g8up"
 }
