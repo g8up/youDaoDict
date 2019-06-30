@@ -1,4 +1,4 @@
-有道词典划词扩展++（官方增强版）
+有道词典划词扩展2019（官方增强版）
 ====
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/d/chgkpfgnhlojjpjchjcbpbgmdnmfmmil.svg?maxAge=2592000)
