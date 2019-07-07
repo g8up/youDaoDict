@@ -3,16 +3,16 @@ html{
   font-family: Arial,sans-serif;
 	background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
 }
+// 拼音
+rt {
+  color: #999;
+}
+
 table{
   table-layout: fixed;
   background: #fff;
   border-collapse: collapse;
   border-spacing: 0;
-  th {
-    font-weight: bold;
-    overflow: hidden;
-    line-height: 30px;
-  }
 
   th,
   td {
@@ -20,8 +20,18 @@ table{
     line-height: 20px;
     padding: 0 3px;
     text-align: left;
-    vertical-align: middle;
     height: 30px;
+  }
+
+  th {
+    font-weight: bold;
+    overflow: hidden;
+    line-height: 30px;
+    vertical-align: bottom;
+  }
+
+  td{
+    vertical-align: middle;
   }
   tr:hover td{
     background-color: aliceblue;
@@ -37,5 +47,23 @@ table{
     &:hover{
       background-position-y: -20px;
     }
+  }
+}
+.pagination{
+  margin: 10px auto;
+  a{
+    border: 1px solid #9fb9e4;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  a + a{
+    margin-left: 0.5em;
+  }
+  .current-page{
+    border: 1px solid #54c55b;
+    background: aliceblue;
   }
 }
