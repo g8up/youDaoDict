@@ -103,7 +103,7 @@ const buildSearchResult = ({
     res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
   }
   else {
-    History.save({
+    History.add({
       word: WORD,
       // baseTrans,
       // webTrans,
