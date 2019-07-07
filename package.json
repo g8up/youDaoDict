@@ -11,6 +11,10 @@
     "release": "npm run build && gulp release",
     "test-page": "http-server ./test -o"
   },
+  "dependencies": {
+    "localforage": "^1.7.3",
+    "preact": "^8.4.2"
+  },
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",

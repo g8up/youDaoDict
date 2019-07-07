@@ -1,0 +1,182 @@
+@import './common.less';
+
+body {
+	overflow-x: hidden;
+	width: 260px;
+	min-width: 200px;
+	margin:0 auto;
+	padding: 15px;
+	font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", SimSun, sans-serif;
+	font-size: 13px;
+	color: #6D7C8F;
+	background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+}
+a,
+a:hover,
+a:visited{
+	text-decoration: none!important;
+}
+img.logo {
+	margin: 5px;
+	border-width: 0px;
+	vertical-align: middle;
+	width: 82px;
+	height: 22px;
+}
+.input-group{
+	width: 100%;
+	position: relative;
+	display: table;
+	border-collapse: separate;
+	font-size: 0;
+}
+.form-control {
+	display: table-cell;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: normal;
+	font-size: 13px;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+
+}
+.form-control:focus{
+	border-color: #46c3c1;
+	box-shadow: inset 0 1px 1px rgba(102, 175, 233, 0.1), 0 0 5px rgba(102, 175, 233, 0.3);
+	outline: 0;
+}
+.btn{
+	border: 1px solid transparent;
+	box-shadow: none;
+	-webkit-user-select: none;
+	-webkit-appearance: button;
+}
+.btn:active{
+	background-color: #2b9d9b;
+	color: #fff;
+	border: #2b9d9b solid 1px;
+	-webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+.btn:active,.btn:focus{
+	outline: none;
+}
+.form-control,.btn{
+	height: 30px;
+	padding: 4px 8px;
+	vertical-align: middle;
+	border-radius: 4px;
+	line-height: 0.4;
+	font-size: 14px;
+}
+.keyword{
+	width: 75%;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+	border-color: #4685C3;
+}
+.search{
+	width: 25%;
+	border-bottom-left-radius: 0;
+	border-top-left-radius: 0;
+	margin-left: -1px;
+	color: white;
+	border-color: #4685C3;
+	background-color: #469DC3;
+	background-image: linear-gradient(-180deg, rgba(255, 255, 255, .18) 0%, rgba(111, 7, 255, .08) 100%);
+}
+section + section {
+	margin-top: 5px;
+}
+.section-title{
+	font-weight: bold;
+	margin-top: 5px;
+}
+#result {
+	.weblink{
+		color: #77b4e2;
+	}
+	strong {
+		display: inline-block;
+		margin-top: 5px;
+	}
+}
+#options{
+	margin-left:auto;
+	margin-right:auto;
+	-webkit-user-select: none;
+	input[type=checkbox]{
+		vertical-align: middle;
+		margin-top: 0;
+	}
+	.conf-item{
+		height: 25px;
+		line-height: 25px;
+	}
+}
+/*
+ * 搜索历史
+ * @author Sigma
+ */
+#cache {
+	a {
+		cursor: pointer;
+		padding-left: 2px;
+		line-height: 20px;
+	}
+}
+#history_count {
+	width: 40px;
+	color: inherit;
+}
+.feedback-icon(){
+	display: inline-block;
+	height: 22px;
+	width: 22px;
+}
+footer {
+	text-align: right;
+	margin-top: 5px;
+	a {
+		.feedback-icon;
+		text-decoration: none;
+		img{
+			.feedback-icon;
+		}
+	}
+}
+
+.popup{
+	.history-count,
+	#backup {
+		display: none;
+	}
+}
+.phrase{
+	.voice-icon-wrap;
+}
+.add-to-note{
+	box-sizing: border-box;
+	width: 20px;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5em;
+	color: #77b4e2;
+	&:hover{
+		color: #3ba5d6;
+	}
+	&.green{
+		color: #5ad25a;
+	}
+}
+#login-youdao{
+	cursor: pointer;
+}
+.link,
+.link:hover,
+.link:visited{
+	text-decoration: none;
+	color: #666;
+}

@@ -13,6 +13,9 @@ import {
 import {
   getAudioByWordAndType,
 } from './common/audio-cache';
+import migrate from './common/migrate';
+
+migrate();
 
 const Options = {};
 const setting = new Setting();

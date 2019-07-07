@@ -26,4 +26,5 @@
 > npm run release
 
 # Dependencies
+- [localForage](https://localforage.github.io/localForage/)
 - [FileSaver.js](https://github.com/g8up/qrcodejs)

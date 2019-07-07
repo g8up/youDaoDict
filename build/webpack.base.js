@@ -2,7 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const banner = require('./banner');
 
-const resolve = dir => path.resolve(__dirname, dir);
+const resolve = dir => path.resolve(__dirname, '..', dir);
+
 const {
   DEBUG
 } = process.env;
@@ -13,13 +14,20 @@ if( DEBUG ) {
 
 module.exports = {
   entry: {
-    background: resolve('../src/background.ts'),
-    lookup: resolve('../src/lookup.ts'),
-    options: resolve('../src/options.ts'),
+    background: resolve('src/background.ts'),
+    lookup: resolve('src/lookup.ts'),
+    popup: resolve('src/popup.ts'),
+    option: resolve('src/option.tsx'),
   },
   output: {
-    path: resolve('../dist/js'),
+    path: resolve('dist/js'),
     filename: '[name].js',
+  },
+  resolve: {
+    extensions: ['.ts', 'd.ts', '.tsx'],
+    alias: {
+      Model: resolve('src/model'),
+    }
   },
   ...(DEBUG ? {
     devtool: 'source-map',
@@ -30,14 +38,11 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
+        test: /\.(tsx?)$/,
         use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
-  },
-  resolve: {
-    extensions: ['.ts', 'd.ts'],
   },
   plugins: [
     new webpack.BannerPlugin({

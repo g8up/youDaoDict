@@ -1,10 +1,12 @@
 {
   "compileOnSave": true,
   "compilerOptions": {
-    "module": "es6",
-    "target": "es3",
+    "module": "commonjs",
+    "target": "es5",
     "noImplicitAny": false,
     "sourceMap": false,
+    "jsx": "react",
+    "jsxFactory": "h",
     "rootDir": "src",
     "outDir": "dist/js",
     "noEmitOnError": true,
@@ -12,8 +14,12 @@
     // "types": [
     //   "chrome"
     // ],
-    "lib": [ "dom", "es5", "es2015", "es2016" ]
+    "lib": ["dom", "es5", "es2015", "es2016"],
+    "baseUrl": "./",
+    "paths": {
+      "Model/*": ["src/model/*"],
+    }
   },
-  "include": ["src/*.ts"],
+  "include": ["src/*.ts", "src/*.tsx"],
   "exclude": ["node_modules", "built/**"]
 }
