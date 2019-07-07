@@ -45,7 +45,9 @@ export default class extends Component<ListProps> {
               <th width="320px">解释</th>
               <th width="85px">时间</th>
               {/* <th>分类</th> */}
-              <th width="65px">操作</th>
+              <th width="65px">
+                <ruby>弄<rt>nèng</rt></ruby>它
+              </th>
             </tr>
           </thead>
 

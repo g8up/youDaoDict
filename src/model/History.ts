@@ -81,7 +81,7 @@ interface Window {
 }
 
 /*
- * 保存为系统文件
+ * 保存为本地文件
  */
 const saveContent2File = (content, filename) => {
   const blob = new Blob([content], {
@@ -117,6 +117,7 @@ export default {
   cover,
   add,
   get,
+  getAll,
   exportIt,
   deleteOne,
 }
