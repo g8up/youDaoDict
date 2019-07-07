@@ -16,5 +16,8 @@
     "no-console": 0,
     "no-unused-vars": "warn",
     "no-param-reassign": "warn"
+  },
+  "settings": {
+    "import/resolver": "webpack"
   }
 }

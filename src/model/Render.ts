@@ -1,10 +1,14 @@
 /**
  * 界面渲染
  */
+
 import {
   isContainKoera,
   isContainJapanese,
 } from '../common/util';
+import {
+  Word,
+} from '../types/word';
 
 // content
 const renderTransDetail = (title, content) =>
@@ -81,8 +85,8 @@ const table = ({
 };
 
 // popup 查下历史
-const history = (words: string[]) => `<div class="section-title">查询历史</div>
-  ${words.map(word => `<a>${word}</a>`).join('<br/>')}`;
+const history = (words: Word[]) => `<div class="section-title">查询历史</div>
+  ${words.map(word => `<a>${word.word}</a>`).join('<br/>')}`;
 
 export default {
   table,

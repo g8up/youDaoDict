@@ -1,6 +1,6 @@
 import {
   AddToNoteState
-} from 'index';
+} from './index';
 
 export const isEnglish = (str: string) => {
   for (let i = 0; i < str.length; i += 1) {

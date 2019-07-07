@@ -1,0 +1,65 @@
+/**
+ * 按钮列表
+ * todo：高阶函数封装同类按钮操作
+ */
+
+import { h, Component } from 'preact';
+import {
+  Word,
+} from '../../types/word';
+
+interface ListProps {
+  list: Word[];
+};
+
+export default class extends Component<ListProps> {
+  constructor(props: ListProps) {
+    super(props);
+  }
+
+  render(props: ListProps) {
+    const {
+      list,
+    } = props;
+
+    return (
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th width="50px">序号</th>
+              <th width="80px">单词</th>
+              <th width="80px">音标</th>
+              <th width="320px">解释</th>
+              <th width="85px">时间</th>
+              <th>分类</th>
+              <th width="65px">操作</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {
+              list.map((item, index)=>{
+                const{
+                  word,
+                  createtime = '',
+                } = item;
+                return (
+                  <tr>
+                    <td>{index + 1}</td>
+                    <td>{word}</td>
+                    <td></td>
+                    <td></td>
+                    <td>{createtime}</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+}

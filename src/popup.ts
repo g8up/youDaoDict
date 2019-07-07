@@ -1,7 +1,7 @@
 import Setting from './model/Setting';
 import API from './model/API';
-import parser from './model/Parser';
 import render from './model/Render';
+import History from './model/History';
 
 import MsgType from './common/msg-type';
 import {
@@ -15,10 +15,8 @@ import {
   playAudio,
   addToNote,
 } from './common/chrome';
-import ChromeApi from './common/chrome-api';
 import {
   iSetting,
-  TiggerKeyVal,
 } from './index'
 
 interface Window {
@@ -29,51 +27,24 @@ let Options = null;
 let langType = '';
 
 const setting = new Setting();
-const SP = ',';
 let WORD: string;
 
-// 缓存查询词
-const saveSearchedWord = (word?: string) => {
-  let w = word || ($('#word') ? $('#word').value : '');
-  if (w && w.trim()) {
-    w = w.trim();
-    let cache = localStorage.getItem('wordcache');
-    if (cache) {
-      // distinct
-      if (cache.split(SP).includes(w)) {
-        return;
-      }
-      cache = [w, cache].join();
-    } else {
-      cache = w;
-    }
-    localStorage.setItem('wordcache', cache);
-  }
-};
-
-// 取缓存查询词
-const getCachedWord = () => {
-  let cache = localStorage.getItem('wordcache');
-  if (cache && cache.trim()) {
-    cache = cache.trim();
-    const count = Options.history_count >= 0 ? Options.history_count : 0;
-    const words = cache.split(SP, count);
-
-    if (words.length) {
-      let $cache = $('#cache');
-      $cache.innerHTML = render.history(words);
-      $cache.onclick = (event) => { // 查询
-        const a = event.target;
-        if (a.tagName.toLowerCase() === 'a') {
-          const w = a.innerText;
-          if (w) {
-            $('#word').value = w;
-            mainQuery(w, translateXML); // eslint-disable-line
-          }
+const renderHistory = async ()=>{
+  const words = await History.get(Options.history_count);
+  if (words && words.length) {
+    let $cache = $('#cache');
+    $cache.innerHTML = render.history(words);
+    $cache.onclick = (event) => { // 查询
+      const a = event.target;
+      if (a.tagName.toLowerCase() === 'a') {
+        const w = a.innerText;
+        if (w) {
+          $('#word').value = w;
+          mainQuery(w, translateXML); // eslint-disable-line
         }
-      };
-      $cache = null;
-    }
+      }
+    };
+    $cache = null;
   }
 };
 
@@ -130,10 +101,15 @@ const buildSearchResult = ({
   }
   if (!hasBaseTrans && !hasWebTrans) {
     res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
-  } else {
-    saveSearchedWord();
   }
-  getCachedWord();
+  else {
+    History.save({
+      word: WORD,
+      // baseTrans,
+      // webTrans,
+    });
+  }
+  renderHistory();
   langType = '';
 };
 
@@ -251,38 +227,6 @@ const restoreOptions = (option) => {
   });
 };
 
-/*
- * 保存为系统文件
- */
-const saveContent2File = (content, filename) => {
-  const blob = new Blob([content], {
-    type: 'text/plain;charset=utf-8',
-  });
-  (window as unknown as Window).saveAs(blob, filename);
-};
-
-/*
- * 导出单词查询历史
- */
-const exportHistory = () => {
-  const cachedWords = localStorage.getItem('wordcache');
-  if (cachedWords) {
-    const {
-      name,
-      version,
-    } = chrome.runtime.getManifest();
-    const BR = '\r\n';
-    const banner = [
-      `【${name}】V${version} 查询历史备份文件`,
-      `${new Date().toString().slice(0, 24)}`,
-      'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
-      `${new Array(25).join('=')}`,
-    ].join(BR).trim();
-    const content = `${banner}${BR}${cachedWords.replace(/,/g, BR)}`;
-    saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
-  }
-};
-
 const saveOptions = () => {
   Object.keys(Options).forEach((key) => {
     const elem = $(`#${key}`);
@@ -330,7 +274,7 @@ window.onload = () => {
     console.log('option from sync storage', data);
     restoreOptions(data);
     changeIcon();
-    getCachedWord();
+    renderHistory();
     renderTriggerOption(data.triggerKey);
   });
   /**
@@ -356,7 +300,7 @@ window.onload = () => {
       // eslint-disable-next-line
       $('#history_count').onclick = $('#history_count').onkeyup = () => {
         saveOptions();
-        getCachedWord();
+        renderHistory();
       };
 
       $('#triggerKey').addEventListener('change', (e) => {
@@ -376,7 +320,7 @@ window.onload = () => {
   // 导出查询记录
   $('#backup').onclick = (e) => {
     e.preventDefault();
-    exportHistory();
+    History.exportIt();
   };
   // 登录按钮
   $('#login-youdao').addEventListener('click', (e) => {
