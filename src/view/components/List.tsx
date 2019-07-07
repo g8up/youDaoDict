@@ -8,8 +8,19 @@ import {
   Word,
 } from '../../types/word';
 
-interface ListProps {
+export interface ListProps {
   list: Word[];
+  onDelete?: (word: string)=>any;
+};
+
+const getDate = (time) => {
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour12: false,
+  };
+  return (time ? new Date(time) : new Date()).toLocaleString('zh-cn', options);
 };
 
 export default class extends Component<ListProps> {
@@ -20,6 +31,7 @@ export default class extends Component<ListProps> {
   render(props: ListProps) {
     const {
       list,
+      onDelete,
     } = props;
 
     return (
@@ -32,7 +44,7 @@ export default class extends Component<ListProps> {
               <th width="80px">音标</th>
               <th width="320px">解释</th>
               <th width="85px">时间</th>
-              <th>分类</th>
+              {/* <th>分类</th> */}
               <th width="65px">操作</th>
             </tr>
           </thead>
@@ -50,9 +62,13 @@ export default class extends Component<ListProps> {
                     <td>{word}</td>
                     <td></td>
                     <td></td>
-                    <td>{createtime}</td>
-                    <td></td>
-                    <td></td>
+                    <td>{ createtime === '' ? '' : getDate(createtime) }</td>
+                    <td>
+                      {/* <a href="#" class="editword" title="编辑"></a> */}
+                      <a
+                        class="delete-word"
+                        onClick={() => { onDelete(word);}}></a>
+                    </td>
                   </tr>
                 );
               })

@@ -8,10 +8,18 @@ import { Word } from '../types/word';
 export const HISTORY_STORE_KEY = 'word-history';
 
 /**
+ * 复写所有
+ * @param words
+ */
+const cover = (words: Word[])=>{
+  return localforage.setItem(HISTORY_STORE_KEY, words);
+};
+
+/**
  * 缓存
  * @param word string
  */
-const save = async (word: Word) => {
+const add = async (word: Word) => {
   let cache = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
   if (!cache) {
     cache = [];
@@ -26,22 +34,46 @@ const save = async (word: Word) => {
     createtime: +new Date(),
   });
   cache.unshift(word);
-  localforage.setItem(HISTORY_STORE_KEY, cache);
+  return localforage.setItem(HISTORY_STORE_KEY, cache);
 };
 
 /**
- * 读取
+ * 读取所有
+ * @param limit Number
+ */
+const getAll = async () => {
+  let cache = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
+  if (cache && cache.length) {
+    return cache;
+  }
+  return [];
+};
+
+/**
+ * 读取指定条数
  * @param limit Number
  */
 const get = async (limit) => {
   if (!(limit > 0)) {
     return;
   }
-  let cache = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
+  let cache = await getAll();
   if (cache && cache.length) {
     return cache.slice(0, limit);
   }
   return [];
+};
+
+/**
+ * 删除一条记录
+ */
+const deleteOne = async (word)=>{
+  const words = await getAll();
+  const index = words.findIndex(item=>item.word === word);
+  if( index > -1 ) {
+    words.splice(index, 1);
+    return cover(words);
+  }
 };
 
 interface Window {
@@ -82,7 +114,9 @@ const exportIt = async () => {
 };
 
 export default {
-  save,
+  cover,
+  add,
   get,
   exportIt,
+  deleteOne,
 }
