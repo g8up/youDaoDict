@@ -23,6 +23,10 @@ const getDate = (time) => {
   return (time ? new Date(time) : new Date()).toLocaleString('zh-cn', options);
 };
 
+const visit = (word)=>{
+  window.open();
+};
+
 export default class extends Component<ListProps> {
   constructor(props: ListProps) {
     super(props);
@@ -61,7 +65,12 @@ export default class extends Component<ListProps> {
                 return (
                   <tr>
                     <td>{index + 1}</td>
-                    <td>{word}</td>
+                    <td>
+                      <a
+                        className="word"
+                        target="_blank"
+                        href={`https://dict.youdao.com/search?keyfrom=chrome.extension&q=${word}`}>{word}</a>
+                    </td>
                     <td></td>
                     <td></td>
                     <td>{ createtime === '' ? '' : getDate(createtime) }</td>
