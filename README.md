@@ -15,16 +15,17 @@
 5. 采用新技术（shadowDOM）避免与浏览页面样式冲突（v3.1.6)
 6. 添加到单词本（v3.2.0）
 
+# 开发
+> npm run dev
+
+## 打包发布
+> npm run release
+
+# Deps
+- [localForage](https://localforage.github.io/localForage/)
+- [FileSaver.js](https://github.com/g8up/qrcodejs)
+
 # 致谢
 - 感谢 XGHeaven 对 v3.1.4 提出的更新建议
 - 感谢 john_shao 对 v3.0.8 提出的更新建议
 - 感谢 普外科诚伯伯 对 v3.2.3 提出的 Bug 反馈
-
-# 开发
-> npm run dev
-## 打包发布
-> npm run release
-
-# Dependencies
-- [localForage](https://localforage.github.io/localForage/)
-- [FileSaver.js](https://github.com/g8up/qrcodejs)
