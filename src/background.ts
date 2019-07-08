@@ -151,6 +151,6 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 
   if (openOptionPage ) {
-    chrome.tabs.create({ url: 'options.html' });
+    chrome.tabs.create({ url: 'option.html' });
   }
 });
