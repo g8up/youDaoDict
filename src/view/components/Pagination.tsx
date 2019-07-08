@@ -15,16 +15,26 @@ export default class extends Component<Props>{
     total: 0,
   }
 
+  totalPage = 0;
+
   constructor(props: Props) {
     super(props);
   }
 
-  renderPaginationIcon(start, end, totalPage) {
+  componentWillReceiveProps(newProps) {
+    const {
+      total,
+      pageSize,
+    } = newProps;
+    this.totalPage = Math.ceil( total / pageSize );
+  }
+
+  renderPaginationIcon(start, end) {
     const {
       goToPageNum,
     } = this.props;
     const buttons = [];
-    for (let n = start; n <= end && n <= totalPage; n += 1) {
+    for (let n = start; n <= end && n <= this.totalPage; n += 1) {
       buttons.push(<a onClick={() => { goToPageNum(n) }}>
         {n}
       </a>);
@@ -40,7 +50,7 @@ export default class extends Component<Props>{
       goToPageNum,
     } = props;
 
-    const totalPage = Math.ceil( total / pageSize );
+    const totalPage = this.totalPage;
     const offset = 3;
     const beforeCur = Math.max( currentPageNum - offset, 1);
     const afterCur = Math.min( currentPageNum + offset, total);
@@ -55,13 +65,13 @@ export default class extends Component<Props>{
         }
 
         {
-          this.renderPaginationIcon(beforeCur, currentPageNum - 1, totalPage)
+          this.renderPaginationIcon(beforeCur, currentPageNum - 1)
         }
 
         <a className="current-page">{currentPageNum}</a>
 
         {
-          this.renderPaginationIcon(currentPageNum + 1, afterCur, totalPage)
+          this.renderPaginationIcon(currentPageNum + 1, afterCur)
         }
 
         {
