@@ -7,32 +7,21 @@ import { h, Component } from 'preact';
 import {
   Word,
 } from '../../types/word';
+import {
+  getDate,
+} from '../../common/util';
 
-export interface ListProps {
+export interface Props {
   list: Word[];
   onDelete?: (word: string)=>any;
 };
 
-const getDate = (time) => {
-  const options = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour12: false,
-  };
-  return (time ? new Date(time) : new Date()).toLocaleString('zh-cn', options);
-};
-
-const visit = (word)=>{
-  window.open();
-};
-
-export default class extends Component<ListProps> {
-  constructor(props: ListProps) {
+export default class extends Component<Props> {
+  constructor(props: Props) {
     super(props);
   }
 
-  render(props: ListProps) {
+  render(props: Props) {
     const {
       list,
       onDelete,

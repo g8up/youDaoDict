@@ -84,7 +84,7 @@ const table = ({
   return fmt;
 };
 
-// popup 查下历史
+// popup 查询历史
 const history = (words: Word[]) => `<div class="section-title">查询历史</div>
   ${words.map(word => `<a>${word.word}</a>`).join('<br/>')}`;
 

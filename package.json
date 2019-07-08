@@ -4,7 +4,7 @@
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "scripts": {
     "test": "jest",
-    "dev": "set DEBUG=true && npm run css:watch & webpack --mode=production --config=build/webpack.base.js --watch",
+    "dev": "set DEBUG=true && webpack --mode=production --config=build/webpack.base.js --watch & npm run css:watch ",
     "build": "rm -rf ./dist/js & webpack --mode=production --config=build/webpack.base.js",
     "css": "rm -rf ./dist/style && gulp css",
     "css:watch": "rm -rf ./dist/style && gulp watch",
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
+    "@babel/plugin-transform-react-jsx": "^7.3.0",
     "@babel/preset-env": "^7.4.2",
     "@babel/preset-typescript": "^7.3.3",
     "@types/chrome": "^0.0.81",
