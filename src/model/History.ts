@@ -4,6 +4,10 @@
 
 import * as localforage from 'localforage';
 import { Word } from '../types/word';
+import {
+  getDate,
+  getTime,
+} from '../common/util';
 
 export const HISTORY_STORE_KEY = 'word-history';
 
@@ -100,16 +104,18 @@ const exportIt = async () => {
       name,
       version,
     } = chrome.runtime.getManifest();
+    const timeString = `${getDate()}-${getTime()}`;
     const BR = '\r\n';
     const banner = [
-      `【${name}】V${version} 查询历史备份文件`,
-      `${new Date().toString().slice(0, 24)}`,
-      'By https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
+      `查询历史备份文件`,
+      `${timeString}`,
+      `By 【${name}】V${version} `,
+      'https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil',
       `${new Array(25).join('=')}`,
     ].join(BR).trim();
 
     const content = `${banner}${BR}${cachedWords.map(item=>item.word).join(`,${BR}`)}`;
-    saveContent2File(content, `youDaoCrx-history ${+new Date()}.txt`);
+    saveContent2File(content, `youDaoDict-history-${timeString}.txt`);
   }
 };
 
