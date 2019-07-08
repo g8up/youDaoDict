@@ -8,9 +8,17 @@ rt {
   color: #999;
 }
 
+#app{
+  display: flex;
+}
+
+.content{
+  margin: 0 auto;
+}
+
 table{
   table-layout: fixed;
-  background: #fff;
+  background: #ffffffb0;
   border-collapse: collapse;
   border-spacing: 0;
 
@@ -34,7 +42,7 @@ table{
     vertical-align: middle;
   }
   tr:hover td{
-    background-color: aliceblue;
+    background-color: #fefff0;
   }
 
   .delete-word{
@@ -49,8 +57,14 @@ table{
     }
   }
 }
+
+.table-bottom{
+  text-align: center;
+}
+
 .pagination{
   margin: 10px auto;
+  color: #666;
   a{
     border: 1px solid #9fb9e4;
     text-align: center;
@@ -65,5 +79,9 @@ table{
   .current-page{
     border: 1px solid #54c55b;
     background: aliceblue;
+  }
+  .omit{
+    border: none;
+    cursor: default;
   }
 }
