@@ -64,7 +64,7 @@ export default class extends Component<ListProps> {
                 } = item;
                 return (
                   <tr>
-                    <td>{index + 1}</td>
+                    <td className="text-muted">{index + 1}</td>
                     <td>
                       <a
                         className="word"
@@ -73,7 +73,7 @@ export default class extends Component<ListProps> {
                     </td>
                     <td></td>
                     <td></td>
-                    <td>{ createtime === '' ? '' : getDate(createtime) }</td>
+                    <td className="text-muted">{ createtime === '' ? '' : getDate(createtime) }</td>
                     <td>
                       {/* <a href="#" class="editword" title="编辑"></a> */}
                       <a
