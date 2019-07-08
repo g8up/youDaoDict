@@ -195,6 +195,24 @@ export const isMinorVersionIncrease = (previousVer, ver)=>{
 
 export const $ = (selector, cont = document) => cont.querySelector(selector);
 
+export const getDate = (time?) => {
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour12: false,
+  };
+  return (time ? new Date(time) : new Date()).toLocaleString('zh-cn', options);
+};
+
+export const getTime = (date?) => {
+  const cur = date ? new Date(date) : new Date();
+  const h = cur.getHours();
+  const m = cur.getMinutes();
+  const s = cur.getSeconds();
+  return [h, m, s].join(':');
+};
+
 export default {
   ajax,
   qs,

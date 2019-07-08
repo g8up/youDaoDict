@@ -1,24 +1,56 @@
-html{
+html {
   font-size: 14px;
-  font-family: Arial,sans-serif;
-	background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+  font-family: Arial, sans-serif;
+  background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+  color: #333;
 }
+
 // 拼音
 rt {
   color: #999;
 }
-.text-muted{
+
+.text-muted {
   color: #666;
 }
-#app{
+
+#app {
   display: flex;
 }
 
-.content{
+.content {
   margin: 0 auto;
 }
 
-table{
+.top{
+  display: flex;
+  margin: 10px 0;
+}
+
+.title{
+  flex: 1;
+  font-weight: bold;
+  font-size: 18px;
+  color: #2486c7;
+}
+
+.toolbar {
+  a {
+    cursor: pointer;
+    text-decoration: none;
+    .feedback-icon;
+
+    img {
+      .feedback-icon;
+    }
+  }
+
+  a+a {
+    margin-left: 5px;
+  }
+}
+
+table {
   table-layout: fixed;
   background: #ffffffb0;
   border-collapse: collapse;
@@ -40,44 +72,49 @@ table{
     vertical-align: bottom;
   }
 
-  td{
+  td {
     vertical-align: middle;
   }
-  tr:hover td{
+
+  tr:hover td {
     background-color: #fefff0;
   }
 
-  .delete-word{
+  .delete-word {
     background: url("../image/edit.png") right top no-repeat;
     width: 12px;
     height: 12px;
     display: inline-block;
     vertical-align: middle;
     cursor: pointer;
-    &:hover{
+
+    &:hover {
       background-position-y: -20px;
     }
   }
+
   .word,
   .word:hover {
     text-decoration: none;
     color: #35a1d4;
     font-weight: bold;
   }
-  .word:hover{
+
+  .word:hover {
     cursor: pointer;
   }
 }
 
-.table-bottom{
+.table-bottom {
   text-align: center;
 }
 
-.pagination{
+.pagination {
   margin: 10px auto;
   color: #666;
   user-select: none;
-  a{
+
+  a {
     border: 1px solid #9fb9e4;
     text-align: center;
     text-decoration: none;
@@ -85,16 +122,25 @@ table{
     padding: 5px 10px;
     cursor: pointer;
   }
-  a + a{
+
+  a+a {
     margin-left: 0.5em;
   }
-  .current-page{
+
+  .current-page {
     border: 1px solid #54c55b;
     background: aliceblue;
     font-weight: bold;
   }
-  .omit{
+
+  .omit {
     border: none;
     cursor: default;
   }
+}
+
+.feedback-icon() {
+  display: inline-block;
+  height: 22px;
+  width: 22px;
 }

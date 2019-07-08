@@ -1,13 +1,16 @@
 import { h, Component } from 'preact';
 import History from '../model/History';
 import List,{
-  ListProps,
+  Props as ListProps,
 } from './components/List';
 import Pagination, {
   Props as PaginationProps,
 } from './components/Pagination';
+import Toolbar,{
+  Props as ToolbarProps,
+} from './components/Toolbar';
 
-interface AppState extends ListProps, PaginationProps {
+interface AppState extends ListProps, PaginationProps, ToolbarProps {
 
 }
 
@@ -18,7 +21,8 @@ export default class extends Component<any, AppState> {
     currentPageNum: 1,
     pageSize: 15,
     total: 0,
-    goToPageNum: (pageNum) => {}
+    goToPageNum: (pageNum) => {},
+    exportFile: ()=>{},
   }
 
   constructor(props) {
@@ -42,6 +46,10 @@ export default class extends Component<any, AppState> {
       await History.deleteOne(word);
       this.updateList();
     }
+  }
+
+  exportFile(){
+    return History.exportIt();
   }
 
   /**
@@ -84,6 +92,12 @@ export default class extends Component<any, AppState> {
 
     return (
       <div className="content">
+        <div className="top">
+          <div className="title">查询历史</div>
+          <Toolbar
+            exportFile={this.exportFile.bind(this) }
+          />
+        </div>
         <List
           list={state.list}
           onDelete={this.deleteWord.bind(this)}
