@@ -83,17 +83,19 @@ export default class extends Component<any, AppState> {
     } = this.state;
 
     return (
-      <div>
+      <div className="content">
         <List
           list={state.list}
           onDelete={this.deleteWord.bind(this)}
         />
-        <Pagination
-          currentPageNum={currentPageNum}
-          pageSize={pageSize}
-          total={total}
-          goToPageNum={this.goToPageNum.bind(this) }
-        />
+        <div className="table-bottom">
+          <Pagination
+            currentPageNum={currentPageNum}
+            pageSize={pageSize}
+            total={total}
+            goToPageNum={this.goToPageNum.bind(this) }
+          />
+        </div>
       </div>
     )
   }
