@@ -24,7 +24,7 @@ export default class extends Component<Props>{
       goToPageNum,
     } = this.props;
     const buttons = [];
-    for (let n = start; n <= end && n < totalPage; n += 1) {
+    for (let n = start; n <= end && n <= totalPage; n += 1) {
       buttons.push(<a onClick={() => { goToPageNum(n) }}>
         {n}
       </a>);
@@ -42,27 +42,36 @@ export default class extends Component<Props>{
 
     const totalPage = Math.ceil( total / pageSize );
     const offset = 3;
+    const beforeCur = Math.max( currentPageNum - offset, 1);
+    const afterCur = Math.min( currentPageNum + offset, total);
 
     return (
       <div className="pagination">
-        <a onClick={() => { goToPageNum(1) }}>首页</a>
         {
-          this.renderPaginationIcon(Math.max(currentPageNum - offset, 1), currentPageNum -1, totalPage)
+          beforeCur > 2 ? ([
+            <a onClick={() => { goToPageNum(1) }}>{1}</a>,
+            <a className="omit">...</a>
+          ]) : beforeCur === 2 ? <a onClick={() => { goToPageNum(1) }}>{1}</a> : ''
+        }
+
+        {
+          this.renderPaginationIcon(beforeCur, currentPageNum - 1, totalPage)
         }
 
         <a className="current-page">{currentPageNum}</a>
 
         {
-          this.renderPaginationIcon(Math.min(currentPageNum + 1, totalPage), Math.min(currentPageNum + offset, totalPage), totalPage)
+          this.renderPaginationIcon(currentPageNum + 1, afterCur, totalPage)
         }
 
         {
-          (currentPageNum + offset) < totalPage ? (
+          afterCur < totalPage - 1 ? (
             [
-              <a>...</a>,
+              <a className="omit">...</a>,
               <a onClick={() => { goToPageNum(totalPage) }}>{totalPage}</a>
             ]
-          ) : ''
+          ) : afterCur === totalPage - 1 ? <a onClick={() => { goToPageNum(totalPage) }}>{totalPage}</a> : ''
+          // currentPageNum !== total ? this.renderPaginationIcon(Math.min(currentPageNum + 1, totalPage), Math.min(currentPageNum + offset, totalPage), totalPage) : ''
         }
 
         <a onClick={() => { goToPageNum( currentPageNum - 1 ) } }>上一页</a>
