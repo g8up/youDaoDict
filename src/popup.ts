@@ -17,11 +17,7 @@ import {
 } from './common/chrome';
 import {
   iSetting,
-} from './index'
-
-interface Window {
-  saveAs(blob: Blob, filename: string): void;
-}
+} from './index';
 
 let Options = null;
 let langType = '';

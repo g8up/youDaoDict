@@ -81,7 +81,7 @@ const deleteOne = async (word)=>{
 };
 
 interface Window {
-  saveAs: any;
+  saveAs(blob: Blob, filename: string): void;
 }
 
 /*
