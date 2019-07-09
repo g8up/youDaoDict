@@ -5,14 +5,14 @@
 
 import { h, Component } from 'preact';
 import {
-  Word,
+  IWord,
 } from '../../types';
 import {
   getDate,
 } from '../../common/util';
 
 export interface Props {
-  list: Word[];
+  list: IWord[];
   onDelete?: (word: string)=>any;
 };
 

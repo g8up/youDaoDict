@@ -1,4 +1,4 @@
-export interface Word {
+export interface IWord {
   word: string,
   ukSpeech?: string,
   usSpeech?: string,
@@ -11,7 +11,7 @@ export interface Word {
   type?: number, // 类型
 }
 
-interface Translator {
+interface ITranslator {
   getData: (word:string)=>any;
-  parse: (resp)=>Word;
+  parse: (resp)=>IWord;
 }

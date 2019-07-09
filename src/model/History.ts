@@ -3,7 +3,7 @@
  */
 
 import * as localforage from 'localforage';
-import { Word } from '../types';
+import { IWord } from '../types';
 import {
   getDate,
   getTime,
@@ -15,7 +15,7 @@ export const HISTORY_STORE_KEY = 'word-history';
  * 复写所有
  * @param words
  */
-const cover = (words: Word[])=>{
+const cover = (words: IWord[])=>{
   return localforage.setItem(HISTORY_STORE_KEY, words);
 };
 
@@ -23,8 +23,8 @@ const cover = (words: Word[])=>{
  * 缓存
  * @param word string
  */
-const add = async (word: Word) => {
-  let cache = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
+const add = async (word: IWord) => {
+  let cache = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
   if (!cache) {
     cache = [];
   }
@@ -46,7 +46,7 @@ const add = async (word: Word) => {
  * @param limit Number
  */
 const getAll = async () => {
-  let cache = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
+  let cache = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
   if (cache && cache.length) {
     return cache;
   }
@@ -98,7 +98,7 @@ const saveContent2File = (content, filename) => {
  * 导出单词查询历史
  */
 const exportIt = async () => {
-  const cachedWords = await localforage.getItem<Word[]>(HISTORY_STORE_KEY);
+  const cachedWords = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
   if (cachedWords) {
     const {
       name,

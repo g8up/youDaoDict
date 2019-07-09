@@ -7,7 +7,7 @@ import {
   isContainJapanese,
 } from '../common/util';
 import {
-  Word,
+  IWord,
 } from '../types';
 
 // content
@@ -85,7 +85,7 @@ const table = ({
 };
 
 // popup 查询历史
-const history = (words: Word[]) => `<div class="section-title">查询历史</div>
+const history = (words: IWord[]) => `<div class="section-title">查询历史</div>
   ${words.map(word => `<a>${word.word}</a>`).join('<br/>')}`;
 
 export default {
