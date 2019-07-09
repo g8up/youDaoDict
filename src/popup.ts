@@ -36,7 +36,7 @@ const renderHistory = async ()=>{
         const w = a.innerText;
         if (w) {
           $('#word').value = w;
-          mainQuery(w, translateXML); // eslint-disable-line
+          mainQuery(w, parseXML); // eslint-disable-line
         }
       }
     };
@@ -110,7 +110,7 @@ const buildSearchResult = ({
 };
 
 // 布局结果页
-const translateXML = (xmlnode) => {
+const parseXML = (xmlnode) => {
   let hasBaseTrans = true;
   let hasWebTrans = true;
   let baseTrans = '';
@@ -183,7 +183,7 @@ const translateXML = (xmlnode) => {
 
 const mainQuery = (word, callback) => API.fetchWordOnline(word).then((ret) => {
   WORD = word;
-  const dataText = translateXML(ret);
+  const dataText = parseXML(ret);
   if (dataText != null) {
     callback(dataText);
   }
@@ -307,11 +307,11 @@ window.onload = () => {
 
   $('#word').onkeydown = (event) => {
     if (event.keyCode === 13) {
-      mainQuery($('#word').value, translateXML);
+      mainQuery($('#word').value, parseXML);
     }
   };
   $('#querybutton').onclick = () => {
-    mainQuery($('#word').value, translateXML);
+    mainQuery($('#word').value, parseXML);
   };
   // 导出查询记录
   $('#backup').onclick = (e) => {

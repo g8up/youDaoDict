@@ -8,7 +8,7 @@ import {
 } from '../common/util';
 import {
   Word,
-} from '../types/word';
+} from '../types';
 
 // content
 const renderTransDetail = (title, content) =>

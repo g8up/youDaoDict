@@ -10,3 +10,8 @@ export interface Word {
   createtime?: number, // 添加时间
   type?: number, // 类型
 }
+
+interface Translator {
+  getData: (word:string)=>any;
+  parse: (resp)=>Word;
+}

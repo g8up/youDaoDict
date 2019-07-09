@@ -3,7 +3,7 @@
  */
 
 import * as localforage from 'localforage';
-import { Word } from '../types/word';
+import { Word } from '../types';
 import {
   getDate,
   getTime,

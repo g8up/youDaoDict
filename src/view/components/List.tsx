@@ -6,7 +6,7 @@
 import { h, Component } from 'preact';
 import {
   Word,
-} from '../../types/word';
+} from '../../types';
 import {
   getDate,
 } from '../../common/util';
