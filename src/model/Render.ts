@@ -89,7 +89,7 @@ const table = ({
  */
 const popupRender = ({
   word,
-  phoneticSymbol,
+  phonetic,
   baseTrans,
   webTrans,
   retphrase,
@@ -116,7 +116,7 @@ const popupRender = ({
   ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[langType] || '英汉' }翻译</div>
     <span class="phrase" data-toggle="play">
       ${ retphrase }
-      ${ phoneticSymbol ? `[${phoneticSymbol}]` : '' }
+      ${ phonetic ? `[${phonetic}]` : '' }
       <span class="voice-icon" title="朗读"></span>
     </span>
     <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>

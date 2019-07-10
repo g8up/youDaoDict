@@ -50,9 +50,16 @@ export default class extends Component<Props> {
               list.map((item, index)=>{
                 const{
                   word,
+                  phonetic,
+                  baseTrans = '',
+                  webTrans = '',
                   createTime = '',
                   lastView = '',
                 } = item;
+
+                const translation = baseTrans ? baseTrans
+                  : webTrans ? `网络释义：${webTrans}`
+                  : '';
 
                 return (
                   <tr>
@@ -63,8 +70,10 @@ export default class extends Component<Props> {
                         target="_blank"
                         href={`https://dict.youdao.com/search?keyfrom=chrome.extension&q=${word}`}>{word}</a>
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                      {phonetic ? `/${phonetic}/`: ''}
+                    </td>
+                    <td>{translation}</td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
                     <td className="text-muted">{ lastView === '' ? '' : getDate(lastView) }</td>
                     <td>

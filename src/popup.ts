@@ -44,7 +44,27 @@ const renderHistory = async ()=>{
   }
 };
 
-// 布局结果页
+/**
+ * 获取子节点文本
+ */
+const getChildVal = (root, selector)=>{
+  let ret = '';
+  const node = root.querySelector(selector);
+  if (node) {
+    if (node.childNodes[0]) {
+      const val = node.childNodes[0].nodeValue;
+      if (val !== null) {
+        ret = val;
+      }
+    }
+  }
+  return ret;
+};
+
+/**
+ * 解析接口数据
+ * @param xmlNode
+ */
 const parseXML = (xmlNode) => {
   let retphrase = '';
 
@@ -58,38 +78,34 @@ const parseXML = (xmlNode) => {
     langType = root.querySelector('lang').childNodes[0].nodeValue;
   }
 
-  let phoneticSymbol = '';
-  const symbol = root.querySelector('phonetic-symbol');
-  if (symbol) {
-    if (symbol.childNodes[0]) {
-      const pho = symbol.childNodes[0].nodeValue;
-      if (pho !== null) {
-        phoneticSymbol = `${pho}`;
-      }
-    }
-  }
+  let phonetic = getChildVal(root, 'phonetic-symbol');
+  let ukPhonetic = getChildVal(root, 'uk-phonetic-symbol');
+  let usPhonetic = getChildVal(root, 'us-phonetic-symbol');
+
+  let speech = getChildVal(root, 'speech');
+  let ukSpeech = getChildVal(root, 'uk-speech');
+  let usSpeech = getChildVal(root, 'us-speech');
 
   const translations = root.querySelectorAll('translation');
   const webTranslations = root.querySelectorAll('web-translation');
 
-  let baseTrans = '';
+  let baseTrans;
   if (translations.length) {
     baseTrans = Array.from(translations).map( (translation: HTMLElement) =>{
       const content = translation.querySelector('content');
       if( content ) {
-        let line = `${content.childNodes[0].nodeValue}<br/>`;
-        if (line.length > 50) {
+        let val = content.childNodes[0].nodeValue;
+        if (val.length > 50) {
           const reg = /[;；]/;
-          const childs = line.split(reg);
-          line = childs.join('<br/>');
+          return val.split(reg);
         }
-        return line;
+        return val;
       }
       return '';
-    }).join('');
+    }).filter(item=>item);
   }
 
-  let webTrans = '';
+  let webTrans;
   if (webTranslations.length) { // 网络释义
     webTrans = Array.from(webTranslations).map( (webTranslation: HTMLElement) =>{
       const $key = webTranslation.querySelector('key');
@@ -97,10 +113,10 @@ const parseXML = (xmlNode) => {
       if( $key && $val) {
         const key = $key.childNodes[0].nodeValue;
         const val = $val.childNodes[0].nodeValue;
-        return `${key}: ${val}<br/>`;
+        return `${key}: ${val}`;
       }
       return '';
-    }).join('');
+    }).filter(item => item);
   }
 
   $('#options').style.display = 'none'; // hide option pannel
@@ -108,7 +124,7 @@ const parseXML = (xmlNode) => {
   const res = $('#result');
   res.innerHTML = render.popupRender({
     word: WORD,
-    phoneticSymbol,
+    phonetic,
     baseTrans,
     webTrans,
     retphrase,
@@ -118,6 +134,14 @@ const parseXML = (xmlNode) => {
   if (baseTrans || webTrans ) {
     History.add({
       word: WORD,
+      speech,
+      ukSpeech,
+      usSpeech,
+      phonetic,
+      ukPhonetic,
+      usPhonetic,
+      baseTrans: baseTrans.join(';'),
+      webTrans: webTrans.join(';'),
     } as IWord);
   }
   renderHistory();

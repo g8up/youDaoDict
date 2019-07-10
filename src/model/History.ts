@@ -37,7 +37,7 @@ const add = async (word: IWord) => {
   });
 
   if (existWord) {
-    Object.assign(existWord, {
+    Object.assign(existWord, word, {
       lastView: +new Date(), // 更新查看时间
     });
   }
