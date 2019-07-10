@@ -213,6 +213,13 @@ export const getTime = (date?) => {
   return [h, m, s].join(':');
 };
 
+/**
+ * 拼接查看详细释义链接
+ */
+export const getDetailLink = (urlPrefix, params) => {
+  return `${urlPrefix}?${qs(params)}`;
+};
+
 export default {
   ajax,
   qs,

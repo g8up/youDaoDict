@@ -5,7 +5,6 @@ import History from './model/History';
 
 import MsgType from './common/msg-type';
 import {
-  qs as queryString,
   isContainKoera,
   isContainJapanese,
   copyText,
@@ -45,139 +44,83 @@ const renderHistory = async ()=>{
   }
 };
 
-const getLink = (urlPrefix, params) => {
-  const url = `${urlPrefix}?${queryString(params)}`;
-  return url;
-};
-
-const buildSearchResult = ({
-  phoneticSymbol,
-  hasBaseTrans,
-  hasWebTrans,
-  baseTrans,
-  webTrans,
-  retphrase,
-}) => {
-  $('#options').style.display = 'none'; // hide option pannel
-  const params = {
-    q: WORD,
-    ue: 'utf8',
-    keyfrom: 'chrome.extension',
-    le: '',
-  };
-  if (isContainKoera(WORD)) {
-    params.le = 'ko';
-  } else if (isContainJapanese(WORD)) {
-    params.le = 'jap';
-  } else if (langType === 'fr') {
-    params.le = 'fr';
-  }
-  const res = $('#result');
-  res.innerHTML = '<strong>查询:</strong><br/>';
-  if (hasBaseTrans) {
-    const langTypeMap = {
-      ko: '韩汉',
-      jap: '日汉',
-      fr: '法汉',
-    };
-    res.innerHTML = `<div class="section-title">${langTypeMap[langType] || '英汉'}翻译</div>
-      <span class="phrase" data-toggle="play">
-        ${retphrase}
-        ${phoneticSymbol ? `[${phoneticSymbol}]` : ''}
-        <span class="voice-icon" title="朗读"></span>
-      </span>
-      <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>
-      ${baseTrans}`;
-  }
-  if (hasWebTrans) {
-    res.innerHTML += `<div class="section-title">网络释义</div>${webTrans}`;
-  }
-  if (hasBaseTrans || hasWebTrans) {
-    const link = getLink('https://dict.youdao.com/search', params);
-    res.innerHTML += `<a class="weblink" href="${link}" target="_blank">查看详细释义&gt;&gt;</a>`;
-  }
-  if (!hasBaseTrans && !hasWebTrans) {
-    res.innerHTML = `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(WORD)}" target="_blank">尝试用有道搜索</a>`;
-  }
-  else {
-    History.add({
-      word: WORD,
-    } as IWord);
-  }
-  renderHistory();
-  langType = '';
-};
-
 // 布局结果页
-const parseXML = (xmlnode) => {
-  let hasBaseTrans = true;
-  let hasWebTrans = true;
-  let baseTrans = '';
-  let webTrans = '';
+const parseXML = (xmlNode) => {
   let retphrase = '';
-  const root = xmlnode.getElementsByTagName('yodaodict')[0];
-  const phrase = root.getElementsByTagName('return-phrase');
-  if (`${phrase[0].childNodes[0]}` !== 'undefined') {
-    retphrase = phrase[0].childNodes[0].nodeValue;
+
+  const root = xmlNode.querySelector('yodaodict');
+  const phrase = root.querySelector('return-phrase');
+
+  if (`${phrase.childNodes[0]}` !== 'undefined') {
+    retphrase = phrase.childNodes[0].nodeValue;
   }
-  if (`${root.getElementsByTagName('lang')[0]}` !== 'undefined') {
-    langType = root.getElementsByTagName('lang')[0].childNodes[0].nodeValue;
+  if (root.querySelector('lang')) {
+    langType = root.querySelector('lang').childNodes[0].nodeValue;
   }
+
   let phoneticSymbol = '';
-  const symbol = root.getElementsByTagName('phonetic-symbol')[0];
-  if (`${symbol}` !== 'undefined') {
-    if (`${symbol.childNodes[0]}` !== 'undefined') {
+  const symbol = root.querySelector('phonetic-symbol');
+  if (symbol) {
+    if (symbol.childNodes[0]) {
       const pho = symbol.childNodes[0].nodeValue;
       if (pho !== null) {
         phoneticSymbol = `${pho}`;
       }
     }
   }
-  const translation = root.getElementsByTagName('translation')[0];
-  if (`${translation}` === 'undefined') {
-    hasBaseTrans = false;
-  }
-  if (`${root.getElementsByTagName('web-translation')[0]}` === 'undefined') {
-    hasWebTrans = false;
-  }
-  if (hasBaseTrans) {
-    baseTrans += '<div class="section-title">基本释义</div>';
-    if (`${translation.childNodes[0]}` !== 'undefined') {
-      const translations = root.getElementsByTagName('translation');
-      for (let i = 0; i < translations.length; i += 1) {
-        let line = `${translations[i].getElementsByTagName('content')[0].childNodes[0].nodeValue}<br/>`;
+
+  const translations = root.querySelectorAll('translation');
+  const webTranslations = root.querySelectorAll('web-translation');
+
+  let baseTrans = '';
+  if (translations.length) {
+    baseTrans = Array.from(translations).map( (translation: HTMLElement) =>{
+      const content = translation.querySelector('content');
+      if( content ) {
+        let line = `${content.childNodes[0].nodeValue}<br/>`;
         if (line.length > 50) {
           const reg = /[;；]/;
           const childs = line.split(reg);
           line = childs.join('<br/>');
         }
-        baseTrans += line;
+        return line;
       }
-    } else {
-      baseTrans += '未找到基本释义';
-    }
+      return '';
+    }).join('');
   }
-  if (hasWebTrans) {
-    let webtranslations;
-    // 网络释义
-    if (`${root.getElementsByTagName('web-translation')[0].childNodes[0]}` !== 'undefined') {
-      webtranslations = root.getElementsByTagName('web-translation');
-      for (let i = 0; i < webtranslations.length; i += 1) {
-        webTrans += `${webtranslations[i].getElementsByTagName('key')[0].childNodes[0].nodeValue}:  `;
-        webTrans += `${webtranslations[i].getElementsByTagName('trans')[0].getElementsByTagName('value')[0].childNodes[0].nodeValue}<br/>`;
+
+  let webTrans = '';
+  if (webTranslations.length) { // 网络释义
+    webTrans = Array.from(webTranslations).map( (webTranslation: HTMLElement) =>{
+      const $key = webTranslation.querySelector('key');
+      const $val = webTranslation.querySelector('value');
+      if( $key && $val) {
+        const key = $key.childNodes[0].nodeValue;
+        const val = $val.childNodes[0].nodeValue;
+        return `${key}: ${val}<br/>`;
       }
-    } else {
-      webTrans += '未找到网络释义';
-    }
+      return '';
+    }).join('');
   }
-  buildSearchResult({
+
+  $('#options').style.display = 'none'; // hide option pannel
+
+  const res = $('#result');
+  res.innerHTML = render.popupRender({
+    word: WORD,
     phoneticSymbol,
-    hasBaseTrans,
-    hasWebTrans,
     baseTrans,
     webTrans,
     retphrase,
+    langType,
   });
+
+  if (baseTrans || webTrans ) {
+    History.add({
+      word: WORD,
+    } as IWord);
+  }
+  renderHistory();
 };
 
 const mainQuery = (word, callback) => API.fetchWordOnline(word).then((ret) => {
@@ -309,14 +252,17 @@ window.onload = () => {
       mainQuery($('#word').value, parseXML);
     }
   };
+
   $('#querybutton').onclick = () => {
     mainQuery($('#word').value, parseXML);
   };
+
   // 导出查询记录
   $('#backup').onclick = (e) => {
     e.preventDefault();
     History.exportIt();
   };
+
   // 登录按钮
   $('#login-youdao').addEventListener('click', (e) => {
     e.preventDefault();
@@ -326,18 +272,12 @@ window.onload = () => {
       console.log(rep);
     });
   });
+
   // share
   $('#share').addEventListener('click', (e) => {
     e.preventDefault();
     shareDownloadLink();
   });
-  // 检测当前页面打开入口：option / popup
-  (function checkEntry() {
-    const { hash } = window.location;
-    if (hash === '#popup') {
-      document.body.classList.add('popup');
-    }
-  }());
 
   // 绑定朗读事件
   document.body.addEventListener('click', (e) => {

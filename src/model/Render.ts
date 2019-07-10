@@ -5,6 +5,7 @@
 import {
   isContainKoera,
   isContainJapanese,
+  getDetailLink,
 } from '../common/util';
 import {
   IWord,
@@ -54,7 +55,7 @@ const table = ({
   }
   const searchUrl = `https://dict.youdao.com/search?keyfrom=chrome.extension&q=${encodeURIComponent(word)}${lan}`;
 
-  const fmt = `
+  return `
     <div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
@@ -66,22 +67,64 @@ const table = ({
       <div class="yddMiddle">
         ${(ukSpeech || usSpeech) ? renderTransDetail('发音', `
           ${ukSpeech ? renderSpeech({
-    title: '英',
-    wordAndType: ukSpeech,
-    phonetic: ukPhonetic,
-  }) : ''}
+            title: '英',
+            wordAndType: ukSpeech,
+            phonetic: ukPhonetic,
+          }) : ''}
           ${usSpeech ? renderSpeech({
-    title: '美',
-    wordAndType: usSpeech,
-    phonetic: usPhonetic,
-  }) : ''}
+            title: '美',
+            wordAndType: usSpeech,
+            phonetic: usPhonetic,
+          }) : ''}
         `) : ''}
         ${hasBaseTrans ? renderTransDetail('基本翻译', baseTrans) : ''}
         ${hasWebTrans ? renderTransDetail('网络释义', webTrans) : ''}
         ${!hasBaseTrans && !hasWebTrans ? `&nbsp;&nbsp;没有英汉互译结果<br/>&nbsp;&nbsp;<a href="${searchUrl}" target=_blank>请尝试网页搜索</a>` : ''}
       </div>
     </div>`;
-  return fmt;
+};
+
+/**
+ * popup render
+ */
+const popupRender = ({
+  word,
+  phoneticSymbol,
+  baseTrans,
+  webTrans,
+  retphrase,
+  langType,
+}) => {
+  const le = isContainKoera(word) ? 'ko'
+    : isContainJapanese(word) ? 'jap'
+    : langType === 'fr' ? 'fr'
+    : '';
+  const params = {
+    q: word,
+    ue: 'utf8',
+    keyfrom: 'chrome.extension',
+    le,
+  };
+
+  const langTypeMap = {
+    ko: '韩汉',
+    jap: '日汉',
+    fr: '法汉',
+  };
+
+  return baseTrans || webTrans ? `
+  ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[langType] || '英汉' }翻译</div>
+    <span class="phrase" data-toggle="play">
+      ${ retphrase }
+      ${ phoneticSymbol ? `[${phoneticSymbol}]` : '' }
+      <span class="voice-icon" title="朗读"></span>
+    </span>
+    <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>
+    <div class="section-title">基本释义</div>
+    ${ baseTrans}` : '未找到基本释义'}
+    ${ webTrans ? `<div class="section-title">网络释义</div>${webTrans}` : '未找到网络释义'}
+    ${ baseTrans || webTrans ? `<a class="weblink" href="${getDetailLink('https://dict.youdao.com/search', params)}" target="_blank">查看详细释义&gt;&gt;</a>` : ''}`
+    : `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(word)}" target="_blank">尝试用有道搜索</a>`;
 };
 
 // popup 查询历史
@@ -91,4 +134,5 @@ const history = (words: IWord[]) => `<div class="section-title">查询历史</di
 export default {
   table,
   history,
+  popupRender,
 };
