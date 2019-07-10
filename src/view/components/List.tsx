@@ -75,9 +75,9 @@ export default class extends Component<Props> {
                     <td>
                       {phonetic ? `/${phonetic}/`: ''}
                     </td>
-                    <td>{translation}</td>
+                    <td className="translation">{translation}</td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
-                    <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>查看</a> : getDate(lastView) }</td>
+                    <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>现在就看</a> : getDate(lastView) }</td>
                     <td>
                       {/* <a href="#" class="editword" title="编辑"></a> */}
                       <a
