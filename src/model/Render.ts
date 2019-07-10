@@ -92,12 +92,12 @@ const popupRender = ({
   phonetic,
   baseTrans,
   webTrans,
-  retphrase,
-  langType,
+  phrase,
+  type,
 }) => {
   const le = isContainKoera(word) ? 'ko'
     : isContainJapanese(word) ? 'jap'
-    : langType === 'fr' ? 'fr'
+    : type === 'fr' ? 'fr'
     : '';
   const params = {
     q: word,
@@ -113,9 +113,9 @@ const popupRender = ({
   };
 
   return baseTrans || webTrans ? `
-  ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[langType] || '英汉' }翻译</div>
+  ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[type] || '英汉' }翻译</div>
     <span class="phrase" data-toggle="play">
-      ${ retphrase }
+      ${ phrase }
       ${ phonetic ? `[${phonetic}]` : '' }
       <span class="voice-icon" title="朗读"></span>
     </span>

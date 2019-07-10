@@ -10,10 +10,13 @@ export interface IWord {
   webTrans?: string,
   createTime?: number, // 添加时间
   lastView?: number, // 最后查看时间
-  type?: number, // 类型
+  phrase?: string, // 接口返回的查询词
+  type?: string, // 类型
 }
 
-interface ITranslator {
-  getData: (word:string)=>any;
-  parse: (resp)=>IWord;
+export interface ITranslator {
+  word: string;
+
+  query: ()=>any;
+  parse: (resp) => IWord;
 }

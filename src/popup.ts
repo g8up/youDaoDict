@@ -1,12 +1,9 @@
 import Setting from './model/Setting';
-import API from './model/API';
 import render from './model/Render';
 import History from './model/History';
 
 import MsgType from './common/msg-type';
 import {
-  isContainKoera,
-  isContainJapanese,
   copyText,
   $,
 } from './common/util';
@@ -17,10 +14,10 @@ import {
 import {
   iSetting,
 } from './index';
+import Translator from './model/Word';
 import { IWord } from './types';
 
 let Options = null;
-let langType = '';
 
 const setting = new Setting();
 let WORD: string;
@@ -36,7 +33,7 @@ const renderHistory = async ()=>{
         const w = a.innerText;
         if (w) {
           $('#word').value = w;
-          mainQuery(w, parseXML); // eslint-disable-line
+          mainQuery(w); // eslint-disable-line
         }
       }
     };
@@ -44,118 +41,51 @@ const renderHistory = async ()=>{
   }
 };
 
-/**
- * 获取子节点文本
- */
-const getChildVal = (root, selector)=>{
-  let ret = '';
-  const node = root.querySelector(selector);
-  if (node) {
-    if (node.childNodes[0]) {
-      const val = node.childNodes[0].nodeValue;
-      if (val !== null) {
-        ret = val;
-      }
-    }
-  }
-  return ret;
-};
-
-/**
- * 解析接口数据
- * @param xmlNode
- */
-const parseXML = (xmlNode) => {
-  let retphrase = '';
-
-  const root = xmlNode.querySelector('yodaodict');
-  const phrase = root.querySelector('return-phrase');
-
-  if (`${phrase.childNodes[0]}` !== 'undefined') {
-    retphrase = phrase.childNodes[0].nodeValue;
-  }
-  if (root.querySelector('lang')) {
-    langType = root.querySelector('lang').childNodes[0].nodeValue;
-  }
-
-  let phonetic = getChildVal(root, 'phonetic-symbol');
-  let ukPhonetic = getChildVal(root, 'uk-phonetic-symbol');
-  let usPhonetic = getChildVal(root, 'us-phonetic-symbol');
-
-  let speech = getChildVal(root, 'speech');
-  let ukSpeech = getChildVal(root, 'uk-speech');
-  let usSpeech = getChildVal(root, 'us-speech');
-
-  const translations = root.querySelectorAll('translation');
-  const webTranslations = root.querySelectorAll('web-translation');
-
-  let baseTrans;
-  if (translations.length) {
-    baseTrans = Array.from(translations).map( (translation: HTMLElement) =>{
-      const content = translation.querySelector('content');
-      if( content ) {
-        let val = content.childNodes[0].nodeValue;
-        if (val.length > 50) {
-          const reg = /[;；]/;
-          return val.split(reg);
-        }
-        return val;
-      }
-      return '';
-    }).filter(item=>item);
-  }
-
-  let webTrans;
-  if (webTranslations.length) { // 网络释义
-    webTrans = Array.from(webTranslations).map( (webTranslation: HTMLElement) =>{
-      const $key = webTranslation.querySelector('key');
-      const $val = webTranslation.querySelector('value');
-      if( $key && $val) {
-        const key = $key.childNodes[0].nodeValue;
-        const val = $val.childNodes[0].nodeValue;
-        return `${key}: ${val}`;
-      }
-      return '';
-    }).filter(item => item);
-  }
-
-  $('#options').style.display = 'none'; // hide option pannel
-
-  const res = $('#result');
-  res.innerHTML = render.popupRender({
-    word: WORD,
-    phonetic,
-    baseTrans,
-    webTrans,
-    retphrase,
-    langType,
-  });
-
-  if (baseTrans || webTrans ) {
-    History.add({
-      word: WORD,
+const mainQuery = (word) => {
+  const translator = new Translator(word);
+  translator.query().then((data: IWord)=>{
+    const {
+      word,
       speech,
       ukSpeech,
       usSpeech,
       phonetic,
       ukPhonetic,
       usPhonetic,
-      baseTrans: baseTrans.join(';'),
-      webTrans: webTrans.join(';'),
-    } as IWord);
-  }
-  renderHistory();
-};
+      baseTrans,
+      webTrans,
+      phrase,
+      type,
+    } = data;
 
-const mainQuery = (word, callback) => API.fetchWordOnline(word).then((ret) => {
-  WORD = word;
-  const dataText = parseXML(ret);
-  if (dataText != null) {
-    callback(dataText);
-  }
-}).catch((err) => {
-  console.error(err);
-});
+    $('#options').style.display = 'none'; // hide option pannel
+
+    const res = $('#result');
+    res.innerHTML = render.popupRender({
+      word,
+      phonetic,
+      baseTrans,
+      webTrans,
+      phrase,
+      type,
+    });
+
+    if (baseTrans || webTrans) {
+      History.add({
+        word,
+        speech,
+        ukSpeech,
+        usSpeech,
+        phonetic,
+        ukPhonetic,
+        usPhonetic,
+        baseTrans,
+        webTrans,
+      } as IWord);
+    }
+    renderHistory();
+  });
+};
 
 const changeIcon = () => {
   const engBox = $('#english_only');
@@ -273,12 +203,12 @@ window.onload = () => {
 
   $('#word').onkeydown = (event) => {
     if (event.keyCode === 13) {
-      mainQuery($('#word').value, parseXML);
+      mainQuery($('#word').value);
     }
   };
 
   $('#querybutton').onclick = () => {
-    mainQuery($('#word').value, parseXML);
+    mainQuery($('#word').value);
   };
 
   // 导出查询记录
