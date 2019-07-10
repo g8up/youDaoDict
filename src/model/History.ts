@@ -24,21 +24,30 @@ const cover = (words: IWord[])=>{
  * @param word string
  */
 const add = async (word: IWord) => {
+  if( word && word.word === '' || word.word.trim() === ''){
+    return;
+  }
   let cache = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
   if (!cache) {
     cache = [];
   }
-  // distinct
-  if (cache.some(wordItem => {
+
+  const existWord = cache.find(wordItem => { // 已存在
     return wordItem.word === word.word;
-  })) {
-    return;
-  }
-  Object.assign(word, {
-    createtime: +new Date(),
   });
-  cache.unshift(word);
-  return localforage.setItem(HISTORY_STORE_KEY, cache);
+
+  if (existWord) {
+    Object.assign(existWord, {
+      lastView: +new Date(), // 更新查看时间
+    });
+  }
+  else{
+    Object.assign(word, {
+      createTime: +new Date(),
+    });
+    cache.unshift(word);
+  }
+  return cover(cache);
 };
 
 /**

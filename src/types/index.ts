@@ -7,7 +7,8 @@ export interface IWord {
   usPhonetic?: string,
   baseTrans?: string,
   webTrans?: string,
-  createtime?: number, // 添加时间
+  createTime: number, // 添加时间
+  lastView?: number, // 最后查看时间
   type?: number, // 类型
 }
 

@@ -36,7 +36,8 @@ export default class extends Component<Props> {
               <th width="80px">单词</th>
               <th width="80px">音标</th>
               <th width="320px">解释</th>
-              <th width="85px">时间</th>
+              <th width="85px">添加时间</th>
+              <th width="85px">上次查看</th>
               {/* <th>分类</th> */}
               <th width="65px">
                 <ruby>弄<rt>nèng</rt></ruby>它
@@ -49,8 +50,10 @@ export default class extends Component<Props> {
               list.map((item, index)=>{
                 const{
                   word,
-                  createtime = '',
+                  createTime = '',
+                  lastView = '',
                 } = item;
+
                 return (
                   <tr>
                     <td className="text-muted">{index + 1}</td>
@@ -62,7 +65,8 @@ export default class extends Component<Props> {
                     </td>
                     <td></td>
                     <td></td>
-                    <td className="text-muted">{ createtime === '' ? '' : getDate(createtime) }</td>
+                    <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
+                    <td className="text-muted">{ lastView === '' ? '' : getDate(lastView) }</td>
                     <td>
                       {/* <a href="#" class="editword" title="编辑"></a> */}
                       <a

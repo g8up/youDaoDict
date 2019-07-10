@@ -18,6 +18,7 @@ import {
 import {
   iSetting,
 } from './index';
+import { IWord } from './types';
 
 let Options = null;
 let langType = '';
@@ -101,9 +102,7 @@ const buildSearchResult = ({
   else {
     History.add({
       word: WORD,
-      // baseTrans,
-      // webTrans,
-    });
+    } as IWord);
   }
   renderHistory();
   langType = '';
