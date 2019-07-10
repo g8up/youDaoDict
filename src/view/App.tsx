@@ -9,6 +9,9 @@ import Pagination, {
 import Toolbar,{
   Props as ToolbarProps,
 } from './components/Toolbar';
+import {
+  queryAndRecord,
+} from '../common/query';
 
 interface AppState extends ListProps, PaginationProps, ToolbarProps {
 
@@ -46,6 +49,15 @@ export default class extends Component<any, AppState> {
       await History.deleteOne(word);
       this.updateList();
     }
+  }
+
+  /**
+   * 查看单词释义
+   */
+  check(word){
+    queryAndRecord(word).then(resp=>{
+      this.updateList();
+    });
   }
 
   exportFile(){
@@ -101,6 +113,7 @@ export default class extends Component<any, AppState> {
         <List
           list={state.list}
           onDelete={this.deleteWord.bind(this)}
+          onCheck={this.check.bind(this)}
         />
         <div className="table-bottom">
           <Pagination

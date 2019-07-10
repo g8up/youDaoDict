@@ -65,7 +65,7 @@ export default class implements ITranslator{
     const translations = root.querySelectorAll('translation');
     const webTranslations = root.querySelectorAll('web-translation');
 
-    let baseTrans;
+    let baseTrans = [];
     if (translations.length) {
       baseTrans = Array.from(translations).map((translation: HTMLElement) => {
         const content = translation.querySelector('content');
@@ -81,7 +81,7 @@ export default class implements ITranslator{
       }).filter(item => item);
     }
 
-    let webTrans;
+    let webTrans = [];
     if (webTranslations.length) { // 网络释义
       webTrans = Array.from(webTranslations).map((webTranslation: HTMLElement) => {
         const $key = webTranslation.querySelector('key');

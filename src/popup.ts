@@ -14,8 +14,10 @@ import {
 import {
   iSetting,
 } from './index';
-import Translator from './model/Word';
 import { IWord } from './types';
+import {
+  queryAndRecord,
+} from './common/query';
 
 let Options = null;
 
@@ -42,8 +44,7 @@ const renderHistory = async ()=>{
 };
 
 const mainQuery = (word) => {
-  const translator = new Translator(word);
-  translator.query().then((data: IWord)=>{
+  queryAndRecord(word).then((data: IWord)=>{
     const {
       word,
       speech,
@@ -69,20 +70,6 @@ const mainQuery = (word) => {
       phrase,
       type,
     });
-
-    if (baseTrans || webTrans) {
-      History.add({
-        word,
-        speech,
-        ukSpeech,
-        usSpeech,
-        phonetic,
-        ukPhonetic,
-        usPhonetic,
-        baseTrans,
-        webTrans,
-      } as IWord);
-    }
     renderHistory();
   });
 };

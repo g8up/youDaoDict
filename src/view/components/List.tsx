@@ -14,6 +14,7 @@ import {
 export interface Props {
   list: IWord[];
   onDelete?: (word: string)=>any;
+  onCheck?: (word: string)=>any;
 };
 
 export default class extends Component<Props> {
@@ -25,6 +26,7 @@ export default class extends Component<Props> {
     const {
       list,
       onDelete,
+      onCheck,
     } = props;
 
     return (
@@ -75,7 +77,7 @@ export default class extends Component<Props> {
                     </td>
                     <td>{translation}</td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
-                    <td className="text-muted">{ lastView === '' ? '' : getDate(lastView) }</td>
+                    <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>查看</a> : getDate(lastView) }</td>
                     <td>
                       {/* <a href="#" class="editword" title="编辑"></a> */}
                       <a
