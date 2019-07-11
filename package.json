@@ -1,6 +1,6 @@
 {
   "name": "youdao-dict",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "scripts": {
     "test": "jest",
@@ -23,7 +23,7 @@
     "@types/chrome": "^0.0.81",
     "@types/jest": "^24.0.11",
     "del": "^2.2.0",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "gulp": "^4.0.0",
