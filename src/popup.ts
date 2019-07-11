@@ -4,8 +4,8 @@ import History from './model/History';
 
 import MsgType from './common/msg-type';
 import {
-  copyText,
   $,
+  shareDownloadLink,
 } from './common/util';
 import {
   playAudio,
@@ -120,17 +120,6 @@ const saveOptions = () => {
   setting.set(Options);
 };
 
-// 复制分享链接
-const shareDownloadLink = () => {
-  const {
-    name,
-    description,
-  } = chrome.runtime.getManifest();
-  const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
-  const text = `${name}\r\n${description}\r\n${downloadLink}`;
-  copyText(text);
-};
-
 const renderTriggerOption = (val)=>{
   // https://developer.chrome.com/extensions/runtime#type-PlatformOs
   chrome.runtime.getPlatformInfo(function ({os}) {
@@ -196,12 +185,6 @@ window.onload = () => {
 
   $('#querybutton').onclick = () => {
     mainQuery($('#word').value);
-  };
-
-  // 导出查询记录
-  $('#backup').onclick = (e) => {
-    e.preventDefault();
-    History.exportIt();
   };
 
   // 登录按钮

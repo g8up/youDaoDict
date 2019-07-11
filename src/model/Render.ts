@@ -129,7 +129,7 @@ const popupRender = ({
 
 // popup 查询历史
 const history = (words: IWord[]) => `<div class="section-title">查询历史</div>
-  ${words.map(word => `<a>${word.word}</a>`).join('<br/>')}`;
+  ${words.map(word => `<a class="link">${word.word}</a>`).join('<br/>')}`;
 
 export default {
   table,

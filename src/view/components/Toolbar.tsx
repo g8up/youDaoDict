@@ -1,4 +1,7 @@
 import { h, Component } from 'preact';
+import {
+  shareDownloadLink,
+} from '../../common/util';
 
 export interface Props {
   exportFile: ()=>void;
@@ -19,13 +22,15 @@ export default class extends Component<Props> {
         <a
           href="http://dict.youdao.com/wordbook/wordlist"
           target="_blank"
-          title="打开单词本页面">
+          title="打开有道单词本页面">
           <img src="image/memo.svg" alt="单词本"/>
         </a>
 
-        {/* <a title="复制下载链接分享给朋友">
+        <a
+          onClick={shareDownloadLink}
+          title="复制下载链接分享给朋友">
           <img src="image/share.svg" alt="分享给朋友"/>
-        </a> */}
+        </a>
 
         <a
           href="https://weibo.com/1055554120/FvlTldXO5"

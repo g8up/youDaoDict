@@ -1,7 +1,3 @@
-import {
-  AddToNoteState
-} from './index';
-
 export const isEnglish = (str: string) => {
   for (let i = 0; i < str.length; i += 1) {
     if (str.charCodeAt(i) > 126) {
@@ -62,7 +58,6 @@ export const isContainKoera = (str: string) => {
   return false;
 };
 
-
 export const spaceCount = (str: string): number => {
   let cnt = 0;
   for (let i = 0; i < str.length; i += 1) {
@@ -113,53 +108,6 @@ export const parseQuerystring = (querystring: string) => {
   }
   return obj;
 };
-
-type Resp = string | Document | AddToNoteState;
-
-const ajax = (option)=>{
-  const {
-    url,
-    data
-  } = option;
-  return fetch(url).then(resp=>resp.json());
-};
-
-export const ajax1 = option => new Promise<Resp>((resolve: ( value: Resp)=>any, reject) => {
-  const {
-    url,
-    type = 'GET',
-    dataType = '',
-    data,
-  } = option;
-
-  const xhr = new XMLHttpRequest();
-
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4) {
-      if (xhr.status === 200) {
-        let ret: Resp = xhr.responseText as string;
-        if (dataType === 'json') {
-          try {
-            ret = JSON.parse(ret) as AddToNoteState; // 添加单词本接口返回内容需要 parse
-          } catch (err) {
-            reject(err);
-            return;
-          }
-        } else if (dataType === 'xml') {
-          ret = xhr.responseXML as Document;
-        }
-        resolve(ret);
-      }
-    }
-  };
-
-  const queryString = qs(data);
-
-  xhr.open(type, type === 'GET' ? url + `?${queryString}` : url , true);
-  xhr.send(type === 'GET' ? null : queryString);
-}).catch((err) => {
-  console.warn(err);
-});
 
 export const copyText = (text: string) => {
   if (text !== undefined) {
@@ -220,8 +168,18 @@ export const getDetailLink = (urlPrefix, params) => {
   return `${urlPrefix}?${qs(params)}`;
 };
 
+// 复制分享链接
+export const shareDownloadLink = () => {
+  const {
+    name,
+    description,
+  } = chrome.runtime.getManifest();
+  const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
+  const text = `${name}\r\n${description}\r\n${downloadLink}`;
+  copyText(text);
+};
+
 export default {
-  ajax,
   qs,
   isContainKoera,
 }
