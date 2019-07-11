@@ -15,7 +15,8 @@
   "rules": {
     "no-console": 0,
     "no-unused-vars": "warn",
-    "no-param-reassign": "warn"
+    "no-param-reassign": "warn",
+    "import/no-unresolved": { "commonjs": true }
   },
   "settings": {
     "import/resolver": "webpack"
