@@ -77,6 +77,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
       });
       return true;
+
     case MsgType.SELECT_TO_SEARCH:
       api.fetchWordOnline(word).then((ret) => {
         const templateHtml = parser.translateXML(ret);
@@ -85,6 +86,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
       return true;
+
     case MsgType.TRANSLATE:
       api.fetchTranslate(word).then((ret) => {
         const templateHtml = parser.translateTransXML(ret);
@@ -95,6 +97,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
       return true;
+
     case MsgType.SPEECH:
       if (word.length > 0) {
         playAudio(word, type);
@@ -103,9 +106,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.error(`语音朗读-传参不可为空:${word}`);
       }
       break;
+
     case MsgType.LOGIN:
       tab.openWordList();
       break;
+
     case MsgType.ADD_WORD: // 添加到单词本
       (new Dict(api)).add(word).then(() => {
         popBadgeTips('OK', 'green');
@@ -117,6 +122,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
       });
       return true;
+
     default:
       sendResponse();
       break;
