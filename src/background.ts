@@ -169,22 +169,27 @@ const remind = async ()=>{
     pageSize: 1,
   });
 
-  const {
-    word,
-    baseTrans,
-    webTrans,
-  } = wordEntry;
+  if (wordEntry ) {
+    const {
+      word,
+      baseTrans,
+      webTrans,
+    } = wordEntry;
 
-  chrome.notifications.create({
-    type: "basic",
-    title: `${word}`,
-    message: `${baseTrans || webTrans}`,
-    iconUrl: "../image/icon-128.png",
-    requireInteraction: false
-  }, ()=>{
-    localStorage.setItem('remind-index', `${remindIndex}`);
-    remindIndex++;
-  });
+    chrome.notifications.create({
+      type: "basic",
+      title: `${word}`,
+      message: `${baseTrans || webTrans}`,
+      iconUrl: "../image/icon-128.png",
+      requireInteraction: false
+    }, ()=>{
+      remindIndex++;
+      localStorage.setItem('remind-index', `${remindIndex}`);
+    });
+  }
+  else {
+    console.warn('暂无历史查询记录可供提醒');
+  }
 };
 
 
