@@ -54,7 +54,7 @@ const add = async (word: IWord) => {
  * 读取所有
  * @param limit Number
  */
-const getAll = async () => {
+const getAll = async (): Promise<IWord[]> => {
   let cache = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
   if (cache && cache.length) {
     return cache;
@@ -63,18 +63,41 @@ const getAll = async () => {
 };
 
 /**
+ * 获取指定页数据
+ */
+const getPage = async ({
+  pageNum,
+  pageSize,
+}): Promise<IWord[]>=>{
+  const words = await getAll() || [];
+  const total = words.length;
+  let list = [];
+
+  if (total > 0) {
+    if (pageNum < 1) {
+      pageNum = 1;
+    }
+    const totalPage = Math.ceil(total / pageSize);
+    if (pageNum > totalPage) {
+      pageNum = totalPage;
+    }
+    list = words.slice((pageNum - 1) * pageSize, pageNum * pageSize);
+  }
+  return list;
+};
+
+/**
  * 读取指定条数
  * @param limit Number
  */
-const get = async (limit) => {
+const get = async (limit): Promise<IWord[]> => {
   if (!(limit > 0)) {
     return;
   }
-  let cache = await getAll();
-  if (cache && cache.length) {
-    return cache.slice(0, limit);
-  }
-  return [];
+  return await getPage({
+    pageNum: 1,
+    pageSize: limit,
+  });
 };
 
 /**
@@ -131,8 +154,9 @@ const exportIt = async () => {
 export default {
   cover,
   add,
-  get,
   getAll,
+  get,
+  getPage,
   exportIt,
   deleteOne,
 }
