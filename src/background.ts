@@ -14,6 +14,7 @@ import {
   getAudioByWordAndType,
 } from './common/audio-cache';
 import migrate from './common/migrate';
+import History from './model/History';
 
 migrate();
 
@@ -159,4 +160,52 @@ chrome.runtime.onInstalled.addListener((details) => {
   if (openOptionPage ) {
     chrome.tabs.create({ url: 'option.html' });
   }
+});
+
+let remindIndex = +localStorage.getItem('remind-index') || 0;
+const remind = async ()=>{
+  const [wordEntry] = await History.getPage({
+    pageNum: remindIndex,
+    pageSize: 1,
+  });
+
+  const {
+    word,
+    baseTrans,
+    webTrans,
+  } = wordEntry;
+
+  chrome.notifications.create({
+    type: "basic",
+    title: `${word}`,
+    message: `${baseTrans || webTrans}`,
+    iconUrl: "../image/icon-128.png",
+    requireInteraction: false
+  }, ()=>{
+    localStorage.setItem('remind-index', `${remindIndex}`);
+    remindIndex++;
+  });
+};
+
+
+chrome.alarms.onAlarm.addListener((alarm) => {
+  const {
+    name,
+    periodInMinutes,
+  } = alarm;
+
+  console.table(alarm); // for debug
+
+  switch( name ) {
+    case 'remind': {
+      remind();
+      break;
+    }
+    default: break;
+  }
+});
+
+remind();
+chrome.alarms.create('remind', {
+  periodInMinutes: 5, // unit: mins
 });
