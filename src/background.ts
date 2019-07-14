@@ -174,11 +174,12 @@ const remind = async ()=>{
       word,
       baseTrans,
       webTrans,
+      phonetic,
     } = wordEntry;
 
     chrome.notifications.create({
       type: "basic",
-      title: `${word}`,
+      title: `${word} /${phonetic}/`,
       message: `${baseTrans || webTrans}`,
       iconUrl: "../image/icon-128.png",
       requireInteraction: false
