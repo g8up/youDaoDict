@@ -15,6 +15,9 @@ import {
 } from './common/audio-cache';
 import migrate from './common/migrate';
 import History from './model/History';
+import {
+  queryAndRecord,
+} from './common/query';
 
 migrate();
 
@@ -164,25 +167,38 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 let remindIndex = +localStorage.getItem('remind-index') || 0;
 const remind = async ()=>{
-  const [wordEntry] = await History.getPage({
+  let [wordEntry] = await History.getPage({
     pageNum: remindIndex,
     pageSize: 1,
   });
 
   if (wordEntry ) {
-    const {
+    let {
       word,
       baseTrans,
       webTrans,
       phonetic,
+      lastView,
     } = wordEntry;
+
+    if( !lastView ) {
+      wordEntry = await queryAndRecord(word);
+    }
+
+    ({
+      word,
+      baseTrans,
+      webTrans,
+      phonetic,
+      lastView,
+    } = wordEntry);
 
     chrome.notifications.create({
       type: "basic",
-      title: `${word} /${phonetic}/`,
-      message: `${baseTrans || webTrans}`,
+      title: `${word} ${phonetic ? `/${phonetic}/` : ''}`,
+      message: `${baseTrans || webTrans || ''}`,
       iconUrl: "../image/icon-128.png",
-      requireInteraction: false
+      requireInteraction: false,
     }, ()=>{
       remindIndex++;
       localStorage.setItem('remind-index', `${remindIndex}`);
@@ -192,7 +208,6 @@ const remind = async ()=>{
     console.warn('暂无历史查询记录可供提醒');
   }
 };
-
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   const {
