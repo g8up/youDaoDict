@@ -23,8 +23,10 @@ export const queryAndRecord = (word) => {
     } = data;
 
     if (baseTrans || webTrans) {
-      await History.add(data);
+      return await History.add(data);
     }
-    return data;
+    else {
+      console.warn('查询结果缺少翻译内容。');
+    }
   });
 };

@@ -36,18 +36,22 @@ const add = async (word: IWord) => {
     return wordItem.word === word.word;
   });
 
+  let newEntry = null;
   if (existWord) {
     Object.assign(existWord, word, {
       lastView: +new Date(), // 更新查看时间
     });
+    newEntry = existWord;
   }
   else {
     Object.assign(word, {
       createTime: +new Date(),
     });
     cache.unshift(word);
+    newEntry = word;
   }
-  return cover(cache);
+  cover(cache);
+  return newEntry;
 };
 
 /**
@@ -67,17 +71,18 @@ const getAll = async (): Promise<IWord[]> => {
  */
 const getPage = async ({
   pageNum,
-  pageSize,
+  pageSize = 15,
 }): Promise<IPagination<IWord>> => {
   const words = await getAll() || [];
   const total = words.length;
   let list = [];
+  let totalPage = 0;
 
   if (total > 0) {
     if (pageNum < 1) {
       pageNum = 1;
     }
-    const totalPage = Math.ceil(total / pageSize);
+    totalPage = Math.ceil(total / pageSize);
     if (pageNum > totalPage) {
       pageNum = totalPage;
     }
@@ -88,6 +93,7 @@ const getPage = async ({
     pageNum,
     pageSize,
     total,
+    totalPage,
   };
 };
 

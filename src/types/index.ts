@@ -23,7 +23,13 @@ export interface ITranslator {
 
 export interface IPagination<T> {
   list: T[]; // 记录
-  pageNum: Number; // 当前页
-  pageSize: Number; // 每页条数
-  total: Number; // 总条数
+  pageNum: number; // 当前页
+  pageSize: number; // 每页条数
+  total: number; // 总条数
+  totalPage: number; // 总页数
+}
+
+// 单词学习计划
+export interface IPlan {
+  getOne: ()=>Promise<IWord>;
 }
