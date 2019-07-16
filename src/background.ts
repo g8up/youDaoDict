@@ -167,7 +167,9 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 let remindIndex = +localStorage.getItem('remind-index') || 0;
 const remind = async ()=>{
-  let [wordEntry] = await History.getPage({
+  let {
+    list: [wordEntry],
+  } = await History.getPage({
     pageNum: remindIndex,
     pageSize: 1,
   });

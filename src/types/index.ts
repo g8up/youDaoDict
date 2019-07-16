@@ -20,3 +20,10 @@ export interface ITranslator {
   query: ()=>any;
   parse: (resp) => IWord;
 }
+
+export interface IPagination<T> {
+  list: T[]; // 记录
+  pageNum: Number; // 当前页
+  pageSize: Number; // 每页条数
+  total: Number; // 总条数
+}

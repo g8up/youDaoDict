@@ -25,7 +25,7 @@ const setting = new Setting();
 let WORD: string;
 
 const renderHistory = async ()=>{
-  const words = await History.get(Options.history_count);
+  const { list : words} = await History.get(Options.history_count);
   if (words && words.length) {
     let $cache = $('#cache');
     $cache.innerHTML = render.history(words);

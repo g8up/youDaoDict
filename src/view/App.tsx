@@ -72,20 +72,13 @@ export default class extends Component<any, AppState> {
     const {
       pageSize,
     } = this.state;
-    const words = await History.getAll() || [];
-    const total = words.length;
-    let list = [];
-
-    if( total > 0 ) {
-      if( pageNum < 1){
-        pageNum = 1;
-      }
-      const totalPage = Math.ceil( total / pageSize );
-      if (pageNum > totalPage) {
-        pageNum = totalPage;
-      }
-      list = words.slice((pageNum - 1) * pageSize, pageNum * pageSize );
-    }
+    const {
+      list,
+      total,
+    } = await History.getPage({
+      pageNum,
+      pageSize,
+    });
 
     this.setState(Object.assign(this.state, {
       list,

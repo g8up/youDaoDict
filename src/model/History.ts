@@ -3,7 +3,7 @@
  */
 
 import * as localforage from 'localforage';
-import { IWord } from '../types';
+import { IWord, IPagination, } from '../types';
 import {
   getDate,
   getTime,
@@ -15,7 +15,7 @@ export const HISTORY_STORE_KEY = 'word-history';
  * 复写所有
  * @param words
  */
-const cover = (words: IWord[])=>{
+const cover = (words: IWord[]) => {
   return localforage.setItem(HISTORY_STORE_KEY, words);
 };
 
@@ -24,7 +24,7 @@ const cover = (words: IWord[])=>{
  * @param word string
  */
 const add = async (word: IWord) => {
-  if( word && word.word === '' || word.word.trim() === ''){
+  if (word && word.word === '' || word.word.trim() === '') {
     return;
   }
   let cache = await localforage.getItem<IWord[]>(HISTORY_STORE_KEY);
@@ -41,7 +41,7 @@ const add = async (word: IWord) => {
       lastView: +new Date(), // 更新查看时间
     });
   }
-  else{
+  else {
     Object.assign(word, {
       createTime: +new Date(),
     });
@@ -68,7 +68,7 @@ const getAll = async (): Promise<IWord[]> => {
 const getPage = async ({
   pageNum,
   pageSize,
-}): Promise<IWord[]>=>{
+}): Promise<IPagination<IWord>> => {
   const words = await getAll() || [];
   const total = words.length;
   let list = [];
@@ -83,14 +83,19 @@ const getPage = async ({
     }
     list = words.slice((pageNum - 1) * pageSize, pageNum * pageSize);
   }
-  return list;
+  return {
+    list,
+    pageNum,
+    pageSize,
+    total,
+  };
 };
 
 /**
  * 读取指定条数
  * @param limit Number
  */
-const get = async (limit): Promise<IWord[]> => {
+const get = async (limit): Promise<IPagination<IWord>> => {
   if (!(limit > 0)) {
     return;
   }
@@ -103,10 +108,10 @@ const get = async (limit): Promise<IWord[]> => {
 /**
  * 删除一条记录
  */
-const deleteOne = async (word)=>{
+const deleteOne = async (word) => {
   const words = await getAll();
-  const index = words.findIndex(item=>item.word === word);
-  if( index > -1 ) {
+  const index = words.findIndex(item => item.word === word);
+  if (index > -1) {
     words.splice(index, 1);
     return cover(words);
   }
@@ -146,7 +151,7 @@ const exportIt = async () => {
       `${new Array(25).join('=')}`,
     ].join(BR).trim();
 
-    const content = `${banner}${BR}${cachedWords.map(item=>item.word).join(`,${BR}`)}`;
+    const content = `${banner}${BR}${cachedWords.map(item => item.word).join(`,${BR}`)}`;
     saveContent2File(content, `youDaoDict-history-${timeString}.txt`);
   }
 };
