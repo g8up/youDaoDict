@@ -22,7 +22,6 @@ import {
 let Options = null;
 
 const setting = new Setting();
-let WORD: string;
 
 const renderHistory = async ()=>{
   const words = await History.get(Options.history_count);
@@ -227,16 +226,19 @@ window.onload = () => {
   document.body.addEventListener('click', (e) => {
     const { target } = e ;
     if ((target as HTMLElement).dataset.toggle === 'addToNote') {
-      addToNote(WORD, () => {
+      const {
+        word,
+      } = (target as HTMLElement).dataset;
+      addToNote(word, () => {
         (target as HTMLElement).classList.add('green');
       });
     }
     else {
       const voiceNode = (target as Element).closest('.phrase');
       if( voiceNode ){
-        const { toggle  } = (voiceNode as HTMLElement).dataset;
+        const { toggle, word  } = (voiceNode as HTMLElement).dataset;
         if (toggle === 'play') {
-          playAudio({ word: WORD });
+          playAudio({ word });
         }
       }
     }
