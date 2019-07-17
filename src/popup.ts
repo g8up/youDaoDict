@@ -205,18 +205,26 @@ window.onload = () => {
   // 绑定朗读事件
   document.body.addEventListener('click', (e) => {
     const { target } = e ;
-    if ((target as HTMLElement).dataset.toggle === 'addToNote') {
-      const {
-        word,
-      } = (target as HTMLElement).dataset;
+    if (!(target instanceof HTMLElement)) { // fix tslint error
+      return;
+    }
+    const {
+      toggle,
+      word,
+    } = target.dataset;
+
+    if ('addToNote' === toggle ) {
       addToNote(word, () => {
-        (target as HTMLElement).classList.add('green');
+        target.classList.add('green');
       });
     }
     else {
-      const voiceNode = (target as Element).closest('.phrase');
+      const voiceNode = target.closest('.phrase');
+      if (!(voiceNode instanceof HTMLElement)) { // fix tslint error
+        return;
+      }
       if( voiceNode ){
-        const { toggle, word  } = (voiceNode as HTMLElement).dataset;
+        const { toggle, word  } = voiceNode.dataset;
         if (toggle === 'play') {
           playAudio({ word });
         }
