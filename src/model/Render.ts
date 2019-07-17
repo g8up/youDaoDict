@@ -114,12 +114,12 @@ const popupRender = ({
 
   return baseTrans || webTrans ? `
   ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[type] || '英汉' }翻译</div>
-    <span class="phrase" data-toggle="play">
+    <span class="phrase" data-toggle="play" data-word="${phrase}">
       ${ phrase }
       ${ phonetic ? `[${phonetic}]` : '' }
       <span class="voice-icon" title="朗读"></span>
     </span>
-    <a href="#" class="add-to-note" data-toggle="addToNote" title="添加到单词本">+</a>
+    <a class="add-to-note" data-toggle="addToNote" data-word="${phrase}" title="添加到单词本">+</a>
     <div class="section-title">基本释义</div>
     ${ baseTrans}` : '未找到基本释义'}
     ${ webTrans ? `<div class="section-title">网络释义</div>${webTrans}` : '未找到网络释义'}
