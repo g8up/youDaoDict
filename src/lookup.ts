@@ -244,7 +244,7 @@ let triggerKey = Options.triggerKey || 'shift';
 // 指词即译
 const onPointToTrans = debounce((e) => {
   if (!e[`${triggerKey}Key`] ||
-    ['alt', 'shift', 'ctrl'].filter(key => key !== triggerKey).some(key => e[`${key}Key`]) ) {
+    ['alt', 'shift', 'ctrl', 'meta'].filter(key => key !== triggerKey).some(key => e[`${key}Key`]) ) {
       return;
   }
   const caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
