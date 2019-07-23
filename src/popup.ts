@@ -123,13 +123,33 @@ const saveOptions = () => {
 const renderTriggerOption = (val)=>{
   // https://developer.chrome.com/extensions/runtime#type-PlatformOs
   chrome.runtime.getPlatformInfo(function ({os}) {
-    const alt = os === 'mac' ? 'option' : 'alt';
+    const KEY_MAP = os === 'mac' ? [{
+        name: 'shift',
+        value: 'shift',
+      }, {
+        name: 'command',
+        value: 'meta',
+      }, {
+        name: 'option',
+        value: 'alt',
+      }, {
+        name: 'control',
+        value: 'ctrl',
+      },
+    ] : [{
+      name: 'shift',
+      value: 'shift',
+    }, {
+      name: 'alt',
+      value: 'alt',
+    }, {
+      name: 'ctrl',
+      value: 'ctrl',
+    }, ]
 
     const triggerKey = $('#triggerKey');
-    triggerKey.innerHTML = ['shift', 'alt', 'ctrl',].map(key=>{
-      return `<option value="${key}">
-        ${key === 'alt' ? alt : key}
-      </option>`;
+    triggerKey.innerHTML = KEY_MAP.map(({name, value})=>{
+      return `<option value="${value}"> ${name} </option>`;
     }).join('');
 
     triggerKey.value = val;
