@@ -14,6 +14,12 @@ export interface IWord {
   type?: string, // 类型
 }
 
+// 单词朗读参数
+export interface SpeachInfo {
+  word: string;
+  type?: string;
+}
+
 export interface ITranslator {
   word: string;
 

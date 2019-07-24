@@ -9,6 +9,7 @@ import {
 } from './common/config';
 import {
   isMinorVersionIncrease,
+  parseWordAndType,
 } from './common/util';
 import {
   getAudioByWordAndType,
@@ -173,6 +174,7 @@ const remind = async ()=>{
       baseTrans,
       webTrans,
       phonetic,
+      ukSpeech,
       lastView,
     } = wordEntry;
 
@@ -183,6 +185,12 @@ const remind = async ()=>{
       iconUrl: "../image/icon-128.png",
       requireInteraction: false,
     }, ()=>{ });
+
+    const {
+      word : w,
+      type,
+    } = parseWordAndType(ukSpeech);
+    playAudio(w, type);
   }
   else {
     console.warn('暂无历史查询记录可供提醒');

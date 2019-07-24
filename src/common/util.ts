@@ -1,3 +1,7 @@
+import {
+  SpeachInfo,
+} from '../types/index';
+
 export const isEnglish = (str: string) => {
   for (let i = 0; i < str.length; i += 1) {
     if (str.charCodeAt(i) > 126) {
@@ -95,7 +99,7 @@ export const qs = (json): string => {
   return '';
 };
 
-export const parseQuerystring = (querystring: string) => {
+export const parseQuerystring = (querystring: string)=> {
   const obj = {};
   if (querystring && querystring.length) {
     const kvs = querystring.split('&');
@@ -177,6 +181,10 @@ export const shareDownloadLink = () => {
   const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
   const text = `${name}\r\n${description}\r\n${downloadLink}`;
   copyText(text);
+};
+
+export const parseWordAndType = (wordAndType: string): SpeachInfo=>{
+  return parseQuerystring(`word=${wordAndType}`) as SpeachInfo;
 };
 
 export default {
