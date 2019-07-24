@@ -16,7 +16,7 @@ export const playAudio = ({ word, type }: SpeachInfo) => {
     action: MsgType.SPEECH,
     word,
     type,
-  }, () => {});
+  });
 };
 
 export const playAudioByWordAndType = (wordAndType: SpeachInfo) => {
