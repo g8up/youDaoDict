@@ -41,6 +41,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
 });
 
 const playAudio = (word, type) => {
+  if(!word) return;
   const audio = getAudioByWordAndType(word, type);
   audio.play();
 };
@@ -105,7 +106,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         playAudio(word, type);
       }
       else {
-        console.error(`语音朗读-传参不可为空:${word}`);
+        console.warn(`语音朗读-传参不可为空:${word}`);
       }
       break;
 

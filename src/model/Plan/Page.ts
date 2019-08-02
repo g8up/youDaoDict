@@ -45,6 +45,8 @@ export default class extends Base implements IPlan {
    */
   async getPageData({
     pageNum,
+  } = {
+    pageNum: this.pageNum,
   }) {
     const {
       list,
@@ -68,10 +70,11 @@ export default class extends Base implements IPlan {
       if( this.pageNum >= this.totalPage ) {
         this.pageNum = 0;
       }
-      this.getPageData({
-        pageNum: this.pageNum + 1,
-      });
+      // this.getPageData({
+      //   pageNum: this.pageNum + 1,
+      // });
       this.index = 0; // 重置到起始
+      this.getPageData(); // 刷新一次列表，以同步列表的更新
     }
   }
 }
