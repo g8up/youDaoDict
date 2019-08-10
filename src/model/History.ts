@@ -114,7 +114,7 @@ const get = async (limit): Promise<IPagination<IWord>> => {
 /**
  * 删除一条记录
  */
-const deleteOne = async (word) => {
+const deleteOne = async (word: string) => {
   const words = await getAll();
   const index = words.findIndex(item => item.word === word);
   if (index > -1) {

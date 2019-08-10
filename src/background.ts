@@ -3,6 +3,7 @@ import Dict from './model/Dict';
 import api from './model/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
+import Histroy from './model/History';
 import MsgType from './common/msg-type';
 import {
   OPTION_STORAGE_ITEM,
@@ -184,7 +185,30 @@ const remind = async ()=>{
       message: `${baseTrans || webTrans || ''}`,
       iconUrl: "../image/icon-128.png",
       requireInteraction: false,
-    }, ()=>{ });
+      buttons: [{
+        title: '删除',
+      }]
+    }, (notificationId)=>{
+        const handle = (id) => {
+          if (id == notificationId) {
+            // do something
+            alert(word)
+            chrome.notifications.clear(id);
+            chrome.notifications.onClicked.removeListener(handle);
+          }
+        };
+        chrome.notifications.onClicked.addListener(handle);
+
+        chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex)=>{
+          if (buttonIndex === 0 ) { // 删除
+            if (confirm(`确定删除 ${word} ？`) ) {
+              Histroy.deleteOne(word).then(()=>{
+                popBadgeTips('OK', 'green');
+              });
+            }
+          }
+        });
+    });
 
     const {
       word : w,
