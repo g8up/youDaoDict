@@ -36,14 +36,17 @@ const add = async (word: IWord) => {
     return wordItem.word === word.word;
   });
 
-  if (existWord) {
+  const time = +new Date();
+
+  if (existWord) { // 已有
     Object.assign(existWord, word, {
-      lastView: +new Date(), // 更新查看时间
+      lastView: time, // 更新查看时间
     });
   }
-  else{
+  else { // 新增
     Object.assign(word, {
-      createTime: +new Date(),
+      createTime: time,
+      lastView: time,
     });
     cache.unshift(word);
   }
