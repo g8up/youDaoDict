@@ -7,7 +7,7 @@
 
 <img src="https://user-images.githubusercontent.com/8005686/45733856-d133c980-bc14-11e8-8d80-187278297ffa.png" width="400"/>
 
-# 增强功能
+# 功能
 1. 记录、导出查询历史
 2. 自动朗读控制（支持在 https 页面中朗读）
 3. 去除[官方版本重定向百度首页“后门”](http://wenku.baidu.com/view/e9660493aef8941ea76e05cf "后门报告")
