@@ -26,6 +26,7 @@ module.exports = {
   resolve: {
     extensions: ['.ts', 'd.ts', '.tsx'],
     alias: {
+      '@': resolve('src'),
       Model: resolve('src/model'),
     }
   },

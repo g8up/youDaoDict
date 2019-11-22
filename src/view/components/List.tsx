@@ -10,6 +10,9 @@ import {
 import {
   getDate,
 } from '../../common/util';
+import {
+  playAudio,
+} from '@/common/chrome';
 
 export interface Props {
   list: IWord[];
@@ -22,6 +25,11 @@ export default class extends Component<Props> {
     super(props);
   }
 
+  // 语音朗读
+  phonetic(word: string) {
+    playAudio({word});
+  }
+
   render(props: Props) {
     const {
       list,
@@ -30,7 +38,7 @@ export default class extends Component<Props> {
     } = props;
 
     return (
-      <div>
+      <div className="history">
         <table>
           <thead>
             <tr>
@@ -73,7 +81,12 @@ export default class extends Component<Props> {
                         href={`https://dict.youdao.com/search?keyfrom=chrome.extension&q=${word}`}>{word}</a>
                     </td>
                     <td>
-                      {phonetic ? `/${phonetic}/`: ''}
+                      <a
+                        className="phonetic"
+                        onClick={()=>this.phonetic(word)}
+                        title="朗读">
+                        {phonetic ? `/${phonetic}/`: ''}
+                      </a>
                     </td>
                     <td className="translation">{translation}</td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>

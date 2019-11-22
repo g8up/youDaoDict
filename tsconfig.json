@@ -17,6 +17,7 @@
     "lib": ["dom", "es5", "es2015", "es2016"],
     "baseUrl": "./",
     "paths": {
+      "@/*": ["src/*"],
       "Model/*": ["src/model/*"],
     }
   },
