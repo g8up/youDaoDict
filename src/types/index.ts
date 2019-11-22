@@ -20,3 +20,10 @@ export interface ITranslator {
   query: ()=>any;
   parse: (resp) => IWord;
 }
+
+export interface SpeachInfo {
+  /** 朗读单词 */
+  word: string;
+  /** 朗读类型 */
+  type?: string;
+}

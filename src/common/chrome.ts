@@ -5,11 +5,9 @@ import {
   parseQuerystring,
 } from './util';
 import MsgType from './msg-type';
-
-interface SpeachInfo {
-  word: string;
-  type?: string;
-}
+import {
+  SpeachInfo,
+} from '../types';
 
 export const playAudio = ({ word, type }: SpeachInfo) => {
   chrome.runtime.sendMessage({
@@ -20,7 +18,7 @@ export const playAudio = ({ word, type }: SpeachInfo) => {
 };
 
 export const playAudioByWordAndType = (wordAndType: SpeachInfo) => {
-  playAudio(parseQuerystring(`word=${wordAndType}`) as SpeachInfo);
+  playAudio(parseQuerystring<SpeachInfo>(`word=${wordAndType}`));
 };
 
 export const addToNote = (word, callback) => {

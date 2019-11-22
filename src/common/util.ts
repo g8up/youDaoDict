@@ -95,7 +95,7 @@ export const qs = (json): string => {
   return '';
 };
 
-export const parseQuerystring = (querystring: string) => {
+export const parseQuerystring = <T>(querystring: string):T => {
   const obj = {};
   if (querystring && querystring.length) {
     const kvs = querystring.split('&');
@@ -106,7 +106,7 @@ export const parseQuerystring = (querystring: string) => {
       });
     }
   }
-  return obj;
+  return obj as T;
 };
 
 export const copyText = (text: string) => {
