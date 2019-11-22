@@ -103,6 +103,10 @@ export default class extends Component<Props> {
             }
           </tbody>
         </table>
+
+        { list.length < 1 && <p className="no-data text-muted">
+          暂无查询历史
+        </p>}
       </div>
     )
   }
