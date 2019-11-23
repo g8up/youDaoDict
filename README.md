@@ -5,7 +5,7 @@
 
 [在线安装](https://chrome.google.com/webstore/detail/chgkpfgnhlojjpjchjcbpbgmdnmfmmil "Chrome Web Store")
 
-<img src="https://user-images.githubusercontent.com/8005686/45733856-d133c980-bc14-11e8-8d80-187278297ffa.png" width="400"/>
+<img src="https://user-images.githubusercontent.com/8005686/69475802-a3e03e00-0e0c-11ea-864e-9f03f2fa496b.png" width="400"/>
 
 # 功能
 1. 记录、导出查询历史
