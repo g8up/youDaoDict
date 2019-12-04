@@ -31,3 +31,15 @@ export const addToNote = (word, callback) => {
     }
   });
 };
+
+export const notify = ({
+  title,
+  message,
+})=>{
+  chrome.notifications.create(null, {
+    type: 'basic',
+    iconUrl: 'image/icon-128.png',
+    title,
+    message,
+  });
+};
