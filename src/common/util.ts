@@ -109,18 +109,14 @@ export const parseQuerystring = <T>(querystring: string):T => {
   return obj as T;
 };
 
-export const copyText = (text: string) => {
-  if (text !== undefined) {
-    const cont = document.createElement('div');
-    cont.textContent = text;
+export const copyText = (text) => {
+  if (text !== undefined && text !== '') {
+    var cont = document.createElement('textarea');
+    cont.value = text;
     document.body.appendChild(cont);
 
-    const range = document.createRange();
-    range.selectNode(cont);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(range);
+    cont.select();
     document.execCommand('copy');
-    window.getSelection().removeAllRanges();
     cont.remove();
   }
 };
