@@ -16,6 +16,8 @@ import {
 
 export interface Props {
   list: IWord[];
+  currentPageNum: number;
+  pageSize: number;
   onDelete?: (word: string)=>any;
   onCheck?: (word: string)=>any;
 };
@@ -33,9 +35,13 @@ export default class extends Component<Props> {
   render(props: Props) {
     const {
       list,
+      currentPageNum,
+      pageSize,
       onDelete,
       onCheck,
     } = props;
+
+    const indexBase = pageSize * (currentPageNum - 1);
 
     return (
       <div className="history">
@@ -73,7 +79,7 @@ export default class extends Component<Props> {
 
                 return (
                   <tr>
-                    <td className="text-muted">{index + 1}</td>
+                    <td className="text-muted">{indexBase + index + 1}</td>
                     <td>
                       <a
                         className="word"
