@@ -55,9 +55,7 @@ export default class extends Component<Props> {
               <th width="85px">添加时间</th>
               <th width="85px">上次查询</th>
               {/* <th>分类</th> */}
-              <th width="65px">
-                <ruby>弄<rt>nèng</rt></ruby>它
-              </th>
+              <th width="65px">操作</th>
             </tr>
           </thead>
 
