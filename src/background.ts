@@ -14,13 +14,22 @@ import {
   getAudioByWordAndType,
 } from './common/audio-cache';
 import migrate from './common/migrate';
+import {
+  iSetting,
+} from './index';
+import {
+  initIcon,
+} from './common/chrome';
 
 migrate();
 
-const Options = {};
+const Options: Partial<iSetting> = {};
 const setting = new Setting();
 setting.get().then((data) => {
   Object.assign(Options, data);
+
+  const [, autoSpeech] = Options.auto_speech;
+  initIcon(autoSpeech)
 });
 
 chrome.storage.onChanged.addListener((changes, areaName) => {

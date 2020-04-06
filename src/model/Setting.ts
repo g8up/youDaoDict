@@ -32,7 +32,7 @@ export default class Setting extends Storage {
     });
   }
 
-  set(value) {
+  set(value: iSetting) {
     return chromeSync.set(this.name, value);
   }
 }
