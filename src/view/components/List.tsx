@@ -92,7 +92,11 @@ export default class extends Component<Props> {
                         {phonetic ? `/${phonetic}/`: ''}
                       </a>
                     </td>
-                    <td className="translation">{translation}</td>
+                    <td className="translation">
+                      {
+                        translation ? translation : <a className="check" onClick={() => { onCheck(word); }}>查询</a>
+                      }
+                    </td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
                     <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>现在就看</a> : getDate(lastView) }</td>
                     <td>
