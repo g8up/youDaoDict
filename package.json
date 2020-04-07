@@ -38,7 +38,7 @@
     "rimraf": "^3.0.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.4000",
-    "webpack": "^4.29.6",
+    "webpack": "^4.41.2",
     "webpack-cli": "^3.3.0"
   },
   "repository": {

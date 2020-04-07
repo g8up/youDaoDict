@@ -10,6 +10,7 @@ import {
 import {
   playAudio,
   addToNote,
+  initIcon,
 } from './common/chrome';
 import {
   iSetting,
@@ -19,7 +20,7 @@ import {
   queryAndRecord,
 } from './common/query';
 
-let Options = null;
+let Options: iSetting = null;
 
 const setting = new Setting();
 
@@ -108,15 +109,20 @@ const restoreOptions = (option) => {
 const saveOptions = () => {
   Object.keys(Options).forEach((key) => {
     const elem = $(`#${key}`);
-    if (Options[key][0] === 'checked') {
-      Options[key][1] = elem.checked;
-    }
-    else {
-      Options[key] = elem.value;
+    if (elem ){
+      if (Options[key][0] === 'checked') {
+        Options[key][1] = elem.checked;
+      }
+      else {
+        Options[key] = elem.value;
+      }
     }
   });
   // https://developer.chrome.com/extensions/storage
   setting.set(Options);
+
+  const [, autoSpeech] = Options.auto_speech;
+  initIcon(autoSpeech);
 };
 
 const renderTriggerOption = (val)=>{

@@ -16,6 +16,8 @@ import {
 
 export interface Props {
   list: IWord[];
+  currentPageNum: number;
+  pageSize: number;
   onDelete?: (word: string)=>any;
   onCheck?: (word: string)=>any;
 };
@@ -33,9 +35,13 @@ export default class extends Component<Props> {
   render(props: Props) {
     const {
       list,
+      currentPageNum,
+      pageSize,
       onDelete,
       onCheck,
     } = props;
+
+    const indexBase = pageSize * (currentPageNum - 1);
 
     return (
       <div className="history">
@@ -49,9 +55,7 @@ export default class extends Component<Props> {
               <th width="85px">添加时间</th>
               <th width="85px">上次查询</th>
               {/* <th>分类</th> */}
-              <th width="65px">
-                <ruby>弄<rt>nèng</rt></ruby>它
-              </th>
+              <th width="65px">操作</th>
             </tr>
           </thead>
 
@@ -73,7 +77,7 @@ export default class extends Component<Props> {
 
                 return (
                   <tr>
-                    <td className="text-muted">{index + 1}</td>
+                    <td className="text-muted">{indexBase + index + 1}</td>
                     <td>
                       <a
                         className="word"
@@ -88,7 +92,11 @@ export default class extends Component<Props> {
                         {phonetic ? `/${phonetic}/`: ''}
                       </a>
                     </td>
-                    <td className="translation">{translation}</td>
+                    <td className="translation">
+                      {
+                        translation ? translation : <a className="check" onClick={() => { onCheck(word); }}>查询</a>
+                      }
+                    </td>
                     <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
                     <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>现在就看</a> : getDate(lastView) }</td>
                     <td>

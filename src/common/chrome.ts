@@ -8,6 +8,7 @@ import MsgType from './msg-type';
 import {
   SpeachInfo,
 } from '../types';
+import { ICON } from './config';
 
 export const playAudio = ({ word, type }: SpeachInfo) => {
   chrome.runtime.sendMessage({
@@ -42,4 +43,28 @@ export const notify = ({
     title,
     message,
   });
+};
+
+
+const setIcon = (path) => {
+  chrome.browserAction.setIcon({
+    path,
+  });
+};
+
+export const setSpeakerIcon = ()=>{
+  setIcon(ICON.SPEAKER);
+};
+
+export const setDefaultIcon = () => {
+  setIcon(ICON.DEFAULT);
+};
+
+export const initIcon = (autoSpeech)=>{
+  if (autoSpeech) {
+    setSpeakerIcon();
+  }
+  else {
+    setDefaultIcon();
+  }
 };

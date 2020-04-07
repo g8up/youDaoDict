@@ -112,6 +112,8 @@ export default class extends Component<any, AppState> {
         </div>
         <List
           list={state.list}
+          currentPageNum={currentPageNum}
+          pageSize={pageSize}
           onDelete={this.deleteWord.bind(this)}
           onCheck={this.check.bind(this)}
         />
