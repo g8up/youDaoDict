@@ -5,12 +5,12 @@ import History from './model/History';
 import MsgType from './common/msg-type';
 import {
   $,
-  shareDownloadLink,
 } from './common/util';
 import {
   playAudio,
   addToNote,
   initIcon,
+  shareDownloadLink,
 } from './common/chrome';
 import {
   iSetting,

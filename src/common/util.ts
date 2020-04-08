@@ -1,6 +1,7 @@
-import {
-  notify,
-} from '@/common/chrome';
+/**
+ * 基础工具类
+ * 为保证可测试，不应依赖 `chrome`
+ */
 
 export const isEnglish = (str: string) => {
   for (let i = 0; i < str.length; i += 1) {
@@ -166,21 +167,6 @@ export const getTime = (date?) => {
  */
 export const getDetailLink = (urlPrefix, params) => {
   return `${urlPrefix}?${qs(params)}`;
-};
-
-// 复制分享链接
-export const shareDownloadLink = () => {
-  const {
-    name,
-    description,
-  } = chrome.runtime.getManifest();
-  const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
-  const text = `${name}\r\n${description}\r\n${downloadLink}`;
-  copyText(text);
-  notify({
-    title: '分享内容已复制到剪贴板',
-    message: `${text}`
-  });
 };
 
 export default {

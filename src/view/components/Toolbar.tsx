@@ -1,7 +1,7 @@
 import { h, Component } from 'preact';
 import {
   shareDownloadLink,
-} from '../../common/util';
+} from '../../common/chrome';
 
 export interface Props {
   exportFile: () => void;

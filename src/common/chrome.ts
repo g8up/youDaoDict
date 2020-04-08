@@ -3,6 +3,7 @@
  */
 import {
   parseQuerystring,
+  copyText,
 } from './util';
 import MsgType from './msg-type';
 import {
@@ -45,6 +46,20 @@ export const notify = ({
   });
 };
 
+// 复制分享链接
+export const shareDownloadLink = () => {
+  const {
+    name,
+    description,
+  } = chrome.runtime.getManifest();
+  const downloadLink = 'http://getcrx.cn/#/crxid/chgkpfgnhlojjpjchjcbpbgmdnmfmmil';
+  const text = `${name}\r\n${description}\r\n${downloadLink}`;
+  copyText(text);
+  notify({
+    title: '分享内容已复制到剪贴板',
+    message: `${text}`
+  });
+};
 
 const setIcon = (path) => {
   chrome.browserAction.setIcon({
