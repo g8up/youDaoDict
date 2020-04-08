@@ -1,6 +1,7 @@
 /**
  * 网络请求
  */
+import fetch from 'cross-fetch';
 import util from '../common/util';
 
 enum ContentType {
