@@ -113,18 +113,22 @@ const popupRender = ({
   };
 
   return baseTrans || webTrans ? `
-  ${baseTrans ?  `<div class="section-title" > ${ langTypeMap[type] || '英汉' }翻译</div>
-    <span class="phrase" data-toggle="play" data-word="${phrase}">
-      ${ phrase }
-      ${ phonetic ? `[${phonetic}]` : '' }
-      <span class="voice-icon" title="朗读"></span>
-    </span>
-    <a class="add-to-note" data-toggle="addToNote" data-word="${phrase}" title="添加到单词本">+</a>
-    <div class="section-title">基本释义</div>
-    ${ baseTrans}` : '未找到基本释义'}
-    ${ webTrans ? `<div class="section-title">网络释义</div>${webTrans}` : '未找到网络释义'}
-    ${ baseTrans || webTrans ? `<a class="weblink" href="${getDetailLink('https://dict.youdao.com/search', params)}" target="_blank">查看详细释义&gt;&gt;</a>` : ''}`
-    : `未找到英汉翻译!<br><a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(word)}" target="_blank">尝试用有道搜索</a>`;
+    ${baseTrans ?
+      `<div class="section-title" > ${ langTypeMap[type] || '英汉' }翻译</div>
+      <span class="phrase" data-toggle="play" data-word="${phrase}">
+        ${ phrase }
+        ${ phonetic ? `[${phonetic}]` : '' }
+        <span class="voice-icon" title="朗读"></span>
+      </span>
+      <a class="add-to-note" data-toggle="addToNote" data-word="${phrase}" title="添加到单词本">+</a>
+      <div class="section-title">基本释义</div>
+      ${ baseTrans}` : '未找到基本释义'}
+
+      ${ webTrans ? `<div class="section-title">网络释义</div>${webTrans}` : '未找到网络释义'}
+      ${ baseTrans || webTrans ? `<a class="weblink" href="${getDetailLink('https://dict.youdao.com/search', params)}" target="_blank">查看详细释义&gt;&gt;</a>` : ''}`
+    :
+      `<div>未找到英汉翻译！</div>
+      <a class="weblink" href="https://www.youdao.com/w/${encodeURIComponent(word)}" target="_blank">尝试用有道搜索</a>`;
 };
 
 // popup 查询历史

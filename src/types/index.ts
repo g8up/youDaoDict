@@ -27,3 +27,32 @@ export interface SpeachInfo {
   /** 朗读类型 */
   type?: string;
 }
+
+/** 指词热键 */
+export enum TiggerKeyVal {
+  ctrl = 'ctrl',
+  shift = 'shift',
+  alt = 'alt',
+}
+
+/** [节点] */
+type Val = [string, boolean];
+
+/** 发音类型 */
+export enum SpeechType {
+  /** 英音 */
+  eng = '1' ,
+  /** 美音 */
+  us = '2',
+}
+
+export interface iSetting {
+  dict_enable: Val,
+  ctrl_only: Val,
+  english_only: Val,
+  auto_speech: Val,
+  /** Popup 界面默认发音类型 */
+  defaultSpeech: SpeechType,
+  history_count: number,
+  triggerKey: TiggerKeyVal,
+}

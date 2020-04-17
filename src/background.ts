@@ -16,7 +16,7 @@ import {
 import migrate from './common/migrate';
 import {
   iSetting,
-} from './index';
+} from './types/index';
 import {
   initIcon,
 } from './common/chrome';

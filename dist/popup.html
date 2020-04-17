@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html>
+<html lang="zh-CN">
 
 <head>
 	<meta charset="utf-8">
@@ -24,9 +24,12 @@
 
 	<section id="options">
 		<div class="section-title">选项设置：</div>
+
 		<div class="conf-item">
-			<input id="dict_enable" type="checkbox"><label for="dict_enable">划词翻译</label>
+			<input id="dict_enable" type="checkbox">
+			<label for="dict_enable">划词翻译</label>
 		</div>
+
 		<div class="conf-item">
 			<input id="ctrl_only" type="checkbox">
 			<label for="ctrl_only">指词即译（按下
@@ -34,12 +37,21 @@
 				</select>键指词）
 			</label>
 		</div>
+
 		<div class="conf-item">
-			<input id="english_only" type="checkbox"><label for="english_only">仅对英文划译</label>
+			<input id="english_only" type="checkbox">
+			<label for="english_only">仅对英文划译</label>
 		</div>
+
 		<div class="conf-item">
-			<input id="auto_speech" type="checkbox"><label for="auto_speech">自动朗读</label>
+			<input id="auto_speech" type="checkbox">
+			<label for="auto_speech">自动朗读</label>
+			<select id="defaultSpeech" title="默认发音">
+				<option value="2">美</option>
+				<option value="1">英</option>
+			</select>
 		</div>
+
 		<div class="conf-item history-count">
 			查询历史显示条数：
 			<input type="number" id="history_count" min="0" max="100">
