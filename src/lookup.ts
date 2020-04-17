@@ -15,7 +15,7 @@ import {
   wrapShadowDom,
 } from './common/shadow-dom';
 import MsgType from './common/msg-type';
-import { iSetting } from './index';
+import { iSetting, SpeechType } from './types/index';
 import {
   DEFAULT,
 } from './model/Setting';
@@ -29,7 +29,12 @@ let PANEL = null;
 
 const getOptVal = (key) => {
   if (Options) {
-    return Options[key][1];
+    if (Array.isArray(Options[key])) {
+      return Options[key][1];
+    }
+    else {
+      return Options[key];
+    }
   }
   return '';
 };
@@ -104,11 +109,17 @@ const addContentEvent = (cont) => {
   (function renderAudio() {
     // 自动朗读
     if (getOptVal('auto_speech')) {
-      const usPhonetic = cont.querySelector('.ydd-voice');
-      if (usPhonetic) {
-        const { wordAndType } = usPhonetic.dataset;
-        playAudioByWordAndType(wordAndType);
+      const phonetics = cont.querySelectorAll('.ydd-voice');
+      const [eng, us] = phonetics;
+      let wordAndType = null;
+      if (phonetics.length > 1) {
+        const defaultSpeech = getOptVal('defaultSpeech');
+        ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
       }
+      else {
+        ({ wordAndType } = eng.dataset);
+      }
+      playAudioByWordAndType(wordAndType);
     }
     // 朗读按钮事件
     cont.addEventListener('click', (e) => {
@@ -244,8 +255,8 @@ let triggerKey = Options.triggerKey || 'shift';
 // 指词即译
 const onPointToTrans = debounce((e) => {
   if (!e[`${triggerKey}Key`] ||
-    ['alt', 'shift', 'ctrl', 'meta'].filter(key => key !== triggerKey).some(key => e[`${key}Key`]) ) {
-      return;
+    ['alt', 'shift', 'ctrl', 'meta'].filter(key => key !== triggerKey).some(key => e[`${key}Key`])) {
+    return;
   }
   const caretRange = document.caretRangeFromPoint(e.clientX, e.clientY);
   if (!caretRange) { return; }

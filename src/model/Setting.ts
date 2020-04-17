@@ -5,14 +5,17 @@ import {
 } from '../common/config';
 import {
   iSetting,
+  SpeechType,
   TiggerKeyVal,
-} from '../index'
+} from '../types/index'
 
+// key 是 dom#id
 export const DEFAULT: iSetting = {
   dict_enable: ['checked', false],
   ctrl_only: ['checked', true],
   english_only: ['checked', true],
   auto_speech: ['checked', true],
+  defaultSpeech: SpeechType.us,
   history_count: 5,
   triggerKey: TiggerKeyVal.ctrl,
 };
