@@ -9,7 +9,7 @@ import {
 } from '../common/util';
 
 // 解析返回的查询结果
-const translateXML = (xmlnode) => {
+const translateXML = (xmlnode: Document) => {
   let hasBaseTrans = true;
   let hasWebTrans = true;
   const root = xmlnode.getElementsByTagName('yodaodict')[0];
@@ -81,45 +81,30 @@ const translateXML = (xmlnode) => {
   });
 };
 
-let transStrTmp;
-let inputStrTmp;
-const translateTransXML = (xmlnode) => {
-  let s = xmlnode.indexOf('CDATA[');
-  let e = xmlnode.indexOf(']]');
-  const inputStr = xmlnode.substring(s + 6, e);
-  const remain = xmlnode.substring(e + 2, xmlnode.length - 1);
-  s = remain.indexOf('CDATA[');
-  e = remain.indexOf(']]');
-  const transStr = remain.substring(s + 6, e);
-  transStrTmp = transStr.trim();
-  inputStrTmp = inputStr.trim();
-  if ((isContainChinese(inputStrTmp) || isContainJapanese(inputStrTmp)
-    || isContainKoera(inputStrTmp)) && inputStrTmp.length > 15) {
-    inputStrTmp = `${inputStrTmp.substring(0, 8)} ...`;
-  } else if (inputStrTmp.length > 25) {
-    inputStrTmp = `${inputStrTmp.substring(0, 15)} ...`;
-  }
-  if (transStrTmp === inputStrTmp) {
-    return null;
-  }
+const translateTransXML = (xmlnode: Document) => {
+
+  let input = xmlnode.querySelector('input').textContent.trim();
+  let transStr = xmlnode.querySelector('translation').textContent.trim();
+
   const res = `<div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
-          <a class="ydd-icon" href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(inputStr)}&keyfrom=chrome.extension" target=_blank">有道词典</a>
-          <span>${inputStrTmp.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+          <span>${input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;')}</span>
-          <a href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(inputStr)}&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>
+          <a href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(input)}&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>
           <a class="ydd-close">&times;</a>
         </div>
       </div>
       <div class="yddMiddle">
         <div class="ydd-trans-wrapper">
-          <div class="ydd-trans-container">
-            ${transStr.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')}
+          <div class="tab-content">
+            <div class="ydd-trans-container">
+              ${transStr.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')}
+            </div>
           </div>
         </div>
       </div>

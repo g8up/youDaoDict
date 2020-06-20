@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response type="EN2ZH_CN" errorCode="0" elapsedTime="3">
+  <input>
+  <![CDATA[I put together a small test page to isolate the problem but couldn't get it to work at that page either.]]>
+  </input>
+  <translation>
+    <![CDATA[我整理一个小测试页面来隔离问题,但不能让它在这个页面。]]>
+  </translation>
+</response>

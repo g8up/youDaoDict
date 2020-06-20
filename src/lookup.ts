@@ -27,6 +27,16 @@ let lastTime = 0;
 let lastFrame;
 let PANEL = null;
 
+/** 划词翻译类型 */
+enum TRANSLATE_TYPE_MAP {
+  /** 翻译单词 */
+  WORD,
+  /** 翻译句子 */
+  SENTENCE,
+};
+
+let TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.WORD; //
+
 const getOptVal = (key) => {
   if (Options) {
     if (Array.isArray(Options[key])) {
@@ -105,46 +115,51 @@ const addContentEvent = (cont) => {
     closePanel();
   };
   closeBtn = null;
-  // 语音播放
-  (function renderAudio() {
-    // 自动朗读
-    if (getOptVal('auto_speech')) {
-      const phonetics = cont.querySelectorAll('.ydd-voice');
-      const [eng, us] = phonetics;
-      let wordAndType = null;
-      if (phonetics.length > 1) {
-        const defaultSpeech = getOptVal('defaultSpeech');
-        ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
-      }
-      else {
-        ({ wordAndType } = eng.dataset);
-      }
-      playAudioByWordAndType(wordAndType);
-    }
-    // 朗读按钮事件
-    cont.addEventListener('click', (e) => {
-      const { target } = e;
-      const voiceNode = target.closest('.ydd-voice');
-      if (voiceNode) {
-        const { wordAndType } = voiceNode.dataset;
-        playAudioByWordAndType(wordAndType);
-        if (getOptVal('auto_speech')) {
-          playAudioByWordAndType(wordAndType);
+
+  // 翻译单词时才绑定以下行为
+  if (TRANSLATE_TYPE === TRANSLATE_TYPE_MAP.WORD) {
+    // 语音播放
+    (function renderAudio() {
+      // 自动朗读
+      if (getOptVal('auto_speech')) {
+        const phonetics = cont.querySelectorAll('.ydd-voice');
+        const [eng, us] = phonetics;
+        let wordAndType = null;
+        if (phonetics.length > 1) {
+          const defaultSpeech = getOptVal('defaultSpeech');
+          ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
         }
+        else {
+          ({ wordAndType } = eng.dataset);
+        }
+        playAudioByWordAndType(wordAndType);
+      }
+      // 朗读按钮事件
+      cont.addEventListener('click', (e) => {
+        const { target } = e;
+        const voiceNode = target.closest('.ydd-voice');
+        if (voiceNode) {
+          const { wordAndType } = voiceNode.dataset;
+          playAudioByWordAndType(wordAndType);
+          if (getOptVal('auto_speech')) {
+            playAudioByWordAndType(wordAndType);
+          }
+        }
+      });
+    }());
+
+    // 添加到单词本
+    const addBtn = cont.querySelector('#addToNote');
+    addBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const word = cont.querySelector('.yddKeyTitle').textContent.trim();
+      if (word) {
+        addToNote(word, () => {
+          addBtn.classList.add('green');
+        });
       }
     });
-  }());
-  // 添加到单词本
-  const addBtn = cont.querySelector('#addToNote');
-  addBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const word = cont.querySelector('.yddKeyTitle').textContent.trim();
-    if (word) {
-      addToNote(word, () => {
-        addBtn.classList.add('green');
-      });
-    }
-  });
+  }
 };
 
 const ROOT_TAG = 'chrome-extension-youdao-dict';
@@ -152,6 +167,7 @@ const ROOT_TAG = 'chrome-extension-youdao-dict';
 const getPanel = () => {
   const panel = document.createElement(ROOT_TAG);
   panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
+  panel.style.userSelect = 'auto'; // enable select text
   wrapShadowDom(panel);
   body.appendChild(panel);
   addPanelEvent(panel);
@@ -230,18 +246,24 @@ const onSelectToTrans = debounce((e) => {
     if (hasJapanese || hasChinese || hasKoera) {
       return;
     }
-    word = ExtractEnglish(word);
-    // TODO: add isEnglish function
-    if (word !== '') {
+    // word = ExtractEnglish(word);
+  }
+  // TODO: add isEnglish function
+  if (word !== '') {
+    if ((!hasChinese && spaceCount(word) >= 3)
+      || ((hasChinese || hasJapanese) && word.length > 4)) {
+      // 翻译句子
+      getYoudaoTrans(word, (html) => {
+        TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.SENTENCE;
+        createPopup(html, pageX, pageY, screenX, screenY);
+      });
+    } else {
+      // 翻译单词
       getYoudaoDictTemplateHtml(word, (html) => {
+        TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.WORD;
         createPopup(html, pageX, pageY, screenX, screenY);
       });
     }
-  } else if ((!hasChinese && spaceCount(word) >= 3)
-    || ((hasChinese || hasJapanese) && word.length > 4)) {
-    getYoudaoTrans(word, (html) => {
-      createPopup(html, pageX, pageY, screenX, screenY);
-    });
   }
 });
 

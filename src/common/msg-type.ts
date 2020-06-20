@@ -14,6 +14,7 @@ enum MSG_TYPE {
   // 获取设置
   GET_SETTING = 'get-setting',
 
+  /** 翻译 */
   TRANSLATE = 'translate',
 };
 
