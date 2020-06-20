@@ -100,9 +100,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       api.fetchTranslate(word).then((ret) => {
         const templateHtml = parser.translateTransXML(ret);
         if (templateHtml !== '') {
-          sendResponse({
-            data: templateHtml,
-          });
+          sendResponse(templateHtml);
         }
       });
       return true;
