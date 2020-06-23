@@ -81,10 +81,21 @@ const translateXML = (xmlnode: Document) => {
   });
 };
 
-const translateTransXML = (xmlnode: Document) => {
+export const parseTranslateData = (xmlNode: Document)=>{
+  let input = xmlNode.querySelector('input').textContent.trim();
+  let transStr = xmlNode.querySelector('translation').textContent.trim();
 
-  let input = xmlnode.querySelector('input').textContent.trim();
-  let transStr = xmlnode.querySelector('translation').textContent.trim();
+  return {
+    input,
+    transStr,
+  };
+};
+
+const translateTransXML = (xmlnode: Document) => {
+  const {
+    input,
+    transStr,
+  } = parseTranslateData(xmlnode);
 
   const res = `<div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
