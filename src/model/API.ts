@@ -61,9 +61,10 @@ const fetchWordOnline = (word: string) => {
  */
 const fetchTranslate = (word: string) => http.fetchXML(
   'http://fanyi.youdao.com/translate',
-  Object.assign({
+  Object.assign({}, CommonParams, {
     i: word,
-  }, CommonParams));
+    xmlVersion: '1.1', // 翻译接口要求 1.1
+  }));
 
 export default{
   addWord,

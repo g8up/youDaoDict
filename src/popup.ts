@@ -14,7 +14,7 @@ import {
 } from './common/chrome';
 import {
   iSetting,
-} from './index';
+} from './types/index';
 import { IWord } from './types';
 import {
   queryAndRecord,
@@ -24,7 +24,7 @@ let Options: iSetting = null;
 
 const setting = new Setting();
 
-const renderHistory = async ()=>{
+const renderHistory = async () => {
   const words = await History.get(Options.history_count);
   if (words && words.length) {
     let $cache = $('#cache');
@@ -44,7 +44,7 @@ const renderHistory = async ()=>{
 };
 
 const mainQuery = (word) => {
-  queryAndRecord(word).then((data: IWord)=>{
+  queryAndRecord(word).then((data: IWord) => {
     const {
       word,
       speech,
@@ -82,23 +82,26 @@ const changeIcon = () => {
 };
 
 /**
- * 读取配置信息
+ * 读取配置信息并渲染到页面
  */
-const restoreOptions = (option) => {
+const restoreOptions = (option: iSetting) => {
   Object.keys(option).forEach((key) => {
     const elem = $(`#${key}`);
     if (elem) {
       const val = option[key];
-      if (!val) return;
-      const elemType = elem.getAttribute('type');
+      const elemType = elem.getAttribute('type') || elem.type;
+
       switch (elemType) {
         case 'checkbox':
-          if (val[0] === 'checked') {
-            [, elem.checked] = val;
+          if (Array.isArray(val)) {
+            if (val[0] === 'checked') {
+              [, elem.checked] = val;
+            }
           }
           break;
         case 'number':
-          elem.value = val || option.history_count;
+        case 'select-one': // <select />
+          elem.value = val;
           break;
         default: break;
       }
@@ -109,7 +112,7 @@ const restoreOptions = (option) => {
 const saveOptions = () => {
   Object.keys(Options).forEach((key) => {
     const elem = $(`#${key}`);
-    if (elem ){
+    if (elem) {
       if (Options[key][0] === 'checked') {
         Options[key][1] = elem.checked;
       }
@@ -125,22 +128,22 @@ const saveOptions = () => {
   initIcon(autoSpeech);
 };
 
-const renderTriggerOption = (val)=>{
+const renderTriggerOption = (val) => {
   // https://developer.chrome.com/extensions/runtime#type-PlatformOs
-  chrome.runtime.getPlatformInfo(function ({os}) {
+  chrome.runtime.getPlatformInfo(function ({ os }) {
     const KEY_MAP = os === 'mac' ? [{
-        name: 'shift',
-        value: 'shift',
-      }, {
-        name: 'command',
-        value: 'meta',
-      }, {
-        name: 'option',
-        value: 'alt',
-      }, {
-        name: 'control',
-        value: 'ctrl',
-      },
+      name: 'shift',
+      value: 'shift',
+    }, {
+      name: 'command',
+      value: 'meta',
+    }, {
+      name: 'option',
+      value: 'alt',
+    }, {
+      name: 'control',
+      value: 'ctrl',
+    },
     ] : [{
       name: 'shift',
       value: 'shift',
@@ -150,10 +153,10 @@ const renderTriggerOption = (val)=>{
     }, {
       name: 'ctrl',
       value: 'ctrl',
-    }, ]
+    },]
 
     const triggerKey = $('#triggerKey');
-    triggerKey.innerHTML = KEY_MAP.map(({name, value})=>{
+    triggerKey.innerHTML = KEY_MAP.map(({ name, value }) => {
       return `<option value="${value}"> ${name} </option>`;
     }).join('');
 
@@ -162,7 +165,7 @@ const renderTriggerOption = (val)=>{
 };
 
 window.onload = () => {
-  setting.get().then((data:iSetting) => {
+  setting.get().then((data: iSetting) => {
     Options = data;
     console.log('option from sync storage', data);
     restoreOptions(data);
@@ -181,24 +184,31 @@ window.onload = () => {
         saveOptions();
         changeIcon();
       };
-      $('#ctrl_only').onclick = () => {
-        saveOptions();
-      };
-      $('#english_only').onclick = () => {
-        saveOptions();
-      };
-      $('#auto_speech').onclick = () => {
-        saveOptions();
-      };
       // eslint-disable-next-line
       $('#history_count').onclick = $('#history_count').onkeyup = () => {
         saveOptions();
         renderHistory();
       };
 
-      $('#triggerKey').addEventListener('change', (e) => {
-        saveOptions();
+      [
+        $('#triggerKey'),
+        $('#defaultSpeech'),
+      ].forEach(el => {
+        el.addEventListener('change', (e) => {
+          saveOptions();
+        });
       });
+
+      [
+        $('#ctrl_only'),
+        $('#english_only'),
+        $('#auto_speech'),
+      ].forEach(el => {
+        el.onclick = () => {
+          saveOptions();
+        };
+      });
+
     };
   }
 
@@ -230,7 +240,7 @@ window.onload = () => {
 
   // 绑定朗读事件
   document.body.addEventListener('click', (e) => {
-    const { target } = e ;
+    const { target } = e;
     if ((target as HTMLElement).dataset.toggle === 'addToNote') {
       const {
         word,
@@ -241,8 +251,8 @@ window.onload = () => {
     }
     else {
       const voiceNode = (target as Element).closest('.phrase');
-      if( voiceNode ){
-        const { toggle, word  } = (voiceNode as HTMLElement).dataset;
+      if (voiceNode) {
+        const { toggle, word } = (voiceNode as HTMLElement).dataset;
         if (toggle === 'play') {
           playAudio({ word });
         }

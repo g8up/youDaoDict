@@ -16,7 +16,7 @@ import {
 import migrate from './common/migrate';
 import {
   iSetting,
-} from './index';
+} from './types/index';
 import {
   initIcon,
 } from './common/chrome';
@@ -100,9 +100,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       api.fetchTranslate(word).then((ret) => {
         const templateHtml = parser.translateTransXML(ret);
         if (templateHtml !== '') {
-          sendResponse({
-            data: templateHtml,
-          });
+          sendResponse(templateHtml);
         }
       });
       return true;
