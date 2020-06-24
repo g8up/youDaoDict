@@ -1,6 +1,6 @@
 import Setting from './model/Setting';
 import Dict from './model/Dict';
-import api from './model/API';
+import api, { fetchTranslateJson } from './model/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
 import MsgType from './common/msg-type';
@@ -97,8 +97,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
 
     case MsgType.TRANSLATE:
-      api.fetchTranslate(word).then((ret) => {
-        const templateHtml = parser.translateTransXML(ret);
+      fetchTranslateJson(word).then((data) => {
+        const {
+          src: input,
+          tgt: transStr,
+        } = data;
+        const templateHtml = parser.translateTransXML({
+          input,
+          transStr,
+        });
         if (templateHtml !== '') {
           sendResponse(templateHtml);
         }
@@ -152,18 +159,18 @@ chrome.runtime.onInstalled.addListener((details) => {
     reason,
     previousVersion,
   } = details;
-  if( 'install' === reason ) {
+  if ('install' === reason) {
     openOptionPage = true;
   }
-  else if ('update' === reason){
+  else if ('update' === reason) {
     const {
       version,
-    } =  chrome.runtime.getManifest();
+    } = chrome.runtime.getManifest();
     // 2位版本更新时才自动弹出选项页
     openOptionPage = isMinorVersionIncrease(previousVersion, version);
   }
 
-  if (openOptionPage ) {
+  if (openOptionPage) {
     chrome.tabs.create({ url: 'option.html' });
   }
 });
