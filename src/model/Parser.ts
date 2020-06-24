@@ -91,17 +91,23 @@ export const parseTranslateData = (xmlNode: Document)=>{
   };
 };
 
-const translateTransXML = (xmlnode: Document) => {
-  const {
-    input,
-    transStr,
-  } = parseTranslateData(xmlnode);
+const filterXSS = html => {
+  return html.replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;')
+};
+
+const translateTransXML = ({
+  input,
+  transStr,
+}) => {
 
   const res = `<div id="yddContainer">
       <div class="yddTop" class="ydd-sp">
         <div class="yddTopBorderlr">
-          <span>${input.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')}</span>
+          <span>${filterXSS(input)}</span>
           <a href="http://fanyi.youdao.com/translate?i=${encodeURIComponent(input)}&smartresult=dict&keyfrom=chrome.extension" target=_blank>详细</a>
           <a class="ydd-close">&times;</a>
         </div>
@@ -110,11 +116,7 @@ const translateTransXML = (xmlnode: Document) => {
         <div class="ydd-trans-wrapper">
           <div class="tab-content">
             <div class="ydd-trans-container">
-              ${transStr.replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;')}
+              ${filterXSS(transStr)}
             </div>
           </div>
         </div>

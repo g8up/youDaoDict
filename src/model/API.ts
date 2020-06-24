@@ -6,9 +6,9 @@ enum AddState {
   NO_USER = 'nouser'
 }
 
-type Message =  AddState.ADD_DONE | AddState.NO_USER;
+type Message = AddState.ADD_DONE | AddState.NO_USER;
 
-interface AddToNoteState{
+interface AddToNoteState {
   message: Message;
 }
 
@@ -29,18 +29,18 @@ const YouDaoAddWordUrl = 'https://dict.youdao.com/wordbook/ajax';
  * 添加到单词本
  */
 const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
-    q: word,
-    action: 'addword',
-    le: 'eng',
-  },
-).then((ret: AddToNoteState) => {
+  q: word,
+  action: 'addword',
+  le: 'eng',
+}).then((ret: AddToNoteState) => {
   const msg = ret.message;
   if (msg === AddState.ADD_DONE) {
     return Promise.resolve();
   }
-  else if (msg === AddState.NO_USER) {
+  if (msg === AddState.NO_USER) {
     return Promise.reject();
   }
+  return null;
 });
 
 const fetchWordOnline = (word: string) => {
@@ -56,18 +56,59 @@ const fetchWordOnline = (word: string) => {
   );
 };
 
+
+const TranslateUrl = 'http://fanyi.youdao.com/translate';
+
 /**
  * 查询英文之外的语言
  */
-const fetchTranslate = (word: string) => http.fetchXML(
-  'http://fanyi.youdao.com/translate',
+const fetchTranslate = (sentence: string) => http.fetchXML(
+  TranslateUrl,
   Object.assign({}, CommonParams, {
-    i: word,
+    i: sentence,
     xmlVersion: '1.1', // 翻译接口要求 1.1
   }));
 
-export default{
+export const fetchTranslateJson = (sentence: string) => http.get(
+  TranslateUrl,
+  Object.assign({
+    type: 'AUTO',
+    doctype: 'json',
+    version: '2.1',
+    keyfrom: 'fanyi.web',
+    ue: 'UTF-8',
+    action: 'FY_BY_CLICKBUTTON',
+    typoResult: 'true',
+  }, {
+    i: sentence,
+  })
+).then(data => {
+  const {
+    errorCode,
+    translateResult: [
+      [
+        {
+          src,
+          tgt,
+        }
+      ]
+    ] } = data;
+  if (errorCode === 0) {
+    return {
+      src,
+      tgt,
+    };
+  }
+  else {
+    const errMsg = '翻译接口异常';
+
+    console.error(errMsg, data);
+    throw errMsg;
+  }
+});
+
+export default {
   addWord,
   fetchWordOnline,
   fetchTranslate,
-}
+};
