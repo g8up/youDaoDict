@@ -55,11 +55,9 @@ export const isContainJapanese = (str: string) => {
 };
 
 export const isContainKoera = (str: string) => {
-  let cnt = 0;
-  for (let i = 0, len = str.length; i < len; i += 1) {
-    if (isKoera(str.charAt(i))) { cnt += 1; }
+  if( str.length ) {
+    return str.split('').some(char => isKoera(char));
   }
-  if (cnt > 0) { return true; }
   return false;
 };
 
@@ -73,7 +71,7 @@ export const spaceCount = (str: string): number => {
   return cnt;
 };
 
-export const ExtractEnglish = (word): string => {
+export const extractEnglish = (word): string => {
   const patt = new RegExp(/([a-zA-Z ]+)/);
   const results = patt.exec(word);
   if (results && results.length) {
