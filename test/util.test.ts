@@ -25,6 +25,7 @@ describe('文本处理', ()=>{
     test('韩文判断', ()=>{
       expect(util.isKoera(koera)).toBeTruthy();
       expect(util.isKoera(chinese)).toBeFalsy();
+      expect(util.isContainKoera('传闻并非事实')).toBeFalsy();
     });
 
     test('字母判断', ()=>{
