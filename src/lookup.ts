@@ -4,7 +4,7 @@ import {
   isContainKoera,
   isAlpha,
   spaceCount,
-  ExtractEnglish,
+  extractEnglish,
   debounce,
 } from './common/util';
 import {
@@ -124,15 +124,17 @@ const addContentEvent = (cont) => {
       if (getOptVal('auto_speech')) {
         const phonetics = cont.querySelectorAll('.ydd-voice');
         const [eng, us] = phonetics;
-        let wordAndType = null;
-        if (phonetics.length > 1) {
-          const defaultSpeech = getOptVal('defaultSpeech');
-          ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
+        if(eng || us ) { // 划翻中文词时，没有读音
+          let wordAndType = null;
+          if (phonetics.length > 1) {
+            const defaultSpeech = getOptVal('defaultSpeech');
+            ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
+          }
+          else {
+            ({ wordAndType } = eng.dataset);
+          }
+          playAudioByWordAndType(wordAndType);
         }
-        else {
-          ({ wordAndType } = eng.dataset);
-        }
-        playAudioByWordAndType(wordAndType);
       }
       // 朗读按钮事件
       cont.addEventListener('click', (e) => {
@@ -246,7 +248,7 @@ const onSelectToTrans = debounce((e) => {
     if (hasJapanese || hasChinese || hasKoera) {
       return;
     }
-    // word = ExtractEnglish(word);
+    // word = extractEnglish(word);
   }
   // TODO: add isEnglish function
   if (word !== '') {
