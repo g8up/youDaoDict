@@ -1,5 +1,5 @@
 import History from '../model/History';
-import Translator from '../model/Word';
+import Translator from '../model/Translator/Youdao/Word';
 import { IWord } from '../types';
 
 /**

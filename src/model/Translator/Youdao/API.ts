@@ -1,5 +1,9 @@
-import util from '../common/util';
-import http from './Http';
+/**
+ * Youdao Translator
+ */
+
+import util from '../../../common/util';
+import http from '../../Http';
 
 enum AddState {
   ADD_DONE = 'adddone',
@@ -10,6 +14,22 @@ type Message = AddState.ADD_DONE | AddState.NO_USER;
 
 interface AddToNoteState {
   message: Message;
+}
+
+
+interface ITranslateResult{
+  /** 翻译内容 */
+  src: string;
+  /** 翻译结果 */
+  tgt: string;
+}
+
+/** json 格式接口响应结构 */
+interface ITranslatorJsonResp {
+  errorCode: number,
+  translateResult: [
+    ITranslateResult[]
+  ]
 }
 
 const CommonParams = {
@@ -25,10 +45,11 @@ const CommonParams = {
 };
 
 const YouDaoAddWordUrl = 'https://dict.youdao.com/wordbook/ajax';
+
 /**
  * 添加到单词本
  */
-const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
+export const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
   q: word,
   action: 'addword',
   le: 'eng',
@@ -43,7 +64,8 @@ const addWord = (word: string) => http.get(YouDaoAddWordUrl, {
   return null;
 });
 
-const fetchWordOnline = (word: string) => {
+/** 划词搜索 */
+export const fetchWordOnline = (word: string) => {
   if (word === '') {
     return Promise.reject();
   }
@@ -56,20 +78,20 @@ const fetchWordOnline = (word: string) => {
   );
 };
 
-
 const TranslateUrl = 'http://fanyi.youdao.com/translate';
 
 /**
  * 查询英文之外的语言
  */
-const fetchTranslate = (sentence: string) => http.fetchXML(
+export const fetchTranslate = (sentence: string) => http.fetchXML(
   TranslateUrl,
   Object.assign({}, CommonParams, {
     i: sentence,
     xmlVersion: '1.1', // 翻译接口要求 1.1
   }));
 
-export const fetchTranslateJson = (sentence: string) => http.get(
+/** 句子翻译 */
+export const fetchTranslateJson = (sentence: string):Promise<ITranslateResult> => http.get(
   TranslateUrl,
   Object.assign({
     type: 'AUTO',
@@ -82,7 +104,7 @@ export const fetchTranslateJson = (sentence: string) => http.get(
   }, {
     i: sentence,
   })
-).then(data => {
+).then((data: ITranslatorJsonResp) => {
   const {
     errorCode,
     translateResult: [
@@ -92,7 +114,9 @@ export const fetchTranslateJson = (sentence: string) => http.get(
           tgt,
         }
       ]
-    ] } = data;
+    ]
+  } = data;
+
   if (errorCode === 0) {
     return {
       src,
@@ -108,7 +132,5 @@ export const fetchTranslateJson = (sentence: string) => http.get(
 });
 
 export default {
-  addWord,
   fetchWordOnline,
-  fetchTranslate,
 };

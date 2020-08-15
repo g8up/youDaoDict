@@ -1,6 +1,5 @@
 import Setting from './model/Setting';
-import Dict from './model/Dict';
-import api, { fetchTranslateJson } from './model/API';
+import { fetchWordOnline, fetchTranslateJson, addWord } from './model/Translator/Youdao/API';
 import tab from './model/Tab';
 import parser from './model/Parser';
 import MsgType from './common/msg-type';
@@ -88,7 +87,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       return true;
 
     case MsgType.SELECT_TO_SEARCH:
-      api.fetchWordOnline(word).then((ret) => {
+      fetchWordOnline(word).then((ret) => {
         const templateHtml = parser.translateXML(ret);
         if (templateHtml !== '') {
           sendResponse(templateHtml);
@@ -126,7 +125,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       break;
 
     case MsgType.ADD_WORD: // 添加到单词本
-      (new Dict(api)).add(word).then(() => {
+      addWord(word).then(() => {
         popBadgeTips('OK', 'green');
         sendResponse();
       }, () => {

@@ -1,7 +1,7 @@
 import {
   IWord,
   ITranslator,
-} from '../types';
+} from '../../../types';
 import API from './API';
 
 /**
