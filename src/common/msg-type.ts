@@ -16,6 +16,9 @@ enum MSG_TYPE {
 
   /** 翻译 */
   TRANSLATE = 'translate',
+
+  /** 右键菜单翻译句子 */
+  TRANSLATE_CONTEXT = 'context-menu',
 };
 
 export default MSG_TYPE;

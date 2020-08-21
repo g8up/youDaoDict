@@ -174,3 +174,15 @@ chrome.runtime.onInstalled.addListener((details) => {
     chrome.tabs.create({ url: 'option.html' });
   }
 });
+
+// https://developer.chrome.com/extensions/contextMenus
+chrome.contextMenus.create({
+  title: '翻译句子',
+  contexts: ['selection'],
+  documentUrlPatterns: ['<all_urls>'],
+  onclick: (_, tab) => {
+    chrome.tabs.sendMessage(tab.id, {
+      action: MsgType.TRANSLATE_CONTEXT,
+    });
+  },
+});

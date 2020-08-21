@@ -22,7 +22,6 @@ import {
 
 const Options: iSetting = DEFAULT;
 const { body } = document;
-const list = [];
 let lastTime = 0;
 let lastFrame;
 let PANEL = null;
@@ -124,7 +123,7 @@ const addContentEvent = (cont) => {
       if (getOptVal('auto_speech')) {
         const phonetics = cont.querySelectorAll('.ydd-voice');
         const [eng, us] = phonetics;
-        if(eng || us ) { // 划翻中文词时，没有读音
+        if (eng || us) { // 划翻中文词时，没有读音
           let wordAndType = null;
           if (phonetics.length > 1) {
             const defaultSpeech = getOptVal('defaultSpeech');
@@ -164,6 +163,51 @@ const addContentEvent = (cont) => {
   }
 };
 
+/** 选区信息 */
+interface ISelectionInfo {
+  /** 选区文本 */
+  text: string;
+  /** 选区页边距 x */
+  x: number;
+  /** 选区底边页边距 */
+  y: number;
+}
+
+/** 获取选区信息 */
+const getSelectionInfo = (): ISelectionInfo=>{
+  const selection = window.getSelection();
+  if (selection.rangeCount) {
+    const range = selection.getRangeAt(0);
+    const text = range.toString();
+    if( text ) {
+      const { left, bottom } = range.getBoundingClientRect();
+      const { scrollX, scrollY } = window;
+
+      return {
+        text,
+        x: left + scrollX,
+        y: bottom + scrollY,
+      }
+    }
+  }
+  return null;
+};
+
+/** 翻译选区中的句子 */
+const translateSelection = () => {
+  const {
+    text = '',
+  } = getSelectionInfo() || {};
+
+  if( text ) {
+    /** 翻译句子 */
+    getYoudaoTrans(text, (html) => {
+      TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.SENTENCE;
+      createPopup(html);
+    });
+  }
+};
+
 const ROOT_TAG = 'chrome-extension-youdao-dict';
 
 const getPanel = () => {
@@ -177,55 +221,47 @@ const getPanel = () => {
 };
 
 /* eslint-disable no-param-reassign */
-const setPosition = (panel, x, y, screenX, screenY) => {
+const setPosition = (panel, x, y) => {
   const frameHeight = 150;
   const frameWidth = 300;
-  const padding = 10;
+  const PADDING = 5;
   let frameLeft = 0;
   let frameTop = 0;
   body.style.position = 'static';
   // 确定位置
   const {
-    availWidth: screenWidth,
-    availHeight: screenHeight,
-  } = window.screen;
-  if (screenX + frameWidth < screenWidth) {
+    clientWidth,
+    clientHeight,
+  } = body;
+
+  if (x + frameWidth <= clientWidth) {
     frameLeft = x;
   } else {
-    frameLeft = (x - frameWidth - 2 * padding);
+    frameLeft = clientWidth - frameWidth;
   }
   panel.style.left = `${frameLeft}px`;
-  if (screenY + frameHeight + 20 < screenHeight) {
-    frameTop = y;
+
+  if (y + frameHeight + PADDING<= clientHeight) {
+    frameTop = y + PADDING; // 弹框与选区保持距离
   } else {
-    frameTop = (y - frameHeight - 2 * padding);
+    frameTop = clientHeight - frameHeight;
   }
-  panel.style.top = `${frameTop + 10}px`;
-  if (panel.style.left + frameWidth > screenWidth) {
-    panel.style.left -= panel.style.left + frameWidth - screenWidth;
-  }
-  const leftbottom = frameTop + 10 + panel.clientHeight;
-  if (leftbottom < y) {
-    const newtop = y - panel.clientHeight;
-    panel.style.top = `${newtop}px`;
-  }
-  list.push(panel);
+  panel.style.top = `${frameTop}px`;
+
   lastTime = new Date().getTime();
   lastFrame = panel;
 };
 
-const createPopup = (html, pageX, pageY, screenX, screenY) => {
+const createPopup = (html) => {
   if (html !== undefined) {
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount) {
-      const panel = PANEL || (PANEL = getPanel());
-      const content = getPanelContent(panel);
-      content.innerHTML = html;
-      content.classList.add('fadeIn');
-      addContentEvent(content);
-      setPosition(panel, pageX, pageY, screenX, screenY);
-      panel.style.display = '';// 设定了新节点位置，清除隐藏属性
-    }
+    const panel = PANEL || (PANEL = getPanel());
+    const content = getPanelContent(panel);
+    content.innerHTML = html;
+    content.classList.add('fadeIn');
+    addContentEvent(content);
+    const {x, y} = getSelectionInfo();
+    setPosition(panel, x, y);
+    panel.style.display = '';// 设定了新节点位置，清除隐藏属性
   }
 };
 
@@ -235,12 +271,6 @@ const onSelectToTrans = debounce((e) => {
   if (word.length < 1 || word.length > 2000) {
     return;
   }
-  const {
-    pageX,
-    pageY,
-    screenX,
-    screenY,
-  } = e;
   const hasJapanese = isContainJapanese(word);
   const hasChinese = isContainChinese(word);
   if (getOptVal('english_only')) {
@@ -252,18 +282,16 @@ const onSelectToTrans = debounce((e) => {
   }
   // TODO: add isEnglish function
   if (word !== '') {
+    const {x, y} = getSelectionInfo();
     if ((!hasChinese && spaceCount(word) >= 3)
       || ((hasChinese || hasJapanese) && word.length > 4)) {
       // 翻译句子
-      getYoudaoTrans(word, (html) => {
-        TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.SENTENCE;
-        createPopup(html, pageX, pageY, screenX, screenY);
-      });
+      translateSelection();
     } else {
       // 翻译单词
       getYoudaoDictTemplateHtml(word, (html) => {
         TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.WORD;
-        createPopup(html, pageX, pageY, screenX, screenY);
+        createPopup(html);
       });
     }
   }
@@ -322,13 +350,7 @@ const onPointToTrans = debounce((e) => {
     selection.removeAllRanges();
     selection.addRange(tr);
     getYoudaoDictTemplateHtml(word, (html) => {
-      const {
-        pageX,
-        pageY,
-        screenX,
-        screenY,
-      } = e;
-      createPopup(html, pageX, pageY, screenX, screenY);
+      createPopup(html);
     });
   }
 });
@@ -366,7 +388,7 @@ const getOption = (next?) => {
   });
 };
 
-// some page has no body, eg. <frameset />
+// some pages have no body, eg. <frameset />
 if (body) {
   getOption();
 
@@ -378,6 +400,15 @@ if (body) {
       ({ triggerKey } = request.optionChanged);
       dealSelectEvent();
       dealPointEvent();
+    }
+
+    const { action } = request;
+
+    switch (action) {
+      case MsgType.TRANSLATE_CONTEXT:
+        translateSelection();
+        break;
+      default: break;
     }
   });
 
