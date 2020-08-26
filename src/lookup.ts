@@ -168,9 +168,11 @@ interface ISelectionInfo {
   /** 选区文本 */
   text: string;
   /** 选区页边距 x */
-  x: number;
+  left: number;
+  top: number;
   /** 选区底边页边距 */
-  y: number;
+  bottom: number;
+  right: number;
 }
 
 /** 获取选区信息 */
@@ -180,13 +182,14 @@ const getSelectionInfo = (): ISelectionInfo=>{
     const range = selection.getRangeAt(0);
     const text = range.toString();
     if( text ) {
-      const { left, bottom } = range.getBoundingClientRect();
-      const { scrollX, scrollY } = window;
+      const { top, left, right, bottom } = range.getBoundingClientRect();
 
       return {
         text,
-        x: left + scrollX,
-        y: bottom + scrollY,
+        left,
+        top,
+        bottom,
+        right,
       }
     }
   }
@@ -221,30 +224,38 @@ const getPanel = () => {
 };
 
 /* eslint-disable no-param-reassign */
-const setPosition = (panel, x, y) => {
-  const frameHeight = 150;
-  const frameWidth = 300;
+const setPosition = (panel) => {
+  const {
+    height: frameHeight,
+    width: frameWidth,
+  } = panel.getBoundingClientRect();
+  const {left, bottom, top, right} = getSelectionInfo();
+
   const PADDING = 5;
   let frameLeft = 0;
   let frameTop = 0;
   body.style.position = 'static';
   // 确定位置
-  const {
+  let {
     clientWidth,
     clientHeight,
   } = body;
+  const { scrollX, scrollY } = window;
 
-  if (x + frameWidth <= clientWidth) {
-    frameLeft = x;
+  // 有些页面 body 高度为0，如 youtube
+  clientHeight = Math.max(clientHeight, document.documentElement.clientHeight);
+
+  if (left + frameWidth <= clientWidth) {
+    frameLeft = left + scrollX;
   } else {
-    frameLeft = clientWidth - frameWidth;
+    frameLeft = right - frameWidth + scrollX;
   }
   panel.style.left = `${frameLeft}px`;
 
-  if (y + frameHeight + PADDING<= clientHeight) {
-    frameTop = y + PADDING; // 弹框与选区保持距离
+  if (bottom + frameHeight + PADDING <= clientHeight) {
+    frameTop = bottom + PADDING + scrollY; // 弹框与选区保持距离
   } else {
-    frameTop = clientHeight - frameHeight;
+    frameTop = top - frameHeight + scrollY; // 在选区之上弹出
   }
   panel.style.top = `${frameTop}px`;
 
@@ -259,9 +270,8 @@ const createPopup = (html) => {
     content.innerHTML = html;
     content.classList.add('fadeIn');
     addContentEvent(content);
-    const {x, y} = getSelectionInfo();
-    setPosition(panel, x, y);
     panel.style.display = '';// 设定了新节点位置，清除隐藏属性
+    setPosition(panel);
   }
 };
 
@@ -282,7 +292,6 @@ const onSelectToTrans = debounce((e) => {
   }
   // TODO: add isEnglish function
   if (word !== '') {
-    const {x, y} = getSelectionInfo();
     if ((!hasChinese && spaceCount(word) >= 3)
       || ((hasChinese || hasJapanese) && word.length > 4)) {
       // 翻译句子
