@@ -24,7 +24,6 @@ const Options: iSetting = DEFAULT;
 const { body } = document;
 let lastTime = 0;
 let lastFrame;
-let PANEL = null;
 
 /** 划词翻译类型 */
 enum TRANSLATE_TYPE_MAP {
@@ -73,10 +72,13 @@ const getYoudaoTrans = (word, next) => {
 const getPanelContent = panel => panel.shadowRoot.querySelector('#ydd-content');
 
 const closePanel = () => {
-  const content = getPanelContent(PANEL);
-  if (content) {
-    content.classList.remove('fadeIn');
-    content.innerHTML = '';
+  const panel = isPanelExist();
+  if( panel ){
+    const content = getPanelContent(panel);
+    if (content) {
+      content.classList.remove('fadeIn');
+      content.innerHTML = '';
+    }
   }
 };
 
@@ -98,6 +100,7 @@ const addPanelEvent = (panel) => {
     distanceX = 0;
     distanceY = 0;
   };
+  panel.addEventListener('load',()=>console.log('panel is loaded!'));
 };
 
 const addContentEvent = (cont) => {
@@ -213,9 +216,12 @@ const translateSelection = () => {
 
 const ROOT_TAG = 'chrome-extension-youdao-dict';
 
-const getPanel = () => {
+const appendPanel = ()=>{
   const panel = document.createElement(ROOT_TAG);
-  panel.style.display = 'none';// 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
+  // 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
+  panel.style.display = '';
+  panel.style.visibility = 'hidden'; // 为测量尺寸
+
   panel.style.userSelect = 'auto'; // enable select text
   wrapShadowDom(panel);
   body.appendChild(panel);
@@ -223,12 +229,24 @@ const getPanel = () => {
   return panel;
 };
 
+const isPanelExist = ()=>{
+  return document.querySelector<HTMLElement>(ROOT_TAG);
+};
+
+const getPanel = (): HTMLElement => {
+  const panel = isPanelExist();
+  if( panel ) {
+    return panel;
+  }
+  return appendPanel();
+};
+
 /* eslint-disable no-param-reassign */
 const setPosition = (panel) => {
   const {
     height: frameHeight,
     width: frameWidth,
-  } = panel.getBoundingClientRect();
+  } = panel.getBoundingClientRect(); // 需要等待 css 加载
   const {left, bottom, top, right} = getSelectionInfo();
 
   const PADDING = 5;
@@ -250,7 +268,7 @@ const setPosition = (panel) => {
   } else {
     frameLeft = right - frameWidth + scrollX;
   }
-  panel.style.left = `${frameLeft}px`;
+  panel.style.left = `${Math.max(frameLeft, 0)}px`;
 
   if (bottom + frameHeight + PADDING <= clientHeight) {
     frameTop = bottom + PADDING + scrollY; // 弹框与选区保持距离
@@ -265,12 +283,14 @@ const setPosition = (panel) => {
 
 const createPopup = (html) => {
   if (html !== undefined) {
-    const panel = PANEL || (PANEL = getPanel());
+    const panel = getPanel();
     const content = getPanelContent(panel);
     content.innerHTML = html;
     content.classList.add('fadeIn');
     addContentEvent(content);
     panel.style.display = '';// 设定了新节点位置，清除隐藏属性
+    panel.style.visibility = 'visible'; // 为测量尺寸
+
     setPosition(panel);
   }
 };
