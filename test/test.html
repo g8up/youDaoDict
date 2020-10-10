@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试页</title>
+  <style>
+    body{
+      font-size: 20px;
+    }
+    .unfamiliar{
+      color:chocolate;
+    }
+    .word{
+      color:chocolate;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <pre>
+  Dear Developer,
+
+  When we launched the Chrome Web Store 11 years ago, there weren't a lot of ways for our developers to take payment from
+  users. Today, there is <span class="unfamiliar">a <span class="word">thriving</span> ecosystem</span> of payment providers offering a far more <span class="word">diverse</span> set of features than a
+  single provider could hope to. Now that our developers have so many great options to choose from, we can comfortably
+  sunset our own payments integration.
+
+  This decision has no effect on extensions that don't use Chrome Web Store payments. Developers looking to monetize their
+  extensions can still do so using third-party providers.
+
+  Deprecation timeline
+  The Chrome Web Store payments API is deprecated as of Sept 21st, 2020 and will be shut down over the coming months.
+  There are many other ways to monetize your extensions; if you currently use Chrome Web Store payments, you’ll need to
+  migrate to one of them.
+
+  Now: You can no longer create new paid extensions or in-app items. This began as a temporary restriction in March 2020
+  due to the COVID-19 situation. This change is now made permanent.
+  December 1, 2020: Free trials are disabled. The "Try Now" button in CWS will no longer be visible, and in-app free trial
+  requests will result in an error.
+  February 1, 2021: Your existing items and in-app purchases can no longer charge money with Chrome Web Store payments.
+  You can still query license information for previously paid purchases and subscriptions. (The licensing API will
+  accurately reflect the status of active subscriptions, but these subscriptions won’t auto-renew.)
+  At some future time: The licensing API will no longer allow you to determine license status for your users.
+  What it means to developers
+  If you don’t use Chrome Web Store payments to monetize your extension, then this does not affect you and you don’t have
+  to do anything.
+
+  If you use Chrome Web Store payments to charge for your extension or in-app purchases, you’ll need to migrate to another
+  payments processor in the near future. If you use the licensing API to keep track of who has paid, you’ll need to
+  implement another way of tracking user licenses.
+
+  See the payments deprecation page for more details on how to prepare for this change.
+
+  Thank you for your cooperation, and for your participation in the Chrome extension ecosystem!
+
+  - The Google Chrome Web Store team
+  </pre>
+</body>
+</html>

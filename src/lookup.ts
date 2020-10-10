@@ -243,37 +243,39 @@ const getPanel = (): HTMLElement => {
 
 /* eslint-disable no-param-reassign */
 const setPosition = (panel) => {
-  const {
+  // 采用更精确的弹框尺寸布局位置，以使当窗口超出屏幕时有更好的兼容性
+  // 但初次执行时因 css 加载缓慢导致读取不准（插入的弹框 DOM 在页面底部撑满了整页宽度，高度也不精确）
+  // 所以需要兼容拟定一个初始值 300 x 500
+  let {
     height: frameHeight,
     width: frameWidth,
-  } = panel.getBoundingClientRect(); // 需要等待 css 加载
-  const {left, bottom, top, right} = getSelectionInfo();
+  } = panel.getBoundingClientRect();
 
-  const PADDING = 5;
+  if (frameHeight < 1 ) { frameHeight = 300} // 拟定的高度不
+  if (frameWidth < 1 || frameWidth > 500) { frameWidth = 500}
+
+  const PADDING = 5; // 弹框与选区保持适当间距
   let frameLeft = 0;
   let frameTop = 0;
   body.style.position = 'static';
-  // 确定位置
-  let {
-    clientWidth,
-    clientHeight,
-  } = body;
+
   const { scrollX, scrollY } = window;
 
-  // 有些页面 body 高度为0，如 youtube
-  clientHeight = Math.max(clientHeight, document.documentElement.clientHeight);
+  const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+  const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+  const { left, bottom, top, right } = getSelectionInfo();
 
-  if (left + frameWidth <= clientWidth) {
+  if (left + frameWidth <= vw) {
     frameLeft = left + scrollX;
   } else {
     frameLeft = right - frameWidth + scrollX;
   }
   panel.style.left = `${Math.max(frameLeft, 0)}px`;
 
-  if (bottom + frameHeight + PADDING <= clientHeight) {
-    frameTop = bottom + PADDING + scrollY; // 弹框与选区保持距离
-  } else {
-    frameTop = top - frameHeight + scrollY; // 在选区之上弹出
+  if (bottom + frameHeight + PADDING <= vh) {
+    frameTop = scrollY + bottom + PADDING ;
+  } else { // 在选区之上弹出，初次弹出时因 frameHeight 拟定固定导致稍有误差
+    frameTop = scrollY + top - frameHeight - PADDING;
   }
   panel.style.top = `${frameTop}px`;
 
