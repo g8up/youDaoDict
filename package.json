@@ -4,7 +4,7 @@
   "description": "可记录、导出查询历史的有道词典划词扩展",
   "scripts": {
     "test": "jest",
-    "dev": "cross-env DEBUG=true webpack --mode=production --config=build/webpack.base.js --watch & npm run css:watch",
+    "dev": "cross-env DEBUG=true webpack --mode=production --config=build/webpack.base.js --watch",
     "build": "rimraf ./dist/js & webpack --mode=production --config=build/webpack.base.js && npm run css",
     "css": "rimraf ./dist/style && gulp css",
     "css:watch": "rimraf ./dist/style && gulp watch",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "localforage": "^1.7.3",
-    "preact": "^8.4.2"
+    "preact": "^10.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -38,7 +38,7 @@
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.3.4000",
+    "typescript": "^4.6.0-dev.20211208",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.12"
   },
