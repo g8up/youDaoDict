@@ -23,4 +23,4 @@
 
 # Deps
 - [localForage](https://localforage.github.io/localForage/)
-- [FileSaver.js](https://github.com/g8up/qrcodejs)
+- [FileSaver.js](https://github.com/eligrey/FileSaver.js)
