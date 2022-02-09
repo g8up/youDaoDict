@@ -1,8 +1,8 @@
 html {
-  font-size: 14px;
+  font-size  : 14px;
   font-family: Arial, sans-serif;
-  background: -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
-  color: #333;
+  background : -webkit-gradient(linear, left top, left bottom, from(#a3d4f4), color-stop(0.9, white), to(white)) no-repeat;
+  color      : #333;
 }
 
 // 拼音
@@ -14,9 +14,7 @@ rt {
   color: #666;
 }
 
-#app {
-  display: flex;
-}
+#app {}
 
 .content {
   margin: 0 auto;
@@ -24,19 +22,19 @@ rt {
 
 .top {
   display: flex;
-  margin: 10px 0;
+  margin : 10px 0;
 }
 
 .title {
-  flex: 1;
+  flex       : 1;
   font-weight: bold;
-  font-size: 18px;
-  color: #666;
+  font-size  : 18px;
+  color      : #666;
 }
 
 .toolbar {
   a {
-    cursor: pointer;
+    cursor         : pointer;
     text-decoration: none;
     .feedback-icon;
 
@@ -50,36 +48,42 @@ rt {
   }
 }
 
-.history{
-  background: #ffffffb0;
+.history {
+  display: inline-block;
+
   .phonetic:hover {
-    color: #35a1d4;
+    color : #35a1d4;
     cursor: pointer;
   }
-  .no-data{
-    text-align: center;
+
+  .no-data {
+    text-align    : center;
     padding-bottom: 15px;
+  }
+
+  table {
+    background: #ffffffb0;
   }
 }
 
 table {
-  table-layout: fixed;
+  table-layout   : fixed;
   border-collapse: collapse;
-  border-spacing: 0;
+  border-spacing : 0;
 
   th,
   td {
-    border: #ddd solid 1px;
+    border     : #ddd solid 1px;
     line-height: 20px;
-    padding: 0 3px;
-    text-align: left;
-    height: 30px;
+    padding    : 0 3px;
+    text-align : left;
+    height     : 30px;
   }
 
   th {
-    font-weight: bold;
-    overflow: hidden;
-    line-height: 30px;
+    font-weight   : bold;
+    overflow      : hidden;
+    line-height   : 30px;
     vertical-align: bottom;
   }
 
@@ -92,12 +96,12 @@ table {
   }
 
   .delete-word {
-    background: url("../image/edit.png") right top no-repeat;
-    width: 12px;
-    height: 12px;
-    display: inline-block;
+    background    : url("../image/edit.png") right top no-repeat;
+    width         : 12px;
+    height        : 12px;
+    display       : inline-block;
     vertical-align: middle;
-    cursor: pointer;
+    cursor        : pointer;
 
     &:hover {
       background-position-y: -20px;
@@ -105,15 +109,15 @@ table {
   }
 
   .check {
-    color: #35a1d4;
+    color : #35a1d4;
     cursor: pointer;
   }
 
   .word,
   .word:hover {
     text-decoration: none;
-    color: #35a1d4;
-    font-weight: bold;
+    color          : #35a1d4;
+    font-weight    : bold;
   }
 
   .word:hover {
@@ -130,17 +134,17 @@ table {
 }
 
 .pagination {
-  margin: 10px auto;
-  color: #666;
+  margin     : 10px auto;
+  color      : #666;
   user-select: none;
 
   a {
-    border: 1px solid #9fb9e4;
-    text-align: center;
+    border         : 1px solid #9fb9e4;
+    text-align     : center;
     text-decoration: none;
-    display: inline-block;
-    padding: 5px 10px;
-    cursor: pointer;
+    display        : inline-block;
+    padding        : 5px 10px;
+    cursor         : pointer;
   }
 
   a+a {
@@ -148,8 +152,8 @@ table {
   }
 
   .current-page {
-    border: 1px solid #54c55b;
-    background: aliceblue;
+    border     : 1px solid #54c55b;
+    background : aliceblue;
     font-weight: bold;
   }
 
@@ -161,6 +165,6 @@ table {
 
 .feedback-icon() {
   display: inline-block;
-  height: 22px;
-  width: 22px;
+  height : 22px;
+  width  : 22px;
 }

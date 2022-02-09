@@ -1,4 +1,5 @@
-import { h, Component } from 'preact';
+import { Component } from 'react';
+// import { h, Component } from 'preact';
 
 export interface Props {
   currentPageNum: number;
@@ -42,13 +43,13 @@ export default class extends Component<Props>{
     return buttons;
   }
 
-  render(props: Props, state) {
+  render() {
     const {
       currentPageNum,
       pageSize,
       total,
       goToPageNum,
-    } = props;
+    } = this.props;
 
     const totalPage = this.totalPage;
     const offset = 3;

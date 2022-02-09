@@ -12,8 +12,15 @@
     "test-page": "npx http-server ./test -o"
   },
   "dependencies": {
+    "@babel/runtime": "^7.16.3",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.4.0",
     "localforage": "^1.7.3",
-    "preact": "^10.6.3"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

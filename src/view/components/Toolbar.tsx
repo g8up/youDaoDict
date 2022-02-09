@@ -1,4 +1,5 @@
-import { h, Component } from 'preact';
+import { Component } from 'react'
+// import { h, Component } from 'react-dom';
 import {
   shareDownloadLink,
 } from '../../common/chrome';
@@ -8,10 +9,10 @@ export interface Props {
 };
 
 export default class extends Component<Props> {
-  render(props: Props) {
+  render() {
     const {
       exportFile,
-    } = props;
+    } = this.props;
 
     return (
       <div className="toolbar">

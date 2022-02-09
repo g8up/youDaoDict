@@ -3,7 +3,8 @@
  * todo：高阶函数封装同类按钮操作
  */
 
-import { h, Component } from 'preact';
+import { Component } from 'react';
+// import { h, Component } from 'preact';
 import {
   IWord,
 } from '../../types';
@@ -32,30 +33,29 @@ export default class extends Component<Props> {
     playAudio({word});
   }
 
-  render(props: Props) {
+  render() {
     const {
       list,
       currentPageNum,
       pageSize,
       onDelete,
       onCheck,
-    } = props;
+    } = this.props;
 
     const indexBase = pageSize * (currentPageNum - 1);
 
     return (
-      <div className="history">
+      <div>
         <table>
           <thead>
             <tr>
-              <th width="50px">序号</th>
-              <th width="80px">单词</th>
-              <th width="80px">音标</th>
-              <th width="320px">解释</th>
-              <th width="85px">添加时间</th>
-              <th width="85px">上次查询</th>
-              {/* <th>分类</th> */}
-              <th width="65px">操作</th>
+              <th>序号</th>
+              <th>单词</th>
+              <th>音标</th>
+              <th>解释</th>
+              <th>添加时间</th>
+              <th>上次查询</th>
+              <th>操作</th>
             </tr>
           </thead>
 
@@ -77,14 +77,14 @@ export default class extends Component<Props> {
 
                 return (
                   <tr>
-                    <td className="text-muted">{indexBase + index + 1}</td>
-                    <td>
+                    <td className="text-muted" width="45px">{indexBase + index + 1}</td>
+                    <td width="85px">
                       <a
                         className="word"
                         target="_blank"
                         href={`https://dict.youdao.com/search?keyfrom=chrome.extension&q=${word}`}>{word}</a>
                     </td>
-                    <td>
+                    <td width="80px">
                       <a
                         className="phonetic"
                         onClick={()=>this.phonetic(word)}
@@ -92,17 +92,17 @@ export default class extends Component<Props> {
                         {phonetic ? `/${phonetic}/`: ''}
                       </a>
                     </td>
-                    <td className="translation">
+                    <td className="translation" width="320px">
                       {
                         translation ? translation : <a className="check" onClick={() => { onCheck(word); }}>查询</a>
                       }
                     </td>
-                    <td className="text-muted">{ createTime === '' ? '' : getDate(createTime) }</td>
-                    <td className="text-muted">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>现在就看</a> : getDate(lastView) }</td>
-                    <td>
+                    <td className="text-muted" width="85px">{ createTime === '' ? '' : getDate(createTime) }</td>
+                    <td className="text-muted" width="85px">{lastView === '' ? <a className="check" onClick={ ()=>{onCheck(word);} }>现在就看</a> : getDate(lastView) }</td>
+                    <td width="85px">
                       {/* <a href="#" class="editword" title="编辑"></a> */}
                       <a
-                        class="delete-word"
+                        className="delete-word"
                         onClick={() => { onDelete(word);}}></a>
                     </td>
                   </tr>
