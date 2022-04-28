@@ -30,7 +30,7 @@
     "@types/chrome": "^0.0.81",
     "@types/jest": "^24.0.11",
     "cross-env": "^5.2.0",
-    "cross-fetch": "^3.0.6",
+    "cross-fetch": "^3.1.5",
     "del": "^2.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
