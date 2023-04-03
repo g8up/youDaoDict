@@ -73,7 +73,7 @@ const getPanelContent = panel => panel.shadowRoot.querySelector('#ydd-content');
 
 const closePanel = () => {
   const panel = isPanelExist();
-  if( panel ){
+  if (panel) {
     const content = getPanelContent(panel);
     if (content) {
       content.classList.remove('fadeIn');
@@ -100,7 +100,7 @@ const addPanelEvent = (panel) => {
     distanceX = 0;
     distanceY = 0;
   };
-  panel.addEventListener('load',()=>console.log('panel is loaded!'));
+  panel.addEventListener('load', () => console.log('panel is loaded!'));
 };
 
 const addContentEvent = (cont) => {
@@ -132,7 +132,7 @@ const addContentEvent = (cont) => {
             const defaultSpeech = getOptVal('defaultSpeech');
             ({ wordAndType } = (defaultSpeech === SpeechType.eng ? eng : us).dataset);
           }
-          else {
+          else if (eng) {
             ({ wordAndType } = eng.dataset);
           }
           playAudioByWordAndType(wordAndType);
@@ -179,12 +179,12 @@ interface ISelectionInfo {
 }
 
 /** 获取选区信息 */
-const getSelectionInfo = (): ISelectionInfo=>{
+const getSelectionInfo = (): ISelectionInfo => {
   const selection = window.getSelection();
   if (selection.rangeCount) {
     const range = selection.getRangeAt(0);
     const text = range.toString();
-    if( text ) {
+    if (text) {
       const { top, left, right, bottom } = range.getBoundingClientRect();
 
       return {
@@ -205,7 +205,7 @@ const translateSelection = () => {
     text = '',
   } = getSelectionInfo() || {};
 
-  if( text ) {
+  if (text) {
     /** 翻译句子 */
     getYoudaoTrans(text, (html) => {
       TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.SENTENCE;
@@ -216,7 +216,7 @@ const translateSelection = () => {
 
 const ROOT_TAG = 'chrome-extension-youdao-dict';
 
-const appendPanel = ()=>{
+const appendPanel = () => {
   const panel = document.createElement(ROOT_TAG);
   // 此时新生成的节点还没确定位置，默认隐藏，以免页面暴露
   panel.style.display = '';
@@ -229,13 +229,13 @@ const appendPanel = ()=>{
   return panel;
 };
 
-const isPanelExist = ()=>{
+const isPanelExist = () => {
   return document.querySelector<HTMLElement>(ROOT_TAG);
 };
 
 const getPanel = (): HTMLElement => {
   const panel = isPanelExist();
-  if( panel ) {
+  if (panel) {
     return panel;
   }
   return appendPanel();
@@ -251,8 +251,8 @@ const setPosition = (panel) => {
     width: frameWidth,
   } = panel.getBoundingClientRect();
 
-  if (frameHeight < 1 ) { frameHeight = 300} // 拟定的高度不
-  if (frameWidth < 1 || frameWidth > 500) { frameWidth = 500}
+  if (frameHeight < 1) { frameHeight = 300 } // 拟定的高度不
+  if (frameWidth < 1 || frameWidth > 500) { frameWidth = 500 }
 
   const PADDING = 5; // 弹框与选区保持适当间距
   let frameLeft = 0;
@@ -273,7 +273,7 @@ const setPosition = (panel) => {
   panel.style.left = `${Math.max(frameLeft, 0)}px`;
 
   if (bottom + frameHeight + PADDING <= vh) {
-    frameTop = scrollY + bottom + PADDING ;
+    frameTop = scrollY + bottom + PADDING;
   } else { // 在选区之上弹出，初次弹出时因 frameHeight 拟定固定导致稍有误差
     frameTop = scrollY + top - frameHeight - PADDING;
   }
