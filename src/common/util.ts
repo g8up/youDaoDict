@@ -148,7 +148,7 @@ export const getDate = (time?) => {
     month: 'numeric',
     day: 'numeric',
     hour12: false,
-  };
+  } as const;
   return (time ? new Date(time) : new Date()).toLocaleString('zh-cn', options);
 };
 

@@ -11,7 +11,7 @@
     "noEmitOnError": true,
     // "typeRoots": [ "src/typings", "node_modules/@types" ],
     // "types": [
-    //   "chrome"
+    //   "@types/chrome"
     // ],
     "lib": ["dom", "es5", "es2015", "es2016"],
     "baseUrl": "./",

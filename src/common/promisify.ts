@@ -4,7 +4,7 @@ const promisify = (api, context = null) => (...args) => new Promise((resolve, re
     if (err) {
       reject(err);
     } else {
-      resolve(...argus);
+      resolve(argus);
     }
   }));
 }).catch(() => {

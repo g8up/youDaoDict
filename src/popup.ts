@@ -214,12 +214,12 @@ window.onload = () => {
 
   $('#word').onkeydown = (event) => {
     if (event.keyCode === 13) {
-      mainQuery($('#word').value);
+      mainQuery($('#word').value.trim());
     }
   };
 
   $('#querybutton').onclick = () => {
-    mainQuery($('#word').value);
+    mainQuery($('#word').value.trim());
   };
 
   // 登录按钮

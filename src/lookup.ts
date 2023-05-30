@@ -381,6 +381,7 @@ const onPointToTrans = debounce((e) => {
     selection.removeAllRanges();
     selection.addRange(tr);
     getYoudaoDictTemplateHtml(word, (html) => {
+      TRANSLATE_TYPE = TRANSLATE_TYPE_MAP.WORD;
       createPopup(html);
     });
   }

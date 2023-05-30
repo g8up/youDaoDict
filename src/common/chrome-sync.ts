@@ -1,6 +1,6 @@
 // https://developer.chrome.com/extensions/storage
 
-const set = (name, value) => new Promise((resolve, reject) => {
+const set = (name, value) => new Promise<void>((resolve, reject) => {
   chrome.storage.sync.set({ [name]: value }, () => {
     resolve();
   });
@@ -16,7 +16,7 @@ const get = name => new Promise((resolve, reject) => {
   console.warn(err);
 });
 
-export default{
+export default {
   set,
   get,
 };
